@@ -14,27 +14,13 @@ import { ReduxAsyncConnect } from 'redux-async-connect';
 import useScroll from 'scroll-behavior/lib/useStandardScroll';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { green100, green500, green700 } from 'material-ui/styles/colors';
+import muiTheme from './theme/materialUiTheme';
 
 import getRoutes from './routes';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
-
-const muiTheme = getMuiTheme({
-  palette: {
-    primary1Color: green500,
-    primary2Color: green700,
-    primary3Color: green100
-  },
-}, {
-  avatar: {
-    borderColor: null
-  },
-  userAgent: 'all'
-});
 
 const client = new ApiClient();
 const _browserHistory = useScroll(() => browserHistory)();
@@ -58,11 +44,20 @@ function initSocket() {
 global.socket = initSocket();
 
 const component = (
-  <Router render={(props) =>
-        <ReduxAsyncConnect {...props} helpers={{client}} filter={item => !item.deferred} />
-      } history={history}>
-    {getRoutes(store)}
-  </Router>
+  <MuiThemeProvider muiTheme={muiTheme}>
+    <Router
+      render={(props) =>
+        <ReduxAsyncConnect
+          {...props}
+          helpers={{client}}
+          filter={item => !item.deferred}
+        />
+      }
+      history={history}
+    >
+      {getRoutes(store)}
+    </Router>
+  </MuiThemeProvider>
 );
 
 ReactDOM.render(
@@ -84,12 +79,10 @@ if (__DEVTOOLS__ && !window.devToolsExtension) {
   const DevTools = require('./containers/DevTools/DevTools');
   ReactDOM.render(
     <Provider store={store} key="provider">
-      <MuiThemeProvider muiTheme={muiTheme}>
-        <div>
-          {component}
-          <DevTools />
-        </div>
-      </MuiThemeProvider>
+      <div>
+        {component}
+        <DevTools />
+      </div>
     </Provider>,
     dest
   );

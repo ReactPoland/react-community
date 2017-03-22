@@ -11,6 +11,8 @@ import ApiClient from './helpers/ApiClient';
 import Html from './helpers/Html';
 import PrettyError from 'pretty-error';
 import http from 'http';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import muiTheme from './theme/materialUiTheme';
 
 import { match } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
@@ -92,7 +94,9 @@ app.use((req, res) => {
       loadOnServer({...renderProps, store, helpers: {client}}).then(() => {
         const component = (
           <Provider store={store} key="provider">
-            <ReduxAsyncConnect {...renderProps} />
+            <MuiThemeProvider muiTheme={muiTheme}>
+              <ReduxAsyncConnect {...renderProps} />
+            </MuiThemeProvider>
           </Provider>
         );
 
