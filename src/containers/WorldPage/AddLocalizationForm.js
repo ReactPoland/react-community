@@ -3,36 +3,31 @@ import TextField from 'material-ui/TextField';
 
 class AddLocalizationForm extends Component {
   static propTypes = {
-    value: PropTypes.string
-  }
-
-  constructor() {
-    super();
-
-    this.state = {
-      value: ''
-    };
+    formData: PropTypes.object.isRequired,
+    onChange: PropTypes.func.isRequired
   }
 
   render() {
+    const { formData: { name, link, description }, onChange } = this.props;
     const styles = require('./WorldPage.scss');
 
     return (
       <div className={styles.AddLocalizationForm}>
         <TextField
-          hintText="Hint Text"
-          floatingLabelText="Fixed Floating Label Text"
-          floatingLabelFixed
+          floatingLabelText="Name"
+          value={name}
+          onChange={ev => { onChange('name', ev.target.value); }}
         />
         <TextField
-          hintText="Hint Text"
-          floatingLabelText="Fixed Floating Label Text"
-          floatingLabelFixed
+          floatingLabelText="Link"
+          value={link}
+          onChange={ev => { onChange('link', ev.target.value); }}
         />
         <TextField
-          hintText="Hint Text"
-          floatingLabelText="Fixed Floating Label Text"
-          floatingLabelFixed
+          floatingLabelText="Description"
+          multiLine
+          value={description}
+          onChange={ev => { onChange('description', ev.target.value); }}
         />
       </div>
     );

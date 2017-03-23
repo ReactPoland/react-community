@@ -6,22 +6,56 @@ import AddLocalizationForm from './AddLocalizationForm';
 class AddLocalizationPopup extends Component {
   static propTypes = {
     popupVisible: PropTypes.bool.isRequired,
+    addMarker: PropTypes.func.isRequired,
     closePopup: PropTypes.func.isRequired,
   }
 
+  constructor() {
+    super();
+
+    this.state = {
+      formData: {
+        name: '',
+        link: '',
+        description: ''
+      }
+    };
+  }
+
+  updateForm = (property, value) => {
+    this.setState({
+      ...this.state,
+      formData: {
+        ...this.state.formData,
+        [property]: value
+      }
+    });
+  }
+
+  closePopup = () => {
+    this.setState({ formData: {} });
+    this.props.closePopup();
+  }
+
+  addMarker = () => {
+    this.props.addMarker(this.state.formData);
+    this.props.closePopup();
+  }
+
   render() {
-    const { popupVisible, closePopup } = this.props;
+    const { popupVisible } = this.props;
+    const { formData } = this.state;
 
     const actions = [
       <FlatButton
         label="Cancel"
         primary
-        onTouchTap={closePopup}
+        onTouchTap={this.closePopup}
       />,
       <FlatButton
         label="Add"
         primary
-        onTouchTap={closePopup}
+        onTouchTap={this.addMarker}
       />
     ];
 
@@ -31,9 +65,12 @@ class AddLocalizationPopup extends Component {
         actions={actions}
         modal={false}
         open={popupVisible}
-        onRequestClose={closePopup}
+        onRequestClose={this.closePopup}
       >
-        <AddLocalizationForm />
+        <AddLocalizationForm
+          formData={formData}
+          onChange={this.updateForm}
+        />
       </Dialog>
     );
   }

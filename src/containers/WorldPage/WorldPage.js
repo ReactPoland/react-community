@@ -30,9 +30,10 @@ export default class WorldPage extends Component {
     this.setState({ showPopup: false });
   }
 
-  addMarker = () => {
+  addMarker = markerData => {
+    console.log('markerData', markerData);
     const markers = [...this.state.markers];
-    markers.push({ lat: _random(51.490, 51.530), lng: _random(-0.00, -0.20) });
+    markers.push({ lat: _random(-90, 90, true), lng: _random(-180, 180, true) });
     this.setState({ markers });
   }
 
@@ -59,6 +60,7 @@ export default class WorldPage extends Component {
         <AddLocalizationPopup
           popupVisible={showPopup}
           closePopup={this.closeEntryPopup}
+          addMarker={this.addMarker}
         />
       </div>
     );
