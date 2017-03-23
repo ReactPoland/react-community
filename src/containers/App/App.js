@@ -61,7 +61,7 @@ export default class App extends Component {
     const styles = require('./App.scss');
 
     return (
-      <div className={styles.app}>
+      <div className={styles.appContainer}>
         <Helmet {...config.app.head}/>
         <Navbar fixedTop>
           <Navbar.Header>

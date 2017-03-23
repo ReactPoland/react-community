@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet-universal';
 import _random from 'lodash/random';
-import RaisedButton from 'material-ui/RaisedButton';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 
 export default class World extends Component {
   constructor() {
@@ -36,12 +37,9 @@ export default class World extends Component {
 
     return (
       <div className={styles.worldPage}>
-        <RaisedButton
-          label="Add marker"
-          primary
-          style={{ margin: 8 }}
-          onClick={this.addMarker}
-        />
+        <FloatingActionButton className={styles.addMarkerButton} onClick={this.addMarker}>
+          <ContentAdd />
+        </FloatingActionButton>
         {
           showMap && (
             <Map className={styles.map} center={[mapLat, mapLng]} zoom={zoom}>

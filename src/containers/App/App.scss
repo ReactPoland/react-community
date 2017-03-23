@@ -1,4 +1,15 @@
-.app {
+:global {
+  html,
+  body,
+  #content {
+    height: 100%;
+  }
+}
+
+.appContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   .brand {
     position: absolute;
     $size: 40px;
@@ -17,6 +28,8 @@
     line-height: 20px;
   }
 }
+
 .appContent {
-  margin: 50px 0; // for fixed navbar
+  padding: 50px 0 0; // for fixed navbar
+  height: 100%;
 }
