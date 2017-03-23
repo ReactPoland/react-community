@@ -21,9 +21,7 @@ export default class World extends Component {
 
   componentDidMount() {
     // TODO: This is an ugly way to ensure that map centers after page loads
-    setTimeout(() => {
-      this.setState({ showMap: true });
-    }, 1000);
+    setTimeout(() => { this.setState({ showMap: true }); });
   }
 
   addMarker = () => {
