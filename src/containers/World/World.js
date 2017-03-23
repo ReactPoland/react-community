@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Map, Marker, Popup, TileLayer } from 'react-leaflet-universal';
 import _random from 'lodash/random';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import AddNewEntryPopup from './AddNewEntryPopup';
+import AddLocalizationPopup from './AddLocalizationPopup';
 import LocalizationMap from './LocalizationMap';
 
 export default class World extends Component {
@@ -58,7 +57,7 @@ export default class World extends Component {
               markers={markers}
             />
         }
-        <AddNewEntryPopup
+        <AddLocalizationPopup
           popupVisible={showPopup}
           closePopup={this.closeEntryPopup}
         />

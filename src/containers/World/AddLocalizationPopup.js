@@ -2,7 +2,12 @@ import React, { Component, PropTypes } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
-class AddNewEntryPopup extends Component {
+class AddLocalizationPopup extends Component {
+  static propTypes = {
+    popupVisible: PropTypes.bool.isRequired,
+    closePopup: PropTypes.func.isRequired,
+  }
+
   render() {
     const { popupVisible, closePopup } = this.props;
 
@@ -15,7 +20,6 @@ class AddNewEntryPopup extends Component {
       <FlatButton
         label="Add"
         primary
-        keyboardFocused
         onTouchTap={closePopup}
       />
     ];
@@ -34,9 +38,4 @@ class AddNewEntryPopup extends Component {
   }
 }
 
-AddNewEntryPopup.propTypes = {
-  popupVisible: PropTypes.bool.isRequired,
-  closePopup: PropTypes.func.isRequired,
-};
-
-export default AddNewEntryPopup;
+export default AddLocalizationPopup;
