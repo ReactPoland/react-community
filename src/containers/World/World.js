@@ -3,12 +3,14 @@ import { Map, Marker, Popup, TileLayer } from 'react-leaflet-universal';
 import _random from 'lodash/random';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import AddNewEntryPopup from './AddNewEntryPopup';
 
 export default class World extends Component {
   constructor() {
     super();
     this.state = {
       showMap: false, // Used as a fix for map not centering properly
+      showPopup: false,
       mapLat: 51.505, // Main latitude
       mapLng: -0.09, // Main longitude
       zoom: 12, // Main zoom value
@@ -25,6 +27,14 @@ export default class World extends Component {
     setTimeout(() => { this.setState({ showMap: true }); });
   }
 
+  openEntryPopup = () => {
+    this.setState({ showPopup: true });
+  }
+
+  closeEntryPopup = () => {
+    this.setState({ showPopup: false });
+  }
+
   addMarker = () => {
     const markers = [...this.state.markers];
     markers.push({ lat: _random(51.490, 51.530), lng: _random(-0.00, -0.20) });
@@ -32,12 +42,15 @@ export default class World extends Component {
   }
 
   render() {
-    const { showMap, zoom, mapLat, mapLng, markers } = this.state;
+    const { showPopup, showMap, zoom, mapLat, mapLng, markers } = this.state;
     const styles = require('./World.scss');
 
     return (
       <div className={styles.worldPage}>
-        <FloatingActionButton className={styles.addMarkerButton} onClick={this.addMarker}>
+        <FloatingActionButton
+          className={styles.addMarkerButton}
+          onClick={this.openEntryPopup}
+        >
           <ContentAdd />
         </FloatingActionButton>
         {
@@ -59,6 +72,10 @@ export default class World extends Component {
             </Map>
           )
         }
+        <AddNewEntryPopup
+          popupVisible={showPopup}
+          closePopup={this.closeEntryPopup}
+        />
       </div>
     );
   }
