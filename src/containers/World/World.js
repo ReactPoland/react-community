@@ -4,20 +4,16 @@ import _random from 'lodash/random';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import AddNewEntryPopup from './AddNewEntryPopup';
+import LocalizationMap from './LocalizationMap';
 
 export default class World extends Component {
   constructor() {
     super();
     this.state = {
       showMap: false, // Used as a fix for map not centering properly
-      showPopup: false,
-      mapLat: 51.505, // Main latitude
-      mapLng: -0.09, // Main longitude
-      zoom: 12, // Main zoom value
+      showPopup: false, // Shows popup for adding localization to the map
       markers: [
-        { lat: 51.505, lng: -0.09 },
-        { lat: 51.510, lng: -0.10 },
-        { lat: 51.515, lng: -0.11 }
+        { lat: 51.505, lng: -0.09 }
       ]
     };
   }
@@ -42,7 +38,7 @@ export default class World extends Component {
   }
 
   render() {
-    const { showPopup, showMap, zoom, mapLat, mapLng, markers } = this.state;
+    const { showPopup, showMap, markers } = this.state;
     const styles = require('./World.scss');
 
     return (
@@ -54,23 +50,13 @@ export default class World extends Component {
           <ContentAdd />
         </FloatingActionButton>
         {
-          showMap && (
-            <Map className={styles.map} center={[mapLat, mapLng]} zoom={zoom}>
-              <TileLayer
-                url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-              />
-              {
-                markers.map((marker, index) => (
-                  <Marker key={index} position={[marker.lat, marker.lng]}>
-                    <Popup>
-                      <span>A pretty CSS3 popup.<br/>Easily customizable.</span>
-                    </Popup>
-                  </Marker>
-                ))
-              }
-            </Map>
-          )
+          showMap &&
+            <LocalizationMap
+              className={styles.localizationMap}
+              centerCoords={[0, 0]}
+              zoomLevel={3}
+              markers={markers}
+            />
         }
         <AddNewEntryPopup
           popupVisible={showPopup}
