@@ -5,7 +5,7 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import AddLocalizationPopup from './AddLocalizationPopup';
 import LocalizationMap from './LocalizationMap';
 
-export default class World extends Component {
+export default class WorldPage extends Component {
   constructor() {
     super();
     this.state = {
@@ -38,12 +38,12 @@ export default class World extends Component {
 
   render() {
     const { showPopup, showMap, markers } = this.state;
-    const styles = require('./World.scss');
+    const styles = require('./WorldPage.scss');
 
     return (
-      <div className={styles.worldPage}>
+      <div className={styles.WorldPage}>
         <FloatingActionButton
-          className={styles.addMarkerButton}
+          className={styles.AddMarkerButton}
           onClick={this.openEntryPopup}
         >
           <ContentAdd />
@@ -51,7 +51,6 @@ export default class World extends Component {
         {
           showMap &&
             <LocalizationMap
-              className={styles.localizationMap}
               centerCoords={[0, 0]}
               zoomLevel={3}
               markers={markers}

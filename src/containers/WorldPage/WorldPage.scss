@@ -1,15 +1,20 @@
-.worldPage {
+.WorldPage {
   height: 100%;
 }
 
-.localizationMap {
+.LocalizationMap {
   width: 100%;
   height: 100%;
 }
 
-.addMarkerButton {
+.AddMarkerButton {
   position: absolute;
   right: 40px;
   bottom: 40px;
   z-index: 1000;
+}
+
+.AddLocalizationForm {
+  display: flex;
+  flex-direction: column;
 }
