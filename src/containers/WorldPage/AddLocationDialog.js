@@ -2,12 +2,13 @@ import React, { Component, PropTypes } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import _isEmpty from 'lodash/isEmpty';
+import _startsWith from 'lodash/startsWith';
 import AddLocationForm from './AddLocationForm';
 
 const getInitialState = () => ({
   formData: {
     name: '',
-    link: '',
+    link: 'http://',
     description: '',
     location: {}
   },
@@ -60,6 +61,7 @@ class AddLocationDialog extends Component {
 
     if (!name) validationErrors.name = 'Name is required';
     if (!link) validationErrors.link = 'Link is required';
+    if (!_startsWith(link, 'http://')) validationErrors.link = 'Link must start with "http://"';
     if (!description) validationErrors.description = 'Description is required';
     if (!location.description) validationErrors.location = 'Location is required';
 
