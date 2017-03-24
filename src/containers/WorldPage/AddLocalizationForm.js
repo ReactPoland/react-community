@@ -10,11 +10,14 @@ class AddLocalizationForm extends Component {
   }
 
   render() {
-    const { formData: { name, link, description }, validationErrors, onChange } = this.props;
-    const styles = require('./WorldPage.scss');
+    const {
+      formData: { name, link, description },
+      validationErrors,
+      onChange
+    } = this.props;
 
     return (
-      <div className={styles.AddLocalizationForm}>
+      <div>
         <TextField
           floatingLabelText="Name"
           errorText={validationErrors.name}

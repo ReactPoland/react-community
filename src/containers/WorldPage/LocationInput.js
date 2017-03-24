@@ -9,28 +9,36 @@ class LocationInput extends Component {
     fullWidth: PropTypes.bool
   }
 
-  state = { searchText: '', predictions: [] };
+  state = {
+    searchText: '', // Input's value
+    predictions: [] // Predicted locations
+  };
 
   componentDidMount() {
+    // Initializes Google Maps code
     const { google } = window;
     this.places = new google.maps.places.AutocompleteService();
     this.geocoder = new google.maps.Geocoder;
   }
 
+  // Gets localtion predictions based on input text
   getPredictions = searchText => {
     this.places.getQueryPredictions({ input: searchText }, predictions => {
       this.setState({ predictions: predictions || [] });
     });
   }
 
+  // Updated input field and gets prediction if input is not empty
   handleUpdateInput = searchText => {
     if (searchText) this.getPredictions(searchText);
     this.setState({
       searchText,
+      // Clear predictions if there's no input text
       predictions: searchText ? this.state.predictions : []
     });
   };
 
+  // Passes chosen location to the parent component
   handleNewRequest = location => {
     this.geocoder.geocode({ placeId: location.place_id }, results => {
       this.props.onChooseLocation({ ...location, ...results[0] });

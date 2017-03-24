@@ -1,7 +1,9 @@
+// MAP PAGE
 .WorldPage {
   height: 100%;
 }
 
+// MAP
 .LocalizationMap {
   width: 100%;
   height: 100%;
@@ -12,11 +14,6 @@
   right: 40px;
   bottom: 40px;
   z-index: 1000;
-}
-
-.AddLocalizationForm {
-  display: flex;
-  flex-direction: column;
 }
 
 .MarkerPopup {

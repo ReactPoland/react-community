@@ -21,7 +21,7 @@ class AddLocalizationPopup extends Component {
     closePopup: PropTypes.func.isRequired,
   }
 
-  state = initialState
+  state = { ...initialState }
 
   updateForm = (property, value) => {
     const newState = { ...this.state };
@@ -32,7 +32,6 @@ class AddLocalizationPopup extends Component {
       newState.validationErrors[property] = '';
     }
 
-    console.info('Form updated', newState.formData);
     this.setState(newState);
   }
 
@@ -67,7 +66,6 @@ class AddLocalizationPopup extends Component {
   render() {
     const { popupVisible } = this.props;
     const { formData, validationErrors } = this.state;
-
     const actions = [
       <FlatButton
         label="Cancel"
@@ -88,7 +86,6 @@ class AddLocalizationPopup extends Component {
         titleStyle={{ paddingBottom: 0 }}
         title="Add your location"
         actions={actions}
-        modal={false}
         open={popupVisible}
         onRequestClose={this.closePopup}
       >
