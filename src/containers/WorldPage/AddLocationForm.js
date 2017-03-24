@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import TextField from 'material-ui/TextField';
 import LocationInput from './LocationInput';
 
-class AddLocalizationForm extends Component {
+class AddLocationForm extends Component {
   static propTypes = {
     formData: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
@@ -51,4 +51,4 @@ class AddLocalizationForm extends Component {
   }
 }
 
-export default AddLocalizationForm;
+export default AddLocationForm;

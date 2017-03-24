@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import _isEmpty from 'lodash/isEmpty';
-import AddLocalizationForm from './AddLocalizationForm';
+import AddLocationForm from './AddLocationForm';
 
 const initialState = {
   formData: {
@@ -14,7 +14,7 @@ const initialState = {
   validationErrors: {}
 };
 
-class AddLocalizationPopup extends Component {
+class AddLocationDialog extends Component {
   static propTypes = {
     popupVisible: PropTypes.bool.isRequired,
     addMarker: PropTypes.func.isRequired,
@@ -89,7 +89,7 @@ class AddLocalizationPopup extends Component {
         open={popupVisible}
         onRequestClose={this.closePopup}
       >
-        <AddLocalizationForm
+        <AddLocationForm
           formData={formData}
           validationErrors={validationErrors}
           onChange={this.updateForm}
@@ -99,4 +99,4 @@ class AddLocalizationPopup extends Component {
   }
 }
 
-export default AddLocalizationPopup;
+export default AddLocationDialog;

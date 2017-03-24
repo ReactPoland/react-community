@@ -2,12 +2,12 @@ import React, { PropTypes } from 'react';
 import { Map, TileLayer } from 'react-leaflet-universal';
 import MapMarker from './MapMarker';
 
-const LocalizationMap = props => {
+const LocationMap = props => {
   const styles = require('./WorldPage.scss');
 
   return (
     <Map
-      className={styles.LocalizationMap}
+      className={styles.LocationMap}
       center={props.centerCoords}
       zoom={props.zoomLevel}
       minZoom={3}
@@ -22,10 +22,10 @@ const LocalizationMap = props => {
   );
 };
 
-LocalizationMap.propTypes = {
+LocationMap.propTypes = {
   centerCoords: PropTypes.array.isRequired,
   zoomLevel: PropTypes.number.isRequired,
   markers: PropTypes.array.isRequired
 };
 
-export default LocalizationMap;
+export default LocationMap;

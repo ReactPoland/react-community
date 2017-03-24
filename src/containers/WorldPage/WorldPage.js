@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import AddLocalizationPopup from './AddLocalizationPopup';
-import LocalizationMap from './LocalizationMap';
+import AddLocationDialog from './AddLocationDialog';
+import LocationMap from './LocationMap';
 
 export default class WorldPage extends Component {
   state = {
@@ -78,12 +78,12 @@ export default class WorldPage extends Component {
     return (
       <div className={styles.WorldPage}>
         {AddMarkerButton}
-        <LocalizationMap
+        <LocationMap
           centerCoords={mapCenterCoord}
           zoomLevel={mapZoomLevel}
           markers={markers}
         />
-        <AddLocalizationPopup
+        <AddLocationDialog
           popupVisible={showPopup}
           closePopup={this.closeEntryPopup}
           addMarker={this.addMarker}
