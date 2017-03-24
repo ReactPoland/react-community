@@ -5,34 +5,43 @@ import LocationInput from './LocationInput';
 class AddLocalizationForm extends Component {
   static propTypes = {
     formData: PropTypes.object.isRequired,
-    onChange: PropTypes.func.isRequired
+    onChange: PropTypes.func.isRequired,
+    validationErrors: PropTypes.object.isRequired
   }
 
   render() {
-    const { formData: { name, link, description }, onChange } = this.props;
+    const { formData: { name, link, description }, validationErrors, onChange } = this.props;
     const styles = require('./WorldPage.scss');
 
     return (
       <div className={styles.AddLocalizationForm}>
         <TextField
           floatingLabelText="Name"
+          errorText={validationErrors.name}
           value={name}
           onChange={ev => { onChange('name', ev.target.value); }}
+          fullWidth
         />
         <TextField
           floatingLabelText="Link"
+          errorText={validationErrors.link}
           value={link}
           onChange={ev => { onChange('link', ev.target.value); }}
+          fullWidth
         />
         <TextField
           floatingLabelText="Description"
           multiLine
+          errorText={validationErrors.description}
           value={description}
           onChange={ev => { onChange('description', ev.target.value); }}
+          fullWidth
         />
         <LocationInput
           floatingLabelText="Location"
+          errorText={validationErrors.location}
           onChooseLocation={location => { onChange('location', location); }}
+          fullWidth
         />
       </div>
     );

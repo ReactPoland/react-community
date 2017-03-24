@@ -4,7 +4,9 @@ import AutoComplete from 'material-ui/AutoComplete';
 class LocationInput extends Component {
   static propTypes = {
     floatingLabelText: PropTypes.string.isRequired,
-    onChooseLocation: PropTypes.func.isRequired
+    onChooseLocation: PropTypes.func.isRequired,
+    errorText: PropTypes.string,
+    fullWidth: PropTypes.bool
   }
 
   state = { searchText: '', predictions: [] };
@@ -37,18 +39,20 @@ class LocationInput extends Component {
   };
 
   render() {
-    const { floatingLabelText } = this.props;
+    const { floatingLabelText, errorText, fullWidth } = this.props;
     const { searchText, predictions } = this.state;
 
     return (
       <AutoComplete
         floatingLabelText={floatingLabelText}
+        errorText={errorText}
         searchText={searchText}
         onUpdateInput={this.handleUpdateInput}
         onNewRequest={this.handleNewRequest}
         dataSource={predictions}
         dataSourceConfig={{ text: 'description', value: 'description' }}
         filter={AutoComplete.noFilter}
+        fullWidth={fullWidth}
       />
     );
   }
