@@ -4,15 +4,17 @@ import FlatButton from 'material-ui/FlatButton';
 import _isEmpty from 'lodash/isEmpty';
 import AddLocationForm from './AddLocationForm';
 
-const initialState = {
-  formData: {
-    name: '',
-    link: '',
-    description: '',
-    location: {}
-  },
-  validationErrors: {}
-};
+function getInitialState() {
+  return {
+    formData: {
+      name: '',
+      link: '',
+      description: '',
+      location: {}
+    },
+    validationErrors: {}
+  };
+}
 
 class AddLocationDialog extends Component {
   static propTypes = {
@@ -21,7 +23,7 @@ class AddLocationDialog extends Component {
     closePopup: PropTypes.func.isRequired,
   }
 
-  state = { ...initialState }
+  state = getInitialState()
 
   updateForm = (property, value) => {
     const newState = { ...this.state };
@@ -45,7 +47,7 @@ class AddLocationDialog extends Component {
 
   // Clears state and closes dialog window
   closePopup = () => {
-    this.setState(initialState);
+    this.setState(getInitialState());
     this.props.closePopup();
   }
 
