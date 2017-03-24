@@ -4,17 +4,20 @@ import FlatButton from 'material-ui/FlatButton';
 import _isEmpty from 'lodash/isEmpty';
 import AddLocationForm from './AddLocationForm';
 
-function getInitialState() {
-  return {
-    formData: {
-      name: '',
-      link: '',
-      description: '',
-      location: {}
-    },
-    validationErrors: {}
-  };
-}
+const getInitialState = () => ({
+  formData: {
+    name: '',
+    link: '',
+    description: '',
+    location: {}
+  },
+  validationErrors: {
+    name: '',
+    link: '',
+    description: '',
+    location: ''
+  }
+});
 
 class AddLocationDialog extends Component {
   static propTypes = {
