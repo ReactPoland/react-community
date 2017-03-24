@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import TextField from 'material-ui/TextField';
+import LocationInput from './LocationInput';
 
 class AddLocalizationForm extends Component {
   static propTypes = {
@@ -28,6 +29,10 @@ class AddLocalizationForm extends Component {
           multiLine
           value={description}
           onChange={ev => { onChange('description', ev.target.value); }}
+        />
+        <LocationInput
+          floatingLabelText="Location"
+          onChooseLocation={location => { onChange('location', location); }}
         />
       </div>
     );

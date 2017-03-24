@@ -6,20 +6,17 @@ import AddLocalizationPopup from './AddLocalizationPopup';
 import LocalizationMap from './LocalizationMap';
 
 export default class WorldPage extends Component {
-  constructor() {
-    super();
-    this.state = {
-      showMap: false, // Used as a fix for map not centering properly
-      showPopup: false, // Shows popup for adding localization to the map
-      markers: [
-        {
-          name: 'Test marker name lorem ipsum sit lorem',
-          link: 'http://google.com/',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-          lat: 51.505, lng: -0.09
-        }
-      ]
-    };
+  state = {
+    showMap: false, // Used as a fix for map not centering properly
+    showPopup: false, // Shows popup for adding localization to the map
+    markers: [
+      {
+        name: 'Test marker name lorem ipsum sit lorem',
+        link: 'http://google.com/',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+        lat: 51.505, lng: -0.09
+      }
+    ]
   }
 
   componentDidMount() {
@@ -45,6 +42,8 @@ export default class WorldPage extends Component {
       lat: _random(5, 50, true),
       lng: _random(-15, 50, true)
     };
+
+    console.log('newMarker', newMarker);
 
     markers.push(newMarker);
 

@@ -36,10 +36,16 @@ export default class Html extends Component {
           <link rel="shortcut icon" href="/favicon.ico" />
           <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
+
           {/* styles (will be present only in production with webpack extract text plugin) */}
-          {Object.keys(assets.styles).map((style, key) =>
-            <link href={assets.styles[style]} key={key} media="screen, projection"
-                  rel="stylesheet" type="text/css" charSet="UTF-8"/>
+          {
+            Object.keys(assets.styles).map((style, key) =>
+              <link
+                key={key}
+                href={assets.styles[style]}
+                media="screen, projection"
+                rel="stylesheet" type="text/css" charSet="UTF-8"
+              />
           )}
 
           {/* (will be present only in development mode) */}
@@ -50,8 +56,9 @@ export default class Html extends Component {
         </head>
         <body>
           <div id="content" dangerouslySetInnerHTML={{__html: content}}/>
-          <script dangerouslySetInnerHTML={{__html: `window.__data=${serialize(store.getState())};`}} charSet="UTF-8"/>
-          <script src={assets.javascript.main} charSet="UTF-8"/>
+          <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCD3X-Lrhc7YL0WlC6LceHVH9LzshluPd0&libraries=places" />
+          <script dangerouslySetInnerHTML={{__html: `window.__data=${serialize(store.getState())};`}} charSet="UTF-8" />
+          <script src={assets.javascript.main} charSet="UTF-8" />
         </body>
       </html>
     );

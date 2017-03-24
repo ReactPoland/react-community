@@ -10,26 +10,20 @@ class AddLocalizationPopup extends Component {
     closePopup: PropTypes.func.isRequired,
   }
 
-  constructor() {
-    super();
-
-    this.state = {
-      formData: {
-        name: '',
-        link: '',
-        description: ''
-      }
-    };
+  state = {
+    formData: {
+      name: '',
+      link: '',
+      description: '',
+      location: {}
+    }
   }
 
   updateForm = (property, value) => {
-    this.setState({
-      ...this.state,
-      formData: {
-        ...this.state.formData,
-        [property]: value
-      }
-    });
+    const newState = { ...this.state };
+    newState.formData[property] = value;
+    console.info('Form updated', newState.formData);
+    this.setState(newState);
   }
 
   addMarker = () => {
