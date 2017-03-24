@@ -32,13 +32,13 @@ class AddLocalizationPopup extends Component {
     });
   }
 
-  closePopup = () => {
-    this.setState({ formData: {} });
-    this.props.closePopup();
-  }
-
   addMarker = () => {
     this.props.addMarker(this.state.formData);
+    this.closePopup();
+  }
+
+  closePopup = () => {
+    this.setState({ formData: {} });
     this.props.closePopup();
   }
 

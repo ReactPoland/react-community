@@ -12,7 +12,12 @@ export default class WorldPage extends Component {
       showMap: false, // Used as a fix for map not centering properly
       showPopup: false, // Shows popup for adding localization to the map
       markers: [
-        { lat: 51.505, lng: -0.09 }
+        {
+          name: 'Test marker name lorem ipsum sit lorem',
+          link: 'http://google.com/',
+          description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+          lat: 51.505, lng: -0.09
+        }
       ]
     };
   }
@@ -31,9 +36,18 @@ export default class WorldPage extends Component {
   }
 
   addMarker = markerData => {
-    console.log('markerData', markerData);
     const markers = [...this.state.markers];
-    markers.push({ lat: _random(-90, 90, true), lng: _random(-180, 180, true) });
+
+    const newMarker = {
+      name: markerData.name,
+      link: markerData.link,
+      description: markerData.description,
+      lat: _random(5, 50, true),
+      lng: _random(-15, 50, true)
+    };
+
+    markers.push(newMarker);
+
     this.setState({ markers });
   }
 

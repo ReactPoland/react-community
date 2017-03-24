@@ -14,7 +14,12 @@ const LocalizationMap = props => {
         props.markers.map((marker, index) => (
           <Marker key={index} position={[marker.lat, marker.lng]}>
             <Popup>
-              <span>A pretty CSS3 popup.<br/>Easily customizable.</span>
+              <div className={styles.MarkerPopup}>
+                <h3>
+                  <a href={marker.link}>{marker.name}</a>
+                </h3>
+                <p>{marker.description}</p>
+              </div>
             </Popup>
           </Marker>
         ))
