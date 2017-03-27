@@ -67,8 +67,6 @@ export default class WorldPage extends Component {
   }
 
   // Adds new marker to the map and centers the view on it
-  // TODO: for now it saves them in components state, eventually they'll be
-  // stored in the database
   addMarker = markerData => {
     const lat = markerData.location.geometry.location.lat();
     const lng = markerData.location.geometry.location.lng();
@@ -89,7 +87,8 @@ export default class WorldPage extends Component {
     const { showAddLocationDialog, mapCenterCoord, mapZoomLevel } = this.state;
     const styles = require('./WorldPage.scss');
 
-    if (loadingMarkers) return <Spinner />;
+    // NOTE: adding the "|| __SERVER__" prevents "markup generated on the server was not what the client was expecting" warning
+    if (loadingMarkers || __SERVER__) return <Spinner />;
 
     const AddMarkerButton = (
       <FloatingActionButton
