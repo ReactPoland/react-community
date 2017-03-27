@@ -11,7 +11,7 @@ const initialState = {
   markers: [],
   addingMarker: false,
   markerAdded: false,
-  error: null
+  error: ''
 };
 
 export default function info(state = initialState, action = {}) {
@@ -26,7 +26,8 @@ export default function info(state = initialState, action = {}) {
         ...state,
         loadingMarkers: false,
         markersLoaded: true,
-        markers: action.result
+        markers: action.result,
+        error: ''
       };
     case LOAD_MAP_MARKERS_FAIL:
       return {
@@ -44,7 +45,8 @@ export default function info(state = initialState, action = {}) {
       return {
         ...state,
         addingMarker: false,
-        markerAdded: true
+        markerAdded: true,
+        error: ''
       };
     case ADD_MAP_MARKER_FAIL:
       return {
@@ -58,13 +60,24 @@ export default function info(state = initialState, action = {}) {
   }
 }
 
-export function isLoaded(globalState) {
+export function areMarkersLoaded(globalState) {
   return globalState.map && globalState.map.markersLoaded;
 }
 
 export function loadMarkers() {
   return {
     types: [LOAD_MAP_MARKERS, LOAD_MAP_MARKERS_SUCCESS, LOAD_MAP_MARKERS_FAIL],
-    promise: client => client.get('/loadInfo')
+    promise: client => client.get('/map/loadMarkers')
+  };
+}
+
+export function addMarker(marker) {
+  console.warn('xxx ACTION addMarker');
+  return {
+    types: [ADD_MAP_MARKER, ADD_MAP_MARKER_SUCCESS, ADD_MAP_MARKER_FAIL],
+    id: Date.now(),
+    promise: (client) => client.post('/map/addMarker', {
+      data: marker
+    })
   };
 }

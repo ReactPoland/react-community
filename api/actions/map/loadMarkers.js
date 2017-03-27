@@ -16,14 +16,10 @@ const initialMarkers = [
 ];
 
 export default function loadMarkers() {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     // Make async call to database
     setTimeout(() => {
-      if (Math.random() < 0.25) {
-        reject('Error while loading markers (this is a randomly occuring test error, API works okay - try again)');
-      } else {
-        resolve(initialMarkers);
-      }
+      resolve(initialMarkers);
     }, 2000); // Simulate async load
   });
 }

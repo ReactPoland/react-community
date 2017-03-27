@@ -1,52 +1,59 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
+import Snackbar from 'material-ui/Snackbar';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import AddLocationDialog from './AddLocationDialog';
 import LocationMap from './LocationMap';
-// import { isLoaded, loadMarkers } from 'redux/modules/auth';
+import { addMarker, loadMarkers } from 'redux/modules/map';
 
-@connect(
-  state => ({ mapMarkers: state.map.markers }),
-  // {logout, pushState: push}
-)
+const mappedState = ({ map }) => ({
+  mapMarkers: map.markers,
+  errorMessage: map.error,
+  markersLoaded: map.markersLoaded,
+  loadingMarkers: map.loadingMarkers
+});
+
+const mappedActions = {
+  addMarker,
+  loadMarkers
+};
+
+@connect(mappedState, mappedActions)
 export default class WorldPage extends Component {
   static propTypes = {
-    mapMarkers: PropTypes.array.isRequired
+    mapMarkers: PropTypes.array.isRequired,
+    errorMessage: PropTypes.string.isRequired,
+    markersLoaded: PropTypes.bool.isRequired,
+    loadingMarkers: PropTypes.bool.isRequired,
+    addMarker: PropTypes.func.isRequired,
+    loadMarkers: PropTypes.func.isRequired
   }
 
   state = {
     showMap: false, // Used as a fix for map not centering properly
-    showPopup: false, // Shows popup for adding localization to the map
+    showAddLocationDialog: false, // Shows popup for adding localization to the map
     mapCenterCoord: [0, 0],
-    mapZoomLevel: 3,
-    markers: [
-      {
-        // TODO: sample data, remove in production
-        name: 'Test marker name lorem ipsum sit lorem',
-        link: 'http://google.com/',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-        lat: 51.505, lng: -0.09
-      }
-    ]
+    mapZoomLevel: 3
   }
 
   componentWillMount() {
-    // console.warn('this.props.mapMarkers', this.props.mapMarkers);
+    if (!this.props.markersLoaded) this.props.loadMarkers();
   }
 
   componentDidMount() {
+    // console.warn('componentDidMount');
     // TODO: This is an ugly way to ensure that map centers after page loads (SSR issue)
     // Someone please find a better way to handle this 😔
     setTimeout(() => { this.setState({ showMap: true }); });
   }
 
   openEntryPopup = () => {
-    this.setState({ showPopup: true });
+    this.setState({ showAddLocationDialog: true });
   }
 
   closeEntryPopup = () => {
-    this.setState({ showPopup: false });
+    this.setState({ showAddLocationDialog: false });
   }
 
   // Adds new marker to the map and centers the view on it
@@ -75,7 +82,15 @@ export default class WorldPage extends Component {
   }
 
   render() {
-    const { showPopup, showMap, mapCenterCoord, mapZoomLevel, markers } = this.state;
+    const { mapMarkers, errorMessage, loadingMarkers } = this.props;
+    const { showAddLocationDialog, showMap, mapCenterCoord, mapZoomLevel } = this.state;
+
+    if (loadingMarkers) {
+      // console.warn('loadingMarkers');
+    }
+
+    if (loadingMarkers || !showMap) return null;
+
     const styles = require('./WorldPage.scss');
 
     const AddMarkerButton = (
@@ -87,20 +102,24 @@ export default class WorldPage extends Component {
       </FloatingActionButton>
     );
 
-    if (!showMap) return null;
-
     return (
       <div className={styles.WorldPage}>
         {AddMarkerButton}
         <LocationMap
           centerCoords={mapCenterCoord}
           zoomLevel={mapZoomLevel}
-          markers={markers}
+          markers={mapMarkers}
         />
         <AddLocationDialog
-          popupVisible={showPopup}
+          popupVisible={showAddLocationDialog}
           closePopup={this.closeEntryPopup}
           addMarker={this.addMarker}
+        />
+        <Snackbar
+          open={errorMessage !== ''}
+          message={errorMessage}
+          bodyStyle={{ padding: '8px 24px', lineHeight: 1.5, height: 'auto', backgroundColor: 'red' }}
+          autoHideDuration={5000}
         />
       </div>
     );
