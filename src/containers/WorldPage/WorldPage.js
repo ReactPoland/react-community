@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import _last from 'lodash/last';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import { addMarker, loadMarkers, clearLoadMapMarkersError } from 'redux/modules/mapModule';
+import { addMarker, loadMarkers, clearLoadMapMarkersError, clearAddMapMarkerError } from 'redux/modules/mapModule';
 import { Spinner, ErrorSnackbar } from '../../components';
 import AddLocationDialog from './AddLocationDialog';
 import LocationMap from './LocationMap';
@@ -21,7 +21,8 @@ const mappedState = ({ map }) => ({
 const mappedActions = {
   addMarker,
   loadMarkers,
-  clearLoadMapMarkersError
+  clearLoadMapMarkersError,
+  clearAddMapMarkerError
 };
 
 @connect(mappedState, mappedActions)
@@ -36,7 +37,8 @@ export default class WorldPage extends Component {
     addMarkerError: PropTypes.string.isRequired,
     addMarker: PropTypes.func.isRequired,
     loadMarkers: PropTypes.func.isRequired,
-    clearLoadMapMarkersError: PropTypes.func.isRequired
+    clearLoadMapMarkersError: PropTypes.func.isRequired,
+    clearAddMapMarkerError: PropTypes.func.isRequired
   }
 
   state = {
@@ -120,7 +122,8 @@ export default class WorldPage extends Component {
           addMarker={this.addMarker}
           addingMarker={addingMarker}
           markerAdded={markerAdded}
-          addMarkerError={addMarkerError}
+          errorMessage={addMarkerError}
+          clearError={this.props.clearAddMapMarkerError}
         />
         <ErrorSnackbar
           open={loadMapMarkersError !== ''}

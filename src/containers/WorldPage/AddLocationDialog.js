@@ -28,7 +28,8 @@ class AddLocationDialog extends Component {
     closePopup: PropTypes.func.isRequired,
     addingMarker: PropTypes.bool.isRequired,
     markerAdded: PropTypes.bool.isRequired,
-    addMarkerError: PropTypes.string.isRequired
+    errorMessage: PropTypes.string.isRequired,
+    clearError: PropTypes.func.isRequired
   }
 
   state = getInitialState()
@@ -53,15 +54,18 @@ class AddLocationDialog extends Component {
   }
 
   // Passes marker data to parent component if form is valid
+  // and no request is pending
   addMarker = () => {
-    if (this.validateForm()) {
+    if (this.validateForm() && !this.props.addingMarker) {
       this.props.addMarker(this.state.formData);
     }
   }
 
   // Clears state and closes dialog window
   closePopup = () => {
+    if (this.props.addingMarker) return;
     this.setState(getInitialState());
+    this.props.clearError();
     this.props.closePopup();
   }
 
@@ -81,7 +85,7 @@ class AddLocationDialog extends Component {
   }
 
   render() {
-    const { popupVisible, addingMarker, addMarkerError } = this.props;
+    const { popupVisible, addingMarker, errorMessage } = this.props;
     const { formData, validationErrors } = this.state;
     const actions = [
       <FlatButton
@@ -94,6 +98,7 @@ class AddLocationDialog extends Component {
         style={{ marginLeft: 8 }}
         primary
         onTouchTap={this.addMarker}
+        disabled={addingMarker}
       />
     ];
 
@@ -112,9 +117,9 @@ class AddLocationDialog extends Component {
           onChange={this.updateForm}
         />
         {
-          addMarkerError &&
+          errorMessage &&
             <Alert bsStyle="danger" style={{ margin: '20px 0 -20px' }}>
-              <strong>{addMarkerError}</strong>
+              <strong>{errorMessage}</strong>
             </Alert>
         }
       </Dialog>
