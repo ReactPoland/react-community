@@ -63,9 +63,8 @@ class AddLocationDialog extends Component {
 
   // Clears state and closes dialog window
   closePopup = () => {
-    if (this.props.addingMarker) return;
     this.setState(getInitialState());
-    this.props.clearError();
+    if (this.props.errorMessage) this.props.clearError();
     this.props.closePopup();
   }
 
@@ -74,7 +73,7 @@ class AddLocationDialog extends Component {
     const validationErrors = {};
 
     if (!name) validationErrors.name = 'Name is required';
-    if (!link) validationErrors.link = 'Link is required';
+    if (!link || link === 'http://') validationErrors.link = 'Link is required';
     if (!_startsWith(link, 'http://')) validationErrors.link = 'Link must start with "http://"';
     if (!description) validationErrors.description = 'Description is required';
     if (!location.description) validationErrors.location = 'Location is required';
