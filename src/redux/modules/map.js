@@ -19,6 +19,7 @@ export default function info(state = initialState, action = {}) {
     case LOAD_MAP_MARKERS:
       return {
         ...state,
+        markersLoaded: false,
         loadingMarkers: true
       };
     case LOAD_MAP_MARKERS_SUCCESS:
@@ -39,11 +40,16 @@ export default function info(state = initialState, action = {}) {
     case ADD_MAP_MARKER:
       return {
         ...state,
+        markerAdded: false,
         addingMarker: true
       };
     case ADD_MAP_MARKER_SUCCESS:
       return {
         ...state,
+        markers: [
+          ...state.markers,
+          action.result.marker
+        ],
         addingMarker: false,
         markerAdded: true,
         error: ''
@@ -72,10 +78,8 @@ export function loadMarkers() {
 }
 
 export function addMarker(marker) {
-  console.warn('xxx ACTION addMarker');
   return {
     types: [ADD_MAP_MARKER, ADD_MAP_MARKER_SUCCESS, ADD_MAP_MARKER_FAIL],
-    id: Date.now(),
     promise: (client) => client.post('/map/addMarker', {
       data: marker
     })

@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import _last from 'lodash/last';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { addMarker, loadMarkers } from 'redux/modules/map';
@@ -11,7 +12,9 @@ const mappedState = ({ map }) => ({
   mapMarkers: map.markers,
   errorMessage: map.error,
   markersLoaded: map.markersLoaded,
-  loadingMarkers: map.loadingMarkers
+  loadingMarkers: map.loadingMarkers,
+  addingMarker: map.addingMarker,
+  markerAdded: map.markerAdded
 });
 
 const mappedActions = {
@@ -26,6 +29,8 @@ export default class WorldPage extends Component {
     errorMessage: PropTypes.string.isRequired,
     markersLoaded: PropTypes.bool.isRequired,
     loadingMarkers: PropTypes.bool.isRequired,
+    addingMarker: PropTypes.bool.isRequired,
+    markerAdded: PropTypes.bool.isRequired,
     addMarker: PropTypes.func.isRequired,
     loadMarkers: PropTypes.func.isRequired
   }
@@ -41,6 +46,18 @@ export default class WorldPage extends Component {
     if (!this.props.markersLoaded) this.props.loadMarkers();
   }
 
+  componentWillReceiveProps(nextProps) {
+    // If we successfully got a new marker, center the map view on it
+    if (!this.props.markerAdded && nextProps.markerAdded) {
+      const lastMarker = _last(nextProps.mapMarkers);
+
+      this.setState({
+        mapZoomLevel: 10,
+        mapCenterCoord: [lastMarker.lat, lastMarker.lng]
+      });
+    }
+  }
+
   openAddLocationDialog = () => {
     this.setState({ showAddLocationDialog: true });
   }
@@ -53,7 +70,6 @@ export default class WorldPage extends Component {
   // TODO: for now it saves them in components state, eventually they'll be
   // stored in the database
   addMarker = markerData => {
-    const markers = [...this.state.markers];
     const lat = markerData.location.geometry.location.lat();
     const lng = markerData.location.geometry.location.lng();
 
@@ -65,21 +81,15 @@ export default class WorldPage extends Component {
       lng
     };
 
-    markers.push(newMarker);
-
-    this.setState({
-      markers,
-      mapZoomLevel: 10,
-      mapCenterCoord: [lat, lng]
-    });
+    this.props.addMarker(newMarker);
   }
 
   render() {
-    const { mapMarkers, errorMessage, loadingMarkers } = this.props;
+    const { mapMarkers, errorMessage, loadingMarkers, addingMarker } = this.props;
     const { showAddLocationDialog, mapCenterCoord, mapZoomLevel } = this.state;
     const styles = require('./WorldPage.scss');
 
-    if (loadingMarkers) return <Spinner />;
+    if (loadingMarkers || addingMarker) return <Spinner />;
 
     const AddMarkerButton = (
       <FloatingActionButton
