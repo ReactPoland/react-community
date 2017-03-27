@@ -14,7 +14,7 @@ const initialState = {
   error: ''
 };
 
-export default function info(state = initialState, action = {}) {
+export default function mapModule(state = initialState, action = {}) {
   switch (action.type) {
     case LOAD_MAP_MARKERS:
       return {
@@ -64,10 +64,6 @@ export default function info(state = initialState, action = {}) {
     default:
       return state;
   }
-}
-
-export function areMarkersLoaded(globalState) {
-  return globalState.map && globalState.map.markersLoaded;
 }
 
 export function loadMarkers() {

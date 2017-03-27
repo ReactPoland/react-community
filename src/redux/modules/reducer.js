@@ -9,7 +9,7 @@ import counter from './counter';
 import { reducer as form } from 'redux-form';
 import info from './info';
 import widgets from './widgets';
-import map from './map';
+import mapModule from './mapModule';
 
 export default combineReducers({
   routing: routerReducer,
@@ -24,5 +24,5 @@ export default combineReducers({
   info,
   pagination,
   widgets,
-  map
+  map: mapModule
 });

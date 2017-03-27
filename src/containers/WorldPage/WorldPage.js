@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import _last from 'lodash/last';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import { addMarker, loadMarkers } from 'redux/modules/map';
+import { addMarker, loadMarkers } from 'redux/modules/mapModule';
 import { Spinner, ErrorSnackbar } from '../../components';
 import AddLocationDialog from './AddLocationDialog';
 import LocationMap from './LocationMap';
