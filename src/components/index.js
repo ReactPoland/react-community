@@ -1,8 +1,1 @@
-/**
- *  Point of contact for component modules
- *
- *  ie: import { CounterButton, InfoBar } from 'components';
- *
- */
-
-// export Something from './Something/Something';
+export Spinner from './Spinner';
