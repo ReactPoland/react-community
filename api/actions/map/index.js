@@ -1,0 +1,1 @@
+export loadMarkers from './loadMarkers';
