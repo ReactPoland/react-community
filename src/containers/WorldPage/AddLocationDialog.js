@@ -25,9 +25,18 @@ class AddLocationDialog extends Component {
     popupVisible: PropTypes.bool.isRequired,
     addMarker: PropTypes.func.isRequired,
     closePopup: PropTypes.func.isRequired,
+    addingMarker: PropTypes.bool.isRequired,
+    markerAdded: PropTypes.bool.isRequired
   }
 
   state = getInitialState()
+
+  componentWillReceiveProps(nextProps) {
+    // If we successfully got a new marker, close the dialog window
+    if (!this.props.markerAdded && nextProps.markerAdded) {
+      this.closePopup();
+    }
+  }
 
   updateForm = (property, value) => {
     const newState = { ...this.state };
@@ -45,7 +54,6 @@ class AddLocationDialog extends Component {
   addMarker = () => {
     if (this.validateForm()) {
       this.props.addMarker(this.state.formData);
-      this.closePopup();
     }
   }
 
@@ -71,7 +79,7 @@ class AddLocationDialog extends Component {
   }
 
   render() {
-    const { popupVisible } = this.props;
+    const { popupVisible, addingMarker } = this.props;
     const { formData, validationErrors } = this.state;
     const actions = [
       <FlatButton
@@ -80,7 +88,7 @@ class AddLocationDialog extends Component {
         onTouchTap={this.closePopup}
       />,
       <FlatButton
-        label="Add"
+        label={addingMarker ? 'Adding...' : 'Add'}
         style={{ marginLeft: 8 }}
         primary
         onTouchTap={this.addMarker}

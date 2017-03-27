@@ -85,11 +85,11 @@ export default class WorldPage extends Component {
   }
 
   render() {
-    const { mapMarkers, errorMessage, loadingMarkers, addingMarker } = this.props;
+    const { mapMarkers, errorMessage, loadingMarkers, addingMarker, markerAdded } = this.props;
     const { showAddLocationDialog, mapCenterCoord, mapZoomLevel } = this.state;
     const styles = require('./WorldPage.scss');
 
-    if (loadingMarkers || addingMarker) return <Spinner />;
+    if (loadingMarkers) return <Spinner />;
 
     const AddMarkerButton = (
       <FloatingActionButton
@@ -112,6 +112,8 @@ export default class WorldPage extends Component {
           popupVisible={showAddLocationDialog}
           closePopup={this.closeAddLocationDialog}
           addMarker={this.addMarker}
+          addingMarker={addingMarker}
+          markerAdded={markerAdded}
         />
         <ErrorSnackbar
           open={errorMessage !== ''}
