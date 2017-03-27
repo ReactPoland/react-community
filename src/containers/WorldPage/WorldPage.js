@@ -1,10 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
-import Snackbar from 'material-ui/Snackbar';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { addMarker, loadMarkers } from 'redux/modules/map';
-import { Spinner } from '../../components';
+import { Spinner, ErrorSnackbar } from '../../components';
 import AddLocationDialog from './AddLocationDialog';
 import LocationMap from './LocationMap';
 
@@ -38,14 +37,15 @@ export default class WorldPage extends Component {
   }
 
   componentWillMount() {
+    // Fetch markers from API
     if (!this.props.markersLoaded) this.props.loadMarkers();
   }
 
-  openEntryPopup = () => {
+  openAddLocationDialog = () => {
     this.setState({ showAddLocationDialog: true });
   }
 
-  closeEntryPopup = () => {
+  closeAddLocationDialog = () => {
     this.setState({ showAddLocationDialog: false });
   }
 
@@ -84,7 +84,7 @@ export default class WorldPage extends Component {
     const AddMarkerButton = (
       <FloatingActionButton
         className={styles.AddMarkerButton}
-        onClick={this.openEntryPopup}
+        onClick={this.openAddLocationDialog}
       >
         <ContentAdd />
       </FloatingActionButton>
@@ -100,14 +100,12 @@ export default class WorldPage extends Component {
         />
         <AddLocationDialog
           popupVisible={showAddLocationDialog}
-          closePopup={this.closeEntryPopup}
+          closePopup={this.closeAddLocationDialog}
           addMarker={this.addMarker}
         />
-        <Snackbar
+        <ErrorSnackbar
           open={errorMessage !== ''}
           message={errorMessage}
-          bodyStyle={{ padding: '8px 24px', lineHeight: 1.5, height: 'auto', backgroundColor: 'red' }}
-          autoHideDuration={5000}
         />
       </div>
     );
