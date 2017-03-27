@@ -8,12 +8,13 @@ const style = {
   lineHeight: 1.5
 };
 
-const ErrorSnackbar = ({ open, message, autoHideDuration }) => {
+const ErrorSnackbar = ({ open, message, autoHideDuration, onRequestClose }) => {
   return (
     <Snackbar
       open={open}
       message={message}
       autoHideDuration={autoHideDuration}
+      onRequestClose={onRequestClose}
       bodyStyle={style}
     />
   );
@@ -22,11 +23,13 @@ const ErrorSnackbar = ({ open, message, autoHideDuration }) => {
 ErrorSnackbar.propTypes = {
   open: PropTypes.bool.isRequired,
   message: PropTypes.string.isRequired,
-  autoHideDuration: PropTypes.number
+  autoHideDuration: PropTypes.number,
+  onRequestClose: PropTypes.func
 };
 
 ErrorSnackbar.defaultProps = {
-  autoHideDuration: 5000
+  autoHideDuration: 5000,
+  onRequestClose: () => {}
 };
 
 export default ErrorSnackbar;

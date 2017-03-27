@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import Alert from 'react-bootstrap/lib/Alert';
 import _isEmpty from 'lodash/isEmpty';
 import _startsWith from 'lodash/startsWith';
 import AddLocationForm from './AddLocationForm';
@@ -26,7 +27,8 @@ class AddLocationDialog extends Component {
     addMarker: PropTypes.func.isRequired,
     closePopup: PropTypes.func.isRequired,
     addingMarker: PropTypes.bool.isRequired,
-    markerAdded: PropTypes.bool.isRequired
+    markerAdded: PropTypes.bool.isRequired,
+    addMarkerError: PropTypes.string.isRequired
   }
 
   state = getInitialState()
@@ -79,7 +81,7 @@ class AddLocationDialog extends Component {
   }
 
   render() {
-    const { popupVisible, addingMarker } = this.props;
+    const { popupVisible, addingMarker, addMarkerError } = this.props;
     const { formData, validationErrors } = this.state;
     const actions = [
       <FlatButton
@@ -109,6 +111,12 @@ class AddLocationDialog extends Component {
           validationErrors={validationErrors}
           onChange={this.updateForm}
         />
+        {
+          addMarkerError &&
+            <Alert bsStyle="danger" style={{ margin: '20px 0 -20px' }}>
+              <strong>{addMarkerError}</strong>
+            </Alert>
+        }
       </Dialog>
     );
   }
