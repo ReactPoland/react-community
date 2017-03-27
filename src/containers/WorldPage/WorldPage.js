@@ -1,10 +1,20 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import AddLocationDialog from './AddLocationDialog';
 import LocationMap from './LocationMap';
+// import { isLoaded, loadMarkers } from 'redux/modules/auth';
 
+@connect(
+  state => ({ mapMarkers: state.map.markers }),
+  // {logout, pushState: push}
+)
 export default class WorldPage extends Component {
+  static propTypes = {
+    mapMarkers: PropTypes.array.isRequired
+  }
+
   state = {
     showMap: false, // Used as a fix for map not centering properly
     showPopup: false, // Shows popup for adding localization to the map
@@ -19,6 +29,10 @@ export default class WorldPage extends Component {
         lat: 51.505, lng: -0.09
       }
     ]
+  }
+
+  componentWillMount() {
+    // console.warn('this.props.mapMarkers', this.props.mapMarkers);
   }
 
   componentDidMount() {
