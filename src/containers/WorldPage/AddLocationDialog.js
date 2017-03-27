@@ -74,7 +74,7 @@ class AddLocationDialog extends Component {
 
     if (!name) validationErrors.name = 'Name is required';
     if (!link || link === 'http://') validationErrors.link = 'Link is required';
-    if (!_startsWith(link, 'http://')) validationErrors.link = 'Link must start with "http://"';
+    if (!_startsWith(link, 'http://') || !_startsWith(link, 'https://')) validationErrors.link = 'Link must start with "http://"';
     if (!description) validationErrors.description = 'Description is required';
     if (!location.description) validationErrors.location = 'Location is required';
 

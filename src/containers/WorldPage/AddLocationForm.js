@@ -9,6 +9,15 @@ class AddLocationForm extends Component {
     validationErrors: PropTypes.object.isRequired
   }
 
+  onLinkFieldFocus = ev => {
+    // Move cursor to the end of the input if it contains
+    // default value on focus
+    if (this.props.formData.link === 'http://') {
+      ev.target.value = '';
+      ev.target.value = this.props.formData.link;
+    }
+  }
+
   render() {
     const {
       formData: { name, link, description },
@@ -24,12 +33,14 @@ class AddLocationForm extends Component {
           value={name}
           onChange={ev => { onChange('name', ev.target.value); }}
           fullWidth
+          autoFocus
         />
         <TextField
           floatingLabelText="Link"
           errorText={validationErrors.link}
           value={link}
           onChange={ev => { onChange('link', ev.target.value); }}
+          onFocus={this.onLinkFieldFocus}
           fullWidth
         />
         <TextField
