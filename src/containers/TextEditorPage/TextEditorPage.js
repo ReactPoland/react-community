@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import TextEditor from './TextEditor';
+import RichTextEditor from '../../components/RichTextEditor';
 
 export default class TextEditorPage extends Component {
   state = {
@@ -7,9 +7,7 @@ export default class TextEditorPage extends Component {
   }
 
   componentDidMount() {
-    console.warn('didMount');
     setTimeout(() => {
-      console.warn('didMount timeout');
       this.setState({ showEditor: true });
     }, 3000);
   }
@@ -20,7 +18,7 @@ export default class TextEditorPage extends Component {
 
     return (
       <div className={styles.container}>
-        {showEditor && <TextEditor />}
+        {showEditor && <RichTextEditor />}
       </div>
     );
   }
