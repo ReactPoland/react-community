@@ -84,6 +84,10 @@ export default class App extends Component {
                 <NavItem>World Map</NavItem>
               </LinkContainer>
 
+              <LinkContainer to="/text">
+                <NavItem>Text Editor</NavItem>
+              </LinkContainer>
+
               {!user &&
               <LinkContainer to="/login">
                 <NavItem>Login</NavItem>

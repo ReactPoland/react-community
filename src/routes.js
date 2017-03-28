@@ -1,15 +1,10 @@
 import React from 'react';
-import {IndexRoute, Route} from 'react-router';
+import { IndexRoute, Route } from 'react-router';
 import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
 import {
-    App,
-    Home,
-    Chat,
-    Login,
-    LoginSuccess,
-    WorldPage,
-    NotFound,
-  } from 'containers';
+  App, Home, Chat, Login, LoginSuccess, WorldPage, NotFound,
+  TextEditorPage
+} from 'containers';
 
 export default (store) => {
   const requireLogin = (nextState, replace, cb) => {
@@ -49,6 +44,7 @@ export default (store) => {
       { /* Routes */ }
       <Route path="login" component={Login} />
       <Route path="world" component={WorldPage} />
+      <Route path="text" component={TextEditorPage} />
 
       { /* Catch all route */ }
       <Route path="*" component={NotFound} status={404} />
