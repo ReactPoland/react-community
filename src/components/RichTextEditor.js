@@ -1,7 +1,7 @@
 /* eslint-disable */
 
+import React, { Component } from 'react';
 import { Editor, Raw } from 'slate';
-import React from 'react';
 import initialState from './state.json';
 
 /**
@@ -50,7 +50,7 @@ const schema = {
  * @type {Component}
  */
 
-class RichTextEditor extends React.Component {
+class RichTextEditor extends Component {
 
   /**
    * Deserialize the initial editor state.
@@ -93,6 +93,7 @@ class RichTextEditor extends React.Component {
    */
 
   onChange = (state) => {
+    this.props.onChange(JSON.stringify(Raw.serialize(state)));
     this.setState({ state });
   }
 

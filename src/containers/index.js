@@ -5,4 +5,4 @@ export WorldPage from './WorldPage/WorldPage';
 export Login from './Login/Login';
 export LoginSuccess from './LoginSuccess/LoginSuccess';
 export NotFound from './NotFound/NotFound';
-export TextEditorPage from './TextEditorPage/TextEditorPage';
+export NewArticlePage from './NewArticlePage/NewArticlePage';
