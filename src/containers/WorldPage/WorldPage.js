@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 import _last from 'lodash/last';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import { addMarker, loadMarkers, clearLoadMapMarkersError, clearAddMapMarkerError } from 'redux/modules/mapModule';
+import {
+  loadMarkers, removeMarker, addMarker, clearLoadMapMarkersError,
+  clearAddMapMarkerError
+} from 'redux/modules/mapModule';
 import { Spinner, ErrorSnackbar } from '../../components';
 import AddLocationDialog from './AddLocationDialog';
 import LocationMap from './LocationMap';
@@ -15,12 +18,14 @@ const mappedState = ({ map }) => ({
   loadingMarkers: map.loadingMarkers,
   addingMarker: map.addingMarker,
   markerAdded: map.markerAdded,
-  addMarkerError: map.addMarkerError
+  addMarkerError: map.addMarkerError,
+  removingMarker: map.removingMarker
 });
 
 const mappedActions = {
-  addMarker,
   loadMarkers,
+  addMarker,
+  removeMarker,
   clearLoadMapMarkersError,
   clearAddMapMarkerError
 };
@@ -34,9 +39,11 @@ export default class WorldPage extends Component {
     loadingMarkers: PropTypes.bool.isRequired,
     addingMarker: PropTypes.bool.isRequired,
     markerAdded: PropTypes.bool.isRequired,
+    removingMarker: PropTypes.number,
     addMarkerError: PropTypes.string.isRequired,
-    addMarker: PropTypes.func.isRequired,
     loadMarkers: PropTypes.func.isRequired,
+    addMarker: PropTypes.func.isRequired,
+    removeMarker: PropTypes.func.isRequired,
     clearLoadMapMarkersError: PropTypes.func.isRequired,
     clearAddMapMarkerError: PropTypes.func.isRequired
   }
@@ -88,10 +95,14 @@ export default class WorldPage extends Component {
     this.props.addMarker(newMarker);
   }
 
+  removeMarker = markerId => {
+    this.props.removeMarker(markerId);
+  }
+
   render() {
     const {
       mapMarkers, loadMapMarkersError, loadingMarkers, addingMarker,
-      markerAdded, addMarkerError
+      markerAdded, addMarkerError, removingMarker
     } = this.props;
     const { showAddLocationDialog, mapCenterCoord, mapZoomLevel } = this.state;
     const styles = require('./WorldPage.scss');
@@ -115,6 +126,8 @@ export default class WorldPage extends Component {
           centerCoords={mapCenterCoord}
           zoomLevel={mapZoomLevel}
           markers={mapMarkers}
+          removeMarker={this.removeMarker}
+          removingMarker={removingMarker}
         />
         <AddLocationDialog
           popupVisible={showAddLocationDialog}
