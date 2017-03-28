@@ -31,7 +31,7 @@ export default function mapModule(state = initialState, action = {}) {
         ...state,
         loadingMarkers: false,
         markersLoaded: true,
-        markers: action.result
+        markers: action.result.message
       };
     case LOAD_MAP_MARKERS_FAIL:
       return {
@@ -52,7 +52,7 @@ export default function mapModule(state = initialState, action = {}) {
         ...state,
         markers: [
           ...state.markers,
-          action.result.marker
+          action.result.message
         ],
         addingMarker: false,
         markerAdded: true
