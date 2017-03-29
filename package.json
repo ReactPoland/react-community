@@ -143,6 +143,7 @@
     "sequelize": "^3.30.4",
     "serialize-javascript": "^1.1.2",
     "serve-favicon": "^2.3.0",
+    "slate": "^0.19.7",
     "socket.io": "^1.3.7",
     "socket.io-client": "^1.3.7",
     "superagent": "^1.4.0",
