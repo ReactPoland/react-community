@@ -35,7 +35,8 @@ const rightIconMenu = ({ onMenuItemClick }) => (
 class ArticlesList extends Component {
   static propTypes = {
     articles: PropTypes.array.isRequired,
-    onMenuItemClick: PropTypes.func.isRequired
+    onMenuItemClick: PropTypes.func.isRequired,
+    onListItemClick: PropTypes.func.isRequired
   }
 
   render() {
@@ -46,6 +47,7 @@ class ArticlesList extends Component {
             <ListItem
               key={id}
               primaryText={title}
+              onClick={() => { this.props.onListItemClick(id); }}
               rightIconButton={
                 rightIconMenu({
                   onMenuItemClick: (type) => {

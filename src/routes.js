@@ -3,7 +3,7 @@ import { IndexRoute, Route } from 'react-router';
 import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
 import {
   App, Home, Chat, Login, LoginSuccess, WorldPage, NotFound,
-  NewArticlePage, ArticlesPage
+  NewArticlePage, ArticlesPage, ArticlePage
 } from 'containers';
 
 export default (store) => {
@@ -40,6 +40,7 @@ export default (store) => {
       <Route path="world" component={WorldPage} />
       <Route path="new-article" component={NewArticlePage} />
       <Route path="articles" component={ArticlesPage} />
+      <Route path="articles/:id" component={ArticlePage} />
 
       { /* Catch all route */ }
       <Route path="*" component={NotFound} status={404} />

@@ -1,15 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
+import _find from 'lodash/find';
+import { Html } from 'slate';
 // LAYOUT
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import Paper from 'material-ui/Paper';
 // STORE
-import { loadArticles, removeArticle } from 'redux/modules/articlesModule';
-// COMPONENTS
-import ArticlesList from './ArticlesList';
+import { loadArticles } from 'redux/modules/articlesModule';
 
 
 const mappedState = ({ articles }) => ({
@@ -19,47 +18,34 @@ const mappedState = ({ articles }) => ({
 });
 
 const mappedActions = {
-  loadArticles,
-  removeArticle,
-  pushState: push
+  loadArticles
 };
 
 @connect(mappedState, mappedActions)
-export default class ArticlesPage extends Component {
+export default class ArticlePage extends Component {
   static propTypes = {
     articles: PropTypes.array.isRequired,
     loadingArticles: PropTypes.bool.isRequired,
     articlesLoaded: PropTypes.bool.isRequired,
     loadArticles: PropTypes.func.isRequired,
-    removeArticle: PropTypes.func.isRequired,
-    pushState: PropTypes.func.isRequired
+    params: PropTypes.object.isRequired
   }
 
   componentWillMount() {
     if (!this.props.articlesLoaded) this.props.loadArticles();
   }
 
-  onMenuItemClick = (action) => {
-    if (action.type === 'edit') this.editArticle(action.id);
-    if (action.type === 'delete') this.removeArticle(action.id);
-  }
-
-  redirectToArticle = (articleId) => {
-    console.warn('redirectToArticle', articleId);
-    this.props.pushState(`/articles/${articleId}`);
-  }
-
-  editArticle = (articleId) => {
-    console.warn('editArticle', articleId);
-  }
-
-  removeArticle = (articleId) => {
-    this.props.removeArticle(articleId);
+  renderArticleContent = (articleContent) => {
+    const content = Html.serialize(JSON.parse(articleContent));
+    console.warn('content', content);
+    return content;
   }
 
   render() {
     const { articles, loadingArticles } = this.props;
-    const styles = require('./ArticlesPage.scss');
+    const styles = require('./ArticlePage.scss');
+    const articleId = this.props.params.id;
+    const article = _find(articles, art => articleId === `${art.id}`);
 
     return (
       <div className={styles.container}>
@@ -67,14 +53,13 @@ export default class ArticlesPage extends Component {
           <Row>
             <Col xs={12}>
               <Paper className={styles.content} zDepth={2}>
-                <h1>Articles</h1>
                 {loadingArticles &&
                   <p>Loading...</p>}
-                <ArticlesList
-                  articles={articles}
-                  onListItemClick={this.redirectToArticle}
-                  onMenuItemClick={this.onMenuItemClick}
-                />
+                {!loadingArticles && article &&
+                  <div>
+                    <h1>{article.title}</h1>
+                    <p>{this.renderArticleContent(article.content)}</p>
+                  </div>}
               </Paper>
             </Col>
           </Row>
