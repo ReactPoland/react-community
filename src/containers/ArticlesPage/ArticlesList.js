@@ -14,27 +14,45 @@ const iconButtonElement = (
   </IconButton>
 );
 
-const rightIconMenu = (
-  <IconMenu iconButtonElement={iconButtonElement}>
-    <MenuItem primaryText="Edit" leftIcon={<EditIcon />} />
-    <MenuItem primaryText="Delete" leftIcon={<DeleteIcon />} />
+const rightIconMenu = ({ onMenuItemClick }) => (
+  <IconMenu
+    iconButtonElement={iconButtonElement}
+    onItemTouchTap={(ev, child) => { onMenuItemClick(child.props.action); }}
+  >
+    <MenuItem
+      action="edit"
+      primaryText="Edit"
+      leftIcon={<EditIcon />}
+    />
+    <MenuItem
+      action="delete"
+      primaryText="Delete"
+      leftIcon={<DeleteIcon />}
+    />
   </IconMenu>
 );
 
 class ArticlesList extends Component {
   static propTypes = {
-    articles: PropTypes.array.isRequired
+    articles: PropTypes.array.isRequired,
+    onMenuItemClick: PropTypes.func.isRequired
   }
 
   render() {
     return (
       <List>
         {
-          this.props.articles.map(art => (
+          this.props.articles.map(({ id, title }) => (
             <ListItem
-              key={art.id}
-              primaryText={art.title}
-              rightIconButton={rightIconMenu}
+              key={id}
+              primaryText={title}
+              rightIconButton={
+                rightIconMenu({
+                  onMenuItemClick: (type) => {
+                    this.props.onMenuItemClick({ type, id });
+                  }
+                })
+              }
             />
           ))
         }

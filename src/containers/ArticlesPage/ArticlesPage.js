@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import Paper from 'material-ui/Paper';
 // STORE
-import { loadArticles } from 'redux/modules/articlesModule';
+import { loadArticles, removeArticle } from 'redux/modules/articlesModule';
 // COMPONENTS
 import ArticlesList from './ArticlesList';
 
@@ -18,7 +18,8 @@ const mappedState = ({ articles }) => ({
 });
 
 const mappedActions = {
-  loadArticles
+  loadArticles,
+  removeArticle
 };
 
 @connect(mappedState, mappedActions)
@@ -27,11 +28,25 @@ export default class ArticlesPage extends Component {
     articles: PropTypes.array.isRequired,
     loadingArticles: PropTypes.bool.isRequired,
     articlesLoaded: PropTypes.bool.isRequired,
-    loadArticles: PropTypes.func.isRequired
+    loadArticles: PropTypes.func.isRequired,
+    removeArticle: PropTypes.func.isRequired
   }
 
   componentWillMount() {
     if (!this.props.articlesLoaded) this.props.loadArticles();
+  }
+
+  onMenuItemClick = (action) => {
+    if (action.type === 'edit') this.editArticle(action.id);
+    if (action.type === 'delete') this.removeArticle(action.id);
+  }
+
+  editArticle = (articleId) => {
+    console.warn('editArticle', articleId);
+  }
+
+  removeArticle = (articleId) => {
+    console.warn('removeArticle', articleId);
   }
 
   render() {
@@ -47,7 +62,10 @@ export default class ArticlesPage extends Component {
                 <h1>Articles</h1>
                 {loadingArticles &&
                   <p>Loading...</p>}
-                <ArticlesList articles={articles} />
+                <ArticlesList
+                  articles={articles}
+                  onMenuItemClick={this.onMenuItemClick}
+                />
               </Paper>
             </Col>
           </Row>
