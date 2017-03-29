@@ -1,10 +1,5 @@
 :global {
 .RichTextEditor {
-  max-width: 42em;
-  margin: 0 auto;
-  padding: 20px;
-  background: #fff;
-
   // GENERIC STYLES
 
   input,
@@ -100,10 +95,9 @@
   }
 
   .toolbar-menu {
-    padding: 1px 0 17px 18px;
-    margin: 0 -20px;
-    border-bottom: 2px solid #eee;
-    margin-bottom: 20px;
+    padding: 16px 0;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 24px;
   }
 
   .hover-menu {

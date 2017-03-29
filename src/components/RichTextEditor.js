@@ -1,8 +1,8 @@
 /* eslint-disable */
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Editor, Raw } from 'slate';
-import initialState from './state.json';
+import defaultState from './state.json';
 
 /**
  * Define the default node type.
@@ -51,6 +51,9 @@ const schema = {
  */
 
 class RichTextEditor extends Component {
+  static propTypes = {
+    initialState: PropTypes.object,
+  }
 
   /**
    * Deserialize the initial editor state.
@@ -59,7 +62,7 @@ class RichTextEditor extends Component {
    */
 
   state = {
-    state: Raw.deserialize(initialState, { terse: true })
+    state: Raw.deserialize(this.props.initialState || defaultState, { terse: true })
   };
 
   /**
@@ -93,7 +96,7 @@ class RichTextEditor extends Component {
    */
 
   onChange = (state) => {
-    this.props.onChange(JSON.stringify(Raw.serialize(state)));
+    this.props.onChange(Raw.serialize(state));
     this.setState({ state });
   }
 
