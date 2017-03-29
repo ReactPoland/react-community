@@ -1,6 +1,7 @@
 import React from 'react';
 import { IndexRoute, Route } from 'react-router';
 import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
+import { ArticlesLayout } from 'layouts';
 import {
   App, Home, Chat, Login, LoginSuccess, WorldPage, NotFound,
   NewArticlePage, ArticlesPage, ArticlePage
@@ -38,9 +39,12 @@ export default (store) => {
       { /* Routes */ }
       <Route path="login" component={Login} />
       <Route path="world" component={WorldPage} />
-      <Route path="new-article" component={NewArticlePage} />
-      <Route path="articles" component={ArticlesPage} />
-      <Route path="articles/:id" component={ArticlePage} />
+
+      <Route path="articles" component={ArticlesLayout}>
+        <IndexRoute component={ArticlesPage} />
+        <Route path="/article/:id" component={ArticlePage} />
+        <Route path="add" component={NewArticlePage} />
+      </Route>
 
       { /* Catch all route */ }
       <Route path="*" component={NotFound} status={404} />

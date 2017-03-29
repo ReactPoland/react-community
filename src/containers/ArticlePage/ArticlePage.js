@@ -5,7 +5,6 @@ import _find from 'lodash/find';
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
-import Paper from 'material-ui/Paper';
 // STORE
 import { loadArticles } from 'redux/modules/articlesModule';
 // COMPONENTS
@@ -47,28 +46,23 @@ export default class ArticlePage extends Component {
 
   render() {
     const { articles, loadingArticles } = this.props;
-    const styles = require('./ArticlePage.scss');
     const articleId = this.props.params.id;
     const article = _find(articles, art => articleId === `${art.id}`);
 
     return (
-      <div className={styles.container}>
-        <Grid>
-          <Row>
-            <Col xs={12}>
-              <Paper className={styles.content} zDepth={2}>
-                {loadingArticles &&
-                  <p>Loading...</p>}
-                {!loadingArticles && article &&
-                  <div>
-                    <h1>{article.title}</h1>
-                    {this.renderArticleContent(article.content)}
-                  </div>}
-              </Paper>
-            </Col>
-          </Row>
-        </Grid>
-      </div>
+      <Grid>
+        <Row>
+          <Col xs={12}>
+            {loadingArticles &&
+              <p>Loading...</p>}
+            {!loadingArticles && article &&
+              <div>
+                <h1>{article.title}</h1>
+                {this.renderArticleContent(article.content)}
+              </div>}
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 }

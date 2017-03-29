@@ -5,7 +5,6 @@ import { push } from 'react-router-redux';
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
-import Paper from 'material-ui/Paper';
 // STORE
 import { loadArticles, removeArticle } from 'redux/modules/articlesModule';
 // COMPONENTS
@@ -44,7 +43,7 @@ export default class ArticlesPage extends Component {
   }
 
   redirectToArticle = (articleId) => {
-    this.props.pushState(`/articles/${articleId}`);
+    this.props.pushState(`/article/${articleId}`);
   }
 
   editArticle = (articleId) => {
@@ -57,27 +56,22 @@ export default class ArticlesPage extends Component {
 
   render() {
     const { articles, loadingArticles } = this.props;
-    const styles = require('./ArticlesPage.scss');
 
     return (
-      <div className={styles.container}>
-        <Grid>
-          <Row>
-            <Col xs={12}>
-              <Paper className={styles.content} zDepth={2}>
-                <h1>Articles</h1>
-                {loadingArticles &&
-                  <p>Loading...</p>}
-                <ArticlesList
-                  articles={articles}
-                  onListItemClick={this.redirectToArticle}
-                  onMenuItemClick={this.onMenuItemClick}
-                />
-              </Paper>
-            </Col>
-          </Row>
-        </Grid>
-      </div>
+      <Grid>
+        <Row>
+          <Col xs={12}>
+            <h1>Articles</h1>
+            {loadingArticles &&
+              <p>Loading...</p>}
+            <ArticlesList
+              articles={articles}
+              onListItemClick={this.redirectToArticle}
+              onMenuItemClick={this.onMenuItemClick}
+            />
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 }
