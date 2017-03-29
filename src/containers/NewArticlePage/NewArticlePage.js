@@ -111,6 +111,10 @@ export default class NewArticlePage extends Component {
           />
           <RichTextEditor
             initialState={content}
+            style={{
+              width: '100vw', maxWidth: '75vw',
+              height: '100vh', maxHeight: '45vh',
+            }}
             onChange={serializedState => { this.onChange('content', serializedState); }}
           />
           {validationErrors.content &&

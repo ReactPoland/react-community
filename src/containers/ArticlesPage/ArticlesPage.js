@@ -6,7 +6,8 @@ import { loadArticles } from 'redux/modules/articlesModule';
 
 const mappedState = ({ articles }) => ({
   articles: articles.all,
-  loadingArticles: articles.loadingArticles
+  loadingArticles: articles.loadingArticles,
+  articlesLoaded: articles.articlesLoaded
 });
 
 const mappedActions = {
@@ -18,11 +19,12 @@ export default class ArticlesPage extends Component {
   static propTypes = {
     articles: PropTypes.array.isRequired,
     loadingArticles: PropTypes.bool.isRequired,
+    articlesLoaded: PropTypes.bool.isRequired,
     loadArticles: PropTypes.func.isRequired
   }
 
   componentWillMount() {
-    this.props.loadArticles();
+    if (!this.props.articlesLoaded) this.props.loadArticles();
   }
 
   render() {

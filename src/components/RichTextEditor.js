@@ -53,6 +53,12 @@ const schema = {
 class RichTextEditor extends Component {
   static propTypes = {
     initialState: PropTypes.object,
+    style: PropTypes.object,
+  }
+
+  static defaultProps = {
+    initialState: defaultState,
+    style: {}
   }
 
   /**
@@ -62,7 +68,7 @@ class RichTextEditor extends Component {
    */
 
   state = {
-    state: Raw.deserialize(this.props.initialState || defaultState, { terse: true })
+    state: Raw.deserialize(this.props.initialState, { terse: true })
   };
 
   /**
@@ -226,7 +232,7 @@ class RichTextEditor extends Component {
     const styles = require('./RichTextEditor.scss');
 
     return (
-      <div className="RichTextEditor">
+      <div className="RichTextEditor" style={this.props.style}>
         {this.renderToolbar()}
         {this.renderEditor()}
       </div>
