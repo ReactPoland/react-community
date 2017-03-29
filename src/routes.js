@@ -3,7 +3,7 @@ import { IndexRoute, Route } from 'react-router';
 import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
 import {
   App, Home, Chat, Login, LoginSuccess, WorldPage, NotFound,
-  NewArticlePage
+  NewArticlePage, ArticlesPage
 } from 'containers';
 
 export default (store) => {
@@ -24,12 +24,6 @@ export default (store) => {
     }
   };
 
-  /**
-   * Please keep routes in alphabetical order
-   */
-
-  // ⬆️ Why, is there a reason for keeping them in that order? 🤔
-
   return (
     <Route path="/" component={App}>
       { /* Home (main) route */ }
@@ -45,6 +39,7 @@ export default (store) => {
       <Route path="login" component={Login} />
       <Route path="world" component={WorldPage} />
       <Route path="new-article" component={NewArticlePage} />
+      <Route path="articles" component={ArticlesPage} />
 
       { /* Catch all route */ }
       <Route path="*" component={NotFound} status={404} />

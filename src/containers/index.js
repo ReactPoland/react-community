@@ -6,3 +6,5 @@ export Login from './Login/Login';
 export LoginSuccess from './LoginSuccess/LoginSuccess';
 export NotFound from './NotFound/NotFound';
 export NewArticlePage from './NewArticlePage/NewArticlePage';
+export ArticlesPage from './ArticlesPage/ArticlesPage';
+export MainNavbar from './MainNavbar/MainNavbar';
