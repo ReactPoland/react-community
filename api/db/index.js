@@ -1,10 +1,12 @@
 const sequelize = require('./init');
 const MarkerModel = require('./models/Marker');
+const ArticleModel = require('./models/Article');
 
 const models = {};
 
 [
-  MarkerModel
+  MarkerModel,
+  ArticleModel
 ].map(modelItem => {
   models[modelItem.name] = sequelize.define(modelItem.name, {
     ...modelItem.model

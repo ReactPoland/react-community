@@ -1,7 +1,7 @@
 const resp = require('../../utils/serverResp');
-const MarkerModel = require('../../db').markers;
+const ArticleModel = require('../../db').articles;
 
-const removeMarkerRequest = async (body) => {
+const removeArticleRequest = async (body) => {
   if (!body) return resp.error('bad request type');
 
   let { id } = body;
@@ -9,13 +9,13 @@ const removeMarkerRequest = async (body) => {
 
   if (isNaN(id)) return resp.error('id is not a number');
 
-  return await MarkerModel.destroy({
+  return await ArticleModel.destroy({
     where: { id }
   })
     .then(data => resp.success(data))
     .catch(err => resp.error(err.message));
 };
 
-const removeMarker = (data) => removeMarkerRequest(data.body);
+const removeArticle = (data) => removeArticleRequest(data.body);
 
-export default removeMarker;
+export default removeArticle;
