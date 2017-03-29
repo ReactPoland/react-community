@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import _find from 'lodash/find';
-import { Html } from 'slate';
 // LAYOUT
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
@@ -9,7 +8,8 @@ import Col from 'react-bootstrap/lib/Col';
 import Paper from 'material-ui/Paper';
 // STORE
 import { loadArticles } from 'redux/modules/articlesModule';
-
+// COMPONENTS
+import RichTextEditor from 'components/RichTextEditor';
 
 const mappedState = ({ articles }) => ({
   articles: articles.all,
@@ -36,9 +36,13 @@ export default class ArticlePage extends Component {
   }
 
   renderArticleContent = (articleContent) => {
-    const content = Html.serialize(JSON.parse(articleContent));
-    console.warn('content', content);
-    return content;
+    return (
+      <RichTextEditor
+        initialState={JSON.parse(articleContent)}
+        style={{ width: '100%' }}
+        readOnly
+      />
+    );
   }
 
   render() {
@@ -58,7 +62,7 @@ export default class ArticlePage extends Component {
                 {!loadingArticles && article &&
                   <div>
                     <h1>{article.title}</h1>
-                    <p>{this.renderArticleContent(article.content)}</p>
+                    {this.renderArticleContent(article.content)}
                   </div>}
               </Paper>
             </Col>

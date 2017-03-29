@@ -11,7 +11,6 @@ import { loadArticles, removeArticle } from 'redux/modules/articlesModule';
 // COMPONENTS
 import ArticlesList from './ArticlesList';
 
-
 const mappedState = ({ articles }) => ({
   articles: articles.all,
   loadingArticles: articles.loadingArticles,
@@ -45,7 +44,6 @@ export default class ArticlesPage extends Component {
   }
 
   redirectToArticle = (articleId) => {
-    console.warn('redirectToArticle', articleId);
     this.props.pushState(`/articles/${articleId}`);
   }
 

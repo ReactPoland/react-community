@@ -54,6 +54,7 @@ class RichTextEditor extends Component {
   static propTypes = {
     initialState: PropTypes.object,
     style: PropTypes.object,
+    readOnly: PropTypes.bool
   }
 
   static defaultProps = {
@@ -232,8 +233,11 @@ class RichTextEditor extends Component {
     const styles = require('./RichTextEditor.scss');
 
     return (
-      <div className="RichTextEditor" style={this.props.style}>
-        {this.renderToolbar()}
+      <div
+        className="RichTextEditor"
+        style={this.props.style}
+      >
+        {!this.props.readOnly && this.renderToolbar()}
         {this.renderEditor()}
       </div>
     );
@@ -315,6 +319,7 @@ class RichTextEditor extends Component {
           state={this.state.state}
           onChange={this.onChange}
           onKeyDown={this.onKeyDown}
+          readOnly={this.props.readOnly}
         />
       </div>
     );
