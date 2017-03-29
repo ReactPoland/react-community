@@ -134,7 +134,6 @@ export const clearLoadArticlesError = () => ({ type: CLEAR_LOAD_ARTICLES_ERROR }
 
 // --- ADD ---
 export function addArticle(article) {
-  console.warn('ACTION addArticle -> article', article);
   return {
     types: [ADD_ARTICLE_REQUEST, ADD_ARTICLE_SUCCESS, ADD_ARTICLE_FAIL],
     promise: (client) => client.post('/article/addArticle', { data: article })
