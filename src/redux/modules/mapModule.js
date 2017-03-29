@@ -1,14 +1,18 @@
+// --- LOAD ---
 const LOAD_MAP_MARKERS = 'LOAD_MAP_MARKERS';
 const LOAD_MAP_MARKERS_SUCCESS = 'LOAD_MAP_MARKERS_SUCCESS';
 const LOAD_MAP_MARKERS_FAIL = 'LOAD_MAP_MARKERS_FAIL';
+const CLEAR_LOAD_MAP_MARKERS_ERROR = 'CLEAR_LOAD_MAP_MARKERS_ERROR';
+// --- ADD ---
 const ADD_MAP_MARKER = 'ADD_MAP_MARKER';
 const ADD_MAP_MARKER_SUCCESS = 'ADD_MAP_MARKER_SUCCESS';
 const ADD_MAP_MARKER_FAIL = 'ADD_MAP_MARKER_FAIL';
-const CLEAR_LOAD_MAP_MARKERS_ERROR = 'CLEAR_LOAD_MAP_MARKERS_ERROR';
 const CLEAR_ADD_MAP_MARKER_ERROR = 'CLEAR_ADD_MAP_MARKER_ERROR';
+// --- REMOVE ---
 const REMOVE_MAP_MARKER = 'REMOVE_MAP_MARKER';
 const REMOVE_MAP_MARKER_SUCCESS = 'REMOVE_MAP_MARKER_SUCCESS';
 const REMOVE_MAP_MARKER_FAIL = 'REMOVE_MAP_MARKER_FAIL';
+const CLEAR_REMOVE_MAP_MARKER_ERROR = 'CLEAR_REMOVE_MAP_MARKER_ERROR';
 
 const initialState = {
   // Loading all markers
@@ -21,13 +25,14 @@ const initialState = {
   markerAdded: false,
   addMarkerError: '',
   // Removing a marker
-  removingMarker: null,
+  removingMarker: null, // ID of a marker being removed
   markerRemoved: false,
   removeMarkerError: ''
 };
 
-export default function mapModule(state = initialState, action = {}) {
+export default function articleModule(state = initialState, action = {}) {
   switch (action.type) {
+    // --- LOAD ---
     case LOAD_MAP_MARKERS:
       return {
         ...state,
@@ -49,6 +54,13 @@ export default function mapModule(state = initialState, action = {}) {
         markersLoaded: false,
         loadMapMarkersError: action.error
       };
+    case CLEAR_LOAD_MAP_MARKERS_ERROR:
+      return {
+        ...state,
+        loadMapMarkersError: ''
+      };
+      // --- ADD ---
+    // --- ADD ---
     case ADD_MAP_MARKER:
       return {
         ...state,
@@ -73,6 +85,12 @@ export default function mapModule(state = initialState, action = {}) {
         markerAdded: false,
         addMarkerError: action.error
       };
+    case CLEAR_ADD_MAP_MARKER_ERROR:
+      return {
+        ...state,
+        addMarkerError: ''
+      };
+    // --- REMOVE ---
     case REMOVE_MAP_MARKER:
       return {
         ...state,
@@ -94,29 +112,17 @@ export default function mapModule(state = initialState, action = {}) {
         markerRemoved: false,
         removeMarkerError: action.error
       };
-    case CLEAR_LOAD_MAP_MARKERS_ERROR:
+    case CLEAR_REMOVE_MAP_MARKER_ERROR:
       return {
         ...state,
-        loadMapMarkersError: ''
-      };
-    case CLEAR_ADD_MAP_MARKER_ERROR:
-      return {
-        ...state,
-        addMarkerError: ''
+        removeMarkerError: ''
       };
     default:
       return state;
   }
 }
 
-export const clearLoadMapMarkersError = () => ({
-  type: CLEAR_LOAD_MAP_MARKERS_ERROR
-});
-
-export const clearAddMapMarkerError = () => ({
-  type: CLEAR_ADD_MAP_MARKER_ERROR
-});
-
+// --- LOAD ---
 export function loadMarkers() {
   return {
     types: [LOAD_MAP_MARKERS, LOAD_MAP_MARKERS_SUCCESS, LOAD_MAP_MARKERS_FAIL],
@@ -124,6 +130,9 @@ export function loadMarkers() {
   };
 }
 
+export const clearLoadMapMarkersError = () => ({ type: CLEAR_LOAD_MAP_MARKERS_ERROR });
+
+// -- ADD ---
 export function addMarker(marker) {
   return {
     types: [ADD_MAP_MARKER, ADD_MAP_MARKER_SUCCESS, ADD_MAP_MARKER_FAIL],
@@ -131,10 +140,15 @@ export function addMarker(marker) {
   };
 }
 
-export const removeMarker = (markerId) => {
+export const clearAddMapMarkerError = () => ({ type: CLEAR_ADD_MAP_MARKER_ERROR });
+
+// --- REMOVE ---
+export function removeMarker(markerId) {
   return {
     types: [REMOVE_MAP_MARKER, REMOVE_MAP_MARKER_SUCCESS, REMOVE_MAP_MARKER_FAIL],
     payload: { markerId },
     promise: client => client.post('/map/removeMarker', { data: { id: markerId } })
   };
-};
+}
+
+export const clearRemoveMarkerError = () => ({ type: CLEAR_REMOVE_MAP_MARKER_ERROR });

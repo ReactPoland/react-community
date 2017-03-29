@@ -25,7 +25,7 @@ const initialState = {
   articleAdded: false,
   addArticleError: '',
   // Removing a article
-  removingArticle: null, // ID of a article being removed
+  removingArticle: null, // ID of an article being removed
   articleRemoved: false,
   removeArticleError: ''
 };
