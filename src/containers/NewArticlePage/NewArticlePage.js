@@ -1,13 +1,17 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import _isEmpty from 'lodash/isEmpty';
-import TextField from 'material-ui/TextField';
+// LAYOUT
+import Grid from 'react-bootstrap/lib/Grid';
+import Row from 'react-bootstrap/lib/Row';
+import Col from 'react-bootstrap/lib/Col';
 import Paper from 'material-ui/Paper';
+import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
-
+// STORE
 import { addArticle } from 'redux/modules/articlesModule';
-
-import RichTextEditor from '../../components/RichTextEditor';
+// COMPONENTS
+import RichTextEditor from 'components/RichTextEditor';
 
 const mappedState = ({ articles }) => ({
   addingArticle: articles.addingArticle,
@@ -100,31 +104,38 @@ export default class NewArticlePage extends Component {
 
     return (
       <div className={styles.container}>
-        <Paper className={styles.editor} zDepth={2}>
-          <h2>New article</h2>
-          <TextField
-            floatingLabelText="Title"
-            value={title}
-            errorText={validationErrors.title}
-            onChange={ev => { this.onChange('title', ev.target.value); }}
-            fullWidth
-          />
-          <RichTextEditor
-            initialState={content}
-            style={{
-              width: '100vw', maxWidth: '75vw',
-              height: '100vh', maxHeight: '45vh',
-            }}
-            onChange={serializedState => { this.onChange('content', serializedState); }}
-          />
-          {validationErrors.content &&
-            <p>{validationErrors.content}</p>}
-          <FlatButton
-            label={addingArticle ? 'Adding...' : 'Add article'}
-            primary
-            onClick={this.addArticle}
-          />
-        </Paper>
+        <Grid>
+          <Row>
+            <Col xs={12}>
+              <Paper className={styles.editor} zDepth={2}>
+                <h2>New article</h2>
+                <TextField
+                  floatingLabelText="Title"
+                  value={title}
+                  errorText={validationErrors.title}
+                  onChange={ev => { this.onChange('title', ev.target.value); }}
+                  fullWidth
+                />
+                <RichTextEditor
+                  initialState={content}
+                  style={{
+                    width: '100%',
+                    height: '100vh',
+                    maxHeight: '45vh',
+                  }}
+                  onChange={serializedState => { this.onChange('content', serializedState); }}
+                />
+                {validationErrors.content &&
+                  <p>{validationErrors.content}</p>}
+                <FlatButton
+                  label={addingArticle ? 'Adding...' : 'Add article'}
+                  primary
+                  onClick={this.addArticle}
+                />
+              </Paper>
+            </Col>
+          </Row>
+        </Grid>
       </div>
     );
   }

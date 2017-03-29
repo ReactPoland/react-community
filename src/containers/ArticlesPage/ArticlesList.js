@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+// LAYOUT
 import { List, ListItem } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
@@ -15,8 +16,8 @@ const iconButtonElement = (
 
 const rightIconMenu = (
   <IconMenu iconButtonElement={iconButtonElement}>
-    <MenuItem leftIcon={<EditIcon />}>Edit</MenuItem>
-    <MenuItem leftIcon={<DeleteIcon />}>Delete</MenuItem>
+    <MenuItem primaryText="Edit" leftIcon={<EditIcon />} />
+    <MenuItem primaryText="Delete" leftIcon={<DeleteIcon />} />
   </IconMenu>
 );
 

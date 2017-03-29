@@ -1,15 +1,12 @@
 .container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   height: 100%;
+  padding-top: 24px;
   background-color: rgba(green, 0.2);
 }
 
 .editor {
   display: flex;
   flex-direction: column;
-  margin-top: 24px;
   padding: 24px;
   h2 {
     margin-top: 0;
