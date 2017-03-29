@@ -16,7 +16,7 @@ const CLEAR_REMOVE_ARTICLE_ERROR = 'CLEAR_REMOVE_ARTICLE_ERROR';
 
 const initialState = {
   // Loading all articles
-  articles: [],
+  all: [],
   loadingArticles: false,
   articlesLoaded: false,
   loadArticlesError: '',
@@ -30,7 +30,7 @@ const initialState = {
   removeArticleError: ''
 };
 
-export default function articleModule(state = initialState, action = {}) {
+export default function articlesModule(state = initialState, action = {}) {
   switch (action.type) {
     // --- LOAD ---
     case LOAD_ARTICLES_REQUEST:
@@ -43,9 +43,9 @@ export default function articleModule(state = initialState, action = {}) {
     case LOAD_ARTICLES_SUCCESS:
       return {
         ...state,
+        all: action.result.message,
         loadingArticles: false,
-        articlesLoaded: true,
-        articles: action.result.message
+        articlesLoaded: true
       };
     case LOAD_ARTICLES_FAIL:
       return {
@@ -71,8 +71,8 @@ export default function articleModule(state = initialState, action = {}) {
     case ADD_ARTICLE_SUCCESS:
       return {
         ...state,
-        articles: [
-          ...state.articles,
+        all: [
+          ...state.all,
           action.result.message
         ],
         addingArticle: false,
@@ -101,7 +101,7 @@ export default function articleModule(state = initialState, action = {}) {
     case REMOVE_ARTICLE_SUCCESS:
       return {
         ...state,
-        articles: state.articles.filter(article => article.id !== action.payload.articleId),
+        all: state.all.filter(article => article.id !== action.payload.articleId),
         removingArticle: null,
         articleRemoved: true
       };
@@ -126,7 +126,7 @@ export default function articleModule(state = initialState, action = {}) {
 export function loadArticles() {
   return {
     types: [LOAD_ARTICLES_REQUEST, LOAD_ARTICLES_SUCCESS, LOAD_ARTICLES_FAIL],
-    promise: (client) => client.get('/map/loadArticles')
+    promise: (client) => client.get('/article/loadArticles')
   };
 }
 
@@ -134,9 +134,10 @@ export const clearLoadArticlesError = () => ({ type: CLEAR_LOAD_ARTICLES_ERROR }
 
 // --- ADD ---
 export function addArticle(article) {
+  console.warn('ACTION addArticle -> article', article);
   return {
     types: [ADD_ARTICLE_REQUEST, ADD_ARTICLE_SUCCESS, ADD_ARTICLE_FAIL],
-    promise: (client) => client.post('/map/addArticle', { data: article })
+    promise: (client) => client.post('/article/addArticle', { data: article })
   };
 }
 
@@ -147,7 +148,7 @@ export function removeArticle(articleId) {
   return {
     types: [REMOVE_ARTICLE_REQUEST, REMOVE_ARTICLE_SUCCESS, REMOVE_ARTICLE_FAIL],
     payload: { articleId },
-    promise: (client) => client.post('/map/removeArticle', { data: { id: articleId } })
+    promise: (client) => client.post('/article/removeArticle', { data: { id: articleId } })
   };
 }
 
