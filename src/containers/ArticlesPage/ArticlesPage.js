@@ -6,9 +6,11 @@ export default class ArticlesPage extends Component {
     const styles = require('./ArticlesPage.scss');
 
     return (
-      <Paper className={styles.container} zDepth={2}>
-        <h1>Articles</h1>
-      </Paper>
+      <div className={styles.container}>
+        <Paper className={styles.content} zDepth={2}>
+          <h1>Articles</h1>
+        </Paper>
+      </div>
     );
   }
 }
