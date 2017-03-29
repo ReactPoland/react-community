@@ -1,8 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Paper from 'material-ui/Paper';
-
+// STORE
 import { loadArticles } from 'redux/modules/articlesModule';
+// COMPONENTS
+import ArticlesList from './ArticlesList';
+
 
 const mappedState = ({ articles }) => ({
   articles: articles.all,
@@ -37,9 +40,7 @@ export default class ArticlesPage extends Component {
           <h1>Articles</h1>
           {loadingArticles &&
             <p>Loading...</p>}
-          <ul>
-            {articles.map(art => <li key={art.id}>{art.title}</li>)}
-          </ul>
+          <ArticlesList articles={articles} />
         </Paper>
       </div>
     );
