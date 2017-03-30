@@ -8,6 +8,8 @@ import Col from 'react-bootstrap/lib/Col';
 import FlatButton from 'material-ui/FlatButton';
 // COMPONENTS
 import RichTextEditor from 'components/RichTextEditor';
+// LAYOUT
+import { ArticleHeader, List } from 'components/styled';
 
 const mappedState = ({ articles }) => ({
   articles: articles.all
@@ -21,7 +23,12 @@ export default class ArticlePage extends Component {
   }
 
   state = {
-    editingMode: false
+    editingMode: false,
+    editedArticleContent: null
+  }
+
+  editContent = (serializedState) => {
+    this.setState({ editedArticleContent: serializedState });
   }
 
   toggleEditMode = () => {
@@ -29,17 +36,17 @@ export default class ArticlePage extends Component {
   }
 
   saveEdits = () => {
-    console.warn('saveEdits');
+    console.warn(this.state);
   }
 
-  renderArticleContent = (articleContent) => {
-    const { editingMode } = this.state;
-
+  renderEditor = (articleContent) => {
+    // editedArticle
     return (
       <RichTextEditor
         initialState={JSON.parse(articleContent)}
         style={{ width: '100%' }}
-        readOnly={!editingMode}
+        readOnly={!this.state.editingMode}
+        onChange={this.editContent}
       />
     );
   }
@@ -81,14 +88,14 @@ export default class ArticlePage extends Component {
           <Col xs={12}>
             {article &&
               <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '20px 0 40px' }}>
+                <ArticleHeader>
                   <h1 style={{ margin: 0 }}>{article.title}</h1>
-                  <div>
+                  <List right>
                     {this.renderSaveButton()}
                     {this.renderEditButton()}
-                  </div>
-                </div>
-                {this.renderArticleContent(article.content)}
+                  </List>
+                </ArticleHeader>
+                {this.renderEditor(article.content)}
               </div>}
           </Col>
         </Row>
