@@ -4,6 +4,8 @@ import { loadArticles } from 'redux/modules/articlesModule';
 
 import { LoadingScreen } from 'components';
 
+// TODO: show snackbars with error or success messages in this component
+
 const mappedState = ({ articles }) => ({
   articles: articles.all,
   loadingArticles: articles.loadingArticles,

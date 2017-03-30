@@ -27,14 +27,14 @@ const initialState = {
   loadArticlesError: '',
   // Adding new article
   addingArticle: false,
-  articleAdded: null, // ID of an article that was just added
+  articleAdded: null, // (Number) ID of an article that was just added
   addArticleError: '',
   // Editing article
   editingArticle: false,
   articleEdited: false,
   editArticleError: '',
   // Removing a article
-  removingArticle: null, // ID of an article being removed
+  removingArticle: null, // (Number) ID of an article being removed
   articleRemoved: false,
   removeArticleError: ''
 };

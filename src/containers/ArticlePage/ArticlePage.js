@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import _find from 'lodash/find';
 import _isEmpty from 'lodash/isEmpty';
 // STORE
-import { editArticle } from 'redux/modules/articlesModule';
+import { editArticle, removeArticle } from 'redux/modules/articlesModule';
 // COMPONENTS
 import { PlainTextEditor, RichTextEditor } from 'components';
 // LAYOUT
@@ -11,26 +12,36 @@ import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import FlatButton from 'material-ui/FlatButton';
-import { ArticleHeader, List } from 'components/styled';
+import { ArticleHeader, List, Flex } from 'components/styled';
 
 const mappedState = ({ articles }, props) => ({
   article: _find(articles.all, art => props.params.id === `${art.id}`),
   editingArticle: articles.editingArticle,
   articleEdited: articles.articleEdited,
+  removingArticle: articles.removingArticle,
+  articleRemoved: articles.articleRemoved,
   editArticleError: articles.editArticleError
 });
 
-const mappedActions = { editArticle };
+const mappedActions = {
+  editArticle,
+  removeArticle,
+  pushState: push
+};
 
 @connect(mappedState, mappedActions)
 export default class ArticlePage extends Component {
   static propTypes = {
-    article: PropTypes.object.isRequired,
+    article: PropTypes.object,
     params: PropTypes.object.isRequired,
     editingArticle: PropTypes.bool.isRequired,
     articleEdited: PropTypes.bool.isRequired,
+    articleRemoved: PropTypes.bool.isRequired,
+    removingArticle: PropTypes.number,
     editArticleError: PropTypes.string.isRequired,
-    editArticle: PropTypes.func.isRequired
+    editArticle: PropTypes.func.isRequired,
+    removeArticle: PropTypes.func.isRequired,
+    pushState: PropTypes.func.isRequired
   }
 
   state = {
@@ -48,7 +59,14 @@ export default class ArticlePage extends Component {
         editedTitle: ''
       });
     }
+
+    // When article was removed...
+    if (nextProps.articleRemoved === true && nextProps.articleRemoved !== this.props.articleRemoved) {
+      this.props.pushState('/articles');
+    }
   }
+
+  // EDITING ARTICLE
 
   editTitle = (editedTitle) => {
     this.setState({ editedTitle });
@@ -66,6 +84,14 @@ export default class ArticlePage extends Component {
     });
   }
 
+  cancelEditing = () => {
+    this.setState({
+      editingMode: false,
+      editedContent: '',
+      editedTitle: ''
+    });
+  }
+
   validateArticle = (articleData) => {
     const { title } = articleData;
     const validationErrors = {};
@@ -77,6 +103,8 @@ export default class ArticlePage extends Component {
 
     return _isEmpty(validationErrors);
   }
+
+  // API CALLS
 
   saveEdits = () => {
     const { article } = this.props;
@@ -96,38 +124,30 @@ export default class ArticlePage extends Component {
     this.props.editArticle(editedArticle);
   }
 
-  cancelEditing = () => {
-    this.setState({
-      editingMode: false,
-      editedContent: '',
-      editedTitle: ''
-    });
+  removeArticle = () => {
+    this.props.removeArticle(this.props.article.id);
   }
 
-  renderTitle = () => {
-    const { article } = this.props;
+  // RENDERING
 
-    return (
-      <h1 style={{ margin: 0 }}>
-        {
-          this.state.editingMode
-          ? <PlainTextEditor initialState={this.state.editedTitle || article.title} onChange={this.editTitle} />
-          : article.title
-        }
-      </h1>
-    );
-  }
-
-  renderEditor = (articleContent) => {
-    return (
-      <RichTextEditor
-        initialState={JSON.parse(articleContent)}
-        style={{ width: '100%' }}
+  renderTitle = () => (
+    <h1 style={{ margin: 0 }}>
+      <PlainTextEditor
+        initialState={this.state.editedTitle || this.props.article.title}
+        onChange={this.editTitle}
         readOnly={!this.state.editingMode}
-        onChange={this.editContent}
       />
-    );
-  }
+    </h1>
+  )
+
+  renderEditor = () => (
+    <RichTextEditor
+      initialState={JSON.parse(this.props.article.content)}
+      style={{ width: '100%' }}
+      readOnly={!this.state.editingMode}
+      onChange={this.editContent}
+    />
+  )
 
   renderEditButton = () => {
     const { editingMode } = this.state;
@@ -138,6 +158,19 @@ export default class ArticlePage extends Component {
         primary={!editingMode}
         secondary={editingMode}
         onTouchTap={editingMode ? this.cancelEditing : this.toggleEditMode}
+      />
+    );
+  }
+
+  renderDeleteButton = () => {
+    if (this.state.editingMode) return null;
+
+    return (
+      <FlatButton
+        label={this.props.removingArticle ? 'Deleting...' : 'Delete'}
+        secondary
+        onTouchTap={this.removeArticle}
+        disabled={this.props.removingArticle !== null}
       />
     );
   }
@@ -165,7 +198,7 @@ export default class ArticlePage extends Component {
       <Grid>
         <Row>
           <Col xs={12}>
-            <div>
+            <Flex column>
               <ArticleHeader>
                 {this.renderTitle()}
                 <List right>
@@ -173,8 +206,11 @@ export default class ArticlePage extends Component {
                   {this.renderEditButton()}
                 </List>
               </ArticleHeader>
-              {this.renderEditor(article.content)}
-            </div>
+              {this.renderEditor()}
+              <List right>
+                {this.renderDeleteButton()}
+              </List>
+            </Flex>
           </Col>
         </Row>
       </Grid>

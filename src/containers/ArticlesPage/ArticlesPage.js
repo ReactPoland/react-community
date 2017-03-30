@@ -5,8 +5,6 @@ import { push } from 'react-router-redux';
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
-// STORE
-import { removeArticle } from 'redux/modules/articlesModule';
 // COMPONENTS
 import ArticlesList from './ArticlesList';
 
@@ -15,7 +13,6 @@ const mappedState = ({ articles }) => ({
 });
 
 const mappedActions = {
-  removeArticle,
   pushState: push
 };
 
@@ -23,25 +20,11 @@ const mappedActions = {
 export default class ArticlesPage extends Component {
   static propTypes = {
     articles: PropTypes.array.isRequired,
-    removeArticle: PropTypes.func.isRequired,
     pushState: PropTypes.func.isRequired
-  }
-
-  onMenuItemClick = (action) => {
-    if (action.type === 'edit') this.editArticle(action.id);
-    if (action.type === 'delete') this.removeArticle(action.id);
   }
 
   redirectToArticle = (articleId) => {
     this.props.pushState(`/article/${articleId}`);
-  }
-
-  editArticle = (articleId) => {
-    console.warn('editArticle', articleId);
-  }
-
-  removeArticle = (articleId) => {
-    this.props.removeArticle(articleId);
   }
 
   render() {
@@ -55,7 +38,6 @@ export default class ArticlesPage extends Component {
             <ArticlesList
               articles={articles}
               onListItemClick={this.redirectToArticle}
-              onMenuItemClick={this.onMenuItemClick}
             />
           </Col>
         </Row>
