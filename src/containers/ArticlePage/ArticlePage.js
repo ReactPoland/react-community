@@ -5,7 +5,7 @@ import _isEmpty from 'lodash/isEmpty';
 // STORE
 import { editArticle } from 'redux/modules/articlesModule';
 // COMPONENTS
-import RichTextEditor from 'components/RichTextEditor';
+import { PlainTextEditor, RichTextEditor } from 'components';
 // LAYOUT
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
@@ -50,8 +50,8 @@ export default class ArticlePage extends Component {
     }
   }
 
-  editTitle = (ev) => {
-    this.setState({ editedTitle: ev.target.value });
+  editTitle = (editedTitle) => {
+    this.setState({ editedTitle });
   }
 
   editContent = (serializedState) => {
@@ -107,11 +107,15 @@ export default class ArticlePage extends Component {
   renderTitle = () => {
     const { article } = this.props;
 
-    if (this.state.editingMode) {
-      return <input value={this.state.editedTitle || article.title} onChange={this.editTitle} />;
-    }
-
-    return <h1 style={{ margin: 0 }}>{article.title}</h1>;
+    return (
+      <h1 style={{ margin: 0 }}>
+        {
+          this.state.editingMode
+          ? <PlainTextEditor initialState={this.state.editedTitle || article.title} onChange={this.editTitle} />
+          : article.title
+        }
+      </h1>
+    );
   }
 
   renderEditor = (articleContent) => {

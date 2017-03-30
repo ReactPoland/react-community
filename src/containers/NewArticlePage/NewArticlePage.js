@@ -5,7 +5,7 @@ import _isEmpty from 'lodash/isEmpty';
 // STORE
 import { addArticle } from 'redux/modules/articlesModule';
 // COMPONENTS
-import RichTextEditor from 'components/RichTextEditor';
+import { RichTextEditor } from 'components';
 // LAYOUT
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
