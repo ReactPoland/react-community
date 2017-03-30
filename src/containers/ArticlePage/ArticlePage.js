@@ -19,7 +19,6 @@ const mappedState = ({ articles }, props) => ({
   editingArticle: articles.editingArticle,
   articleEdited: articles.articleEdited,
   removingArticle: articles.removingArticle,
-  articleRemoved: articles.articleRemoved,
   editArticleError: articles.editArticleError
 });
 
@@ -36,7 +35,6 @@ export default class ArticlePage extends Component {
     params: PropTypes.object.isRequired,
     editingArticle: PropTypes.bool.isRequired,
     articleEdited: PropTypes.bool.isRequired,
-    articleRemoved: PropTypes.bool.isRequired,
     removingArticle: PropTypes.number,
     editArticleError: PropTypes.string.isRequired,
     editArticle: PropTypes.func.isRequired,
@@ -58,11 +56,6 @@ export default class ArticlePage extends Component {
         editedContent: '',
         editedTitle: ''
       });
-    }
-
-    // When article was removed...
-    if (nextProps.articleRemoved === true && nextProps.articleRemoved !== this.props.articleRemoved) {
-      this.props.pushState('/articles');
     }
   }
 
@@ -176,17 +169,15 @@ export default class ArticlePage extends Component {
   }
 
   renderSaveButton = () => {
-    const { editingMode } = this.state;
+    if (!this.state.editingMode) return null;
 
-    return editingMode
-    ? (
-        <FlatButton
-          label="Save"
-          primary
-          onTouchTap={this.saveEdits}
-        />
-      )
-    : null;
+    return (
+      <FlatButton
+        label={this.props.editingArticle ? 'Saving...' : 'Save'}
+        primary
+        onTouchTap={this.saveEdits}
+      />
+    );
   }
 
   render() {

@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import _isEmpty from 'lodash/isEmpty';
 // STORE
 import { addArticle } from 'redux/modules/articlesModule';
@@ -14,24 +13,16 @@ import Paper from 'material-ui/Paper';
 import FlatButton from 'material-ui/FlatButton';
 
 const mappedState = ({ articles }) => ({
-  addingArticle: articles.addingArticle,
-  articleAdded: articles.articleAdded,
-  addArticleError: articles.addArticleError
+  addingArticle: articles.addingArticle
 });
 
-const mappedActions = {
-  addArticle,
-  pushState: push
-};
+const mappedActions = { addArticle };
 
 @connect(mappedState, mappedActions)
 export default class NewArticlePage extends Component {
   static propTypes = {
     addingArticle: PropTypes.bool.isRequired,
-    articleAdded: PropTypes.number,
-    addArticleError: PropTypes.string.isRequired,
-    addArticle: PropTypes.func.isRequired,
-    pushState: PropTypes.func.isRequired
+    addArticle: PropTypes.func.isRequired
   }
 
   state = {
@@ -59,14 +50,6 @@ export default class NewArticlePage extends Component {
     validationErrors: {
       title: '',
       content: ''
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    // When article was successfully added...
-    if (nextProps.articleAdded !== null && nextProps.articleAdded !== this.props.articleAdded) {
-      // Redirect user to that article
-      this.props.pushState(`/article/${nextProps.articleAdded}`);
     }
   }
 
