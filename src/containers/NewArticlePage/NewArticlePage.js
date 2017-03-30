@@ -5,13 +5,12 @@ import _isEmpty from 'lodash/isEmpty';
 // STORE
 import { addArticle } from 'redux/modules/articlesModule';
 // COMPONENTS
-import { RichTextEditor } from 'components';
+import { PlainTextEditor, RichTextEditor } from 'components';
 // LAYOUT
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import Paper from 'material-ui/Paper';
-import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 
 const mappedState = ({ articles }) => ({
@@ -37,7 +36,7 @@ export default class NewArticlePage extends Component {
 
   state = {
     newArticle: {
-      title: '',
+      title: 'Title',
       content: {
         'nodes': [
           {
@@ -48,7 +47,7 @@ export default class NewArticlePage extends Component {
                 'kind': 'text',
                 'ranges': [
                   {
-                    'text': 'New article...'
+                    'text': 'Content...'
                   }
                 ]
               }
@@ -120,14 +119,14 @@ export default class NewArticlePage extends Component {
           <Row>
             <Col xs={12}>
               <Paper className={styles.editor} zDepth={2}>
-                <h2>New article</h2>
-                <TextField
-                  floatingLabelText="Title"
-                  value={title}
-                  errorText={validationErrors.title}
-                  onChange={ev => { this.onChange('title', ev.target.value); }}
-                  fullWidth
-                />
+                <h2>
+                  <PlainTextEditor
+                    initialState={title}
+                    onChange={val => { this.onChange('title', val); }}
+                  />
+                </h2>
+                {validationErrors.title &&
+                  <p>{validationErrors.title}</p>}
                 <RichTextEditor
                   initialState={content}
                   style={{
