@@ -91,41 +91,24 @@ class ArticlesLayout extends Component {
     }
 
     // ERROR HANDLING
-    if (nextProps.loadArticlesError && !this.props.loadArticlesError) {
-      this.setState({
-        error: {
-          message: nextProps.loadArticlesError,
-          callback: this.props.clearLoadArticlesError
-        }
-      });
-    }
+    const errors = [
+      { name: 'loadArticlesError', callback: 'clearLoadArticlesError' },
+      { name: 'addArticleError', callback: 'clearAddArticleError' },
+      { name: 'editArticleError', callback: 'clearEditArticleError' },
+      { name: 'removeArticleError', callback: 'clearRemoveArticleError' }
+    ];
 
-    if (nextProps.addArticleError && !this.props.addArticleError) {
-      this.setState({
-        error: {
-          message: nextProps.addArticleError,
-          callback: this.props.clearAddArticleError
-        }
-      });
-    }
-
-    if (nextProps.editArticleError && !this.props.editArticleError) {
-      this.setState({
-        error: {
-          message: nextProps.editArticleError,
-          callback: this.props.clearEditArticleError
-        }
-      });
-    }
-
-    if (nextProps.removeArticleError && !this.props.removeArticleError) {
-      this.setState({
-        error: {
-          message: nextProps.removeArticleError,
-          callback: this.props.clearRemoveArticleError
-        }
-      });
-    }
+    // Show error snackbar if any of the above errors is thrown
+    errors.forEach(({ name, callback }) => {
+      if (nextProps[name] && !this.props[name]) {
+        this.setState({
+          error: {
+            message: nextProps[name],
+            callback: this.props[callback]
+          }
+        });
+      }
+    });
   }
 
   // TODO: add support form muliple messages displayed at once

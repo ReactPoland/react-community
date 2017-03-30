@@ -182,7 +182,7 @@ export function addArticle(article) {
 
   return {
     types: [ADD_ARTICLE_REQUEST, ADD_ARTICLE_SUCCESS, ADD_ARTICLE_FAIL],
-    promise: (client) => client.post('/article/addArticler', { data })
+    promise: (client) => client.post('/article/addArticle', { data })
   };
 }
 
@@ -199,7 +199,7 @@ export function editArticle(article) {
     types: [EDIT_ARTICLE_REQUEST, EDIT_ARTICLE_SUCCESS, EDIT_ARTICLE_FAIL],
     // TODO: remove "article" below when API starts returning edited article
     payload: { articleId: article.id, article },
-    promise: client => client.post('/article/updateArticler', { data })
+    promise: client => client.post('/article/updateArticle', { data })
   };
 }
 
@@ -210,7 +210,7 @@ export function removeArticle(articleId) {
   return {
     types: [REMOVE_ARTICLE_REQUEST, REMOVE_ARTICLE_SUCCESS, REMOVE_ARTICLE_FAIL],
     payload: { articleId },
-    promise: (client) => client.post('/article/removeArticler', { data: { id: articleId } })
+    promise: (client) => client.post('/article/removeArticle', { data: { id: articleId } })
   };
 }
 
