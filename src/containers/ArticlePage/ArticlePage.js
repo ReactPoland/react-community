@@ -5,59 +5,89 @@ import _find from 'lodash/find';
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
-// STORE
-import { loadArticles } from 'redux/modules/articlesModule';
+import FlatButton from 'material-ui/FlatButton';
 // COMPONENTS
 import RichTextEditor from 'components/RichTextEditor';
 
 const mappedState = ({ articles }) => ({
-  articles: articles.all,
-  loadingArticles: articles.loadingArticles,
-  articlesLoaded: articles.articlesLoaded
+  articles: articles.all
 });
 
-const mappedActions = {
-  loadArticles
-};
-
-@connect(mappedState, mappedActions)
+@connect(mappedState)
 export default class ArticlePage extends Component {
   static propTypes = {
     articles: PropTypes.array.isRequired,
-    loadingArticles: PropTypes.bool.isRequired,
-    articlesLoaded: PropTypes.bool.isRequired,
-    loadArticles: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired
   }
 
-  componentWillMount() {
-    if (!this.props.articlesLoaded) this.props.loadArticles();
+  state = {
+    editingMode: false
+  }
+
+  toggleEditMode = () => {
+    this.setState({ editingMode: !this.state.editingMode });
+  }
+
+  saveEdits = () => {
+    console.warn('saveEdits');
   }
 
   renderArticleContent = (articleContent) => {
+    const { editingMode } = this.state;
+
     return (
       <RichTextEditor
         initialState={JSON.parse(articleContent)}
         style={{ width: '100%' }}
-        readOnly
+        readOnly={!editingMode}
       />
     );
   }
 
+  renderEditButton = () => {
+    const { editingMode } = this.state;
+
+    return (
+      <FlatButton
+        label={editingMode ? 'Cancel' : 'Edit'}
+        primary={!editingMode}
+        secondary={editingMode}
+        onTouchTap={this.toggleEditMode}
+      />
+    );
+  }
+
+  renderSaveButton = () => {
+    const { editingMode } = this.state;
+
+    return editingMode
+    ? (
+        <FlatButton
+          label="Save"
+          primary
+          onTouchTap={this.saveEdits}
+        />
+      )
+    : null;
+  }
+
   render() {
-    const { articles, loadingArticles } = this.props;
-    const articleId = this.props.params.id;
-    const article = _find(articles, art => articleId === `${art.id}`);
+    const { articles, params } = this.props;
+    const article = _find(articles, art => params.id === `${art.id}`);
 
     return (
       <Grid>
         <Row>
           <Col xs={12}>
-            {loadingArticles &&
-              <p>Loading...</p>}
-            {!loadingArticles && article &&
+            {article &&
               <div>
-                <h1>{article.title}</h1>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '20px 0 40px' }}>
+                  <h1 style={{ margin: 0 }}>{article.title}</h1>
+                  <div>
+                    {this.renderSaveButton()}
+                    {this.renderEditButton()}
+                  </div>
+                </div>
                 {this.renderArticleContent(article.content)}
               </div>}
           </Col>
