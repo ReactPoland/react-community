@@ -1,3 +1,7 @@
+/*
+  Horizontal list that takes care of applying margins to its children
+*/
+
 import styled, { css } from 'styled-components';
 
 const margin = '10px !important';
