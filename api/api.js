@@ -7,6 +7,7 @@ import {mapUrl} from 'utils/url.js';
 import PrettyError from 'pretty-error';
 import http from 'http';
 import SocketIo from 'socket.io';
+import errorHandler from './utils/errorHandler';
 
 const pretty = new PrettyError();
 const app = express();
@@ -51,6 +52,7 @@ app.use((req, res) => {
   }
 });
 
+app.use(errorHandler);
 
 const bufferSize = 100;
 const messageBuffer = new Array(bufferSize);
