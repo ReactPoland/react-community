@@ -1,46 +1,120 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import _find from 'lodash/find';
+import _isEmpty from 'lodash/isEmpty';
+// STORE
+import { editArticle } from 'redux/modules/articlesModule';
+// COMPONENTS
+import RichTextEditor from 'components/RichTextEditor';
 // LAYOUT
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import FlatButton from 'material-ui/FlatButton';
-// COMPONENTS
-import RichTextEditor from 'components/RichTextEditor';
-// LAYOUT
 import { ArticleHeader, List } from 'components/styled';
 
-const mappedState = ({ articles }) => ({
-  articles: articles.all
+const mappedState = ({ articles }, props) => ({
+  article: _find(articles.all, art => props.params.id === `${art.id}`),
+  editingArticle: articles.editingArticle,
+  articleEdited: articles.articleEdited,
+  editArticleError: articles.editArticleError
 });
 
-@connect(mappedState)
+const mappedActions = { editArticle };
+
+@connect(mappedState, mappedActions)
 export default class ArticlePage extends Component {
   static propTypes = {
-    articles: PropTypes.array.isRequired,
-    params: PropTypes.object.isRequired
+    article: PropTypes.object.isRequired,
+    params: PropTypes.object.isRequired,
+    editingArticle: PropTypes.bool.isRequired,
+    articleEdited: PropTypes.bool.isRequired,
+    editArticleError: PropTypes.string.isRequired,
+    editArticle: PropTypes.func.isRequired
   }
 
   state = {
     editingMode: false,
-    editedArticleContent: null
+    editedContent: '',
+    editedTitle: ''
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // When article was successfully updated...
+    if (nextProps.articleEdited !== this.props.articleEdited) {
+      this.setState({
+        editingMode: false,
+        editedContent: '',
+        editedTitle: ''
+      });
+    }
+  }
+
+  editTitle = (ev) => {
+    this.setState({ editedTitle: ev.target.value });
   }
 
   editContent = (serializedState) => {
-    this.setState({ editedArticleContent: serializedState });
+    this.setState({ editedContent: serializedState });
   }
 
   toggleEditMode = () => {
-    this.setState({ editingMode: !this.state.editingMode });
+    this.setState({
+      editingMode: !this.state.editingMode,
+      editedContent: this.state.editingMode ? '' : '',
+      editedTitle: this.state.editingMode ? '' : ''
+    });
+  }
+
+  validateArticle = (articleData) => {
+    const { title } = articleData;
+    const validationErrors = {};
+
+    if (!title) validationErrors.title = 'Title is required';
+    // if (!content || !content.document.nodes.length) validationErrors.content = 'Content is required';
+
+    this.setState({ validationErrors });
+
+    return _isEmpty(validationErrors);
   }
 
   saveEdits = () => {
-    console.warn(this.state);
+    const { article } = this.props;
+
+    const editedArticle = {
+      id: article.id,
+      title: this.state.editedTitle || article.title,
+      content: (this.state.editedContent && JSON.stringify(this.state.editedContent)) || article.content
+    };
+
+    if (!this.validateArticle(editedArticle)) {
+      // TODO: display error message on the page
+      console.error('INVALID ARTICLE', editedArticle);
+      return;
+    }
+
+    this.props.editArticle(editedArticle);
+  }
+
+  cancelEditing = () => {
+    this.setState({
+      editingMode: false,
+      editedContent: '',
+      editedTitle: ''
+    });
+  }
+
+  renderTitle = () => {
+    const { article } = this.props;
+
+    if (this.state.editingMode) {
+      return <input value={this.state.editedTitle || article.title} onChange={this.editTitle} />;
+    }
+
+    return <h1 style={{ margin: 0 }}>{article.title}</h1>;
   }
 
   renderEditor = (articleContent) => {
-    // editedArticle
     return (
       <RichTextEditor
         initialState={JSON.parse(articleContent)}
@@ -59,7 +133,7 @@ export default class ArticlePage extends Component {
         label={editingMode ? 'Cancel' : 'Edit'}
         primary={!editingMode}
         secondary={editingMode}
-        onTouchTap={this.toggleEditMode}
+        onTouchTap={editingMode ? this.cancelEditing : this.toggleEditMode}
       />
     );
   }
@@ -79,24 +153,24 @@ export default class ArticlePage extends Component {
   }
 
   render() {
-    const { articles, params } = this.props;
-    const article = _find(articles, art => params.id === `${art.id}`);
+    const { article } = this.props;
+
+    if (!article) return null;
 
     return (
       <Grid>
         <Row>
           <Col xs={12}>
-            {article &&
-              <div>
-                <ArticleHeader>
-                  <h1 style={{ margin: 0 }}>{article.title}</h1>
-                  <List right>
-                    {this.renderSaveButton()}
-                    {this.renderEditButton()}
-                  </List>
-                </ArticleHeader>
-                {this.renderEditor(article.content)}
-              </div>}
+            <div>
+              <ArticleHeader>
+                {this.renderTitle()}
+                <List right>
+                  {this.renderSaveButton()}
+                  {this.renderEditButton()}
+                </List>
+              </ArticleHeader>
+              {this.renderEditor(article.content)}
+            </div>
           </Col>
         </Row>
       </Grid>

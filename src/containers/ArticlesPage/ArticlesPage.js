@@ -6,18 +6,15 @@ import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 // STORE
-import { loadArticles, removeArticle } from 'redux/modules/articlesModule';
+import { removeArticle } from 'redux/modules/articlesModule';
 // COMPONENTS
 import ArticlesList from './ArticlesList';
 
 const mappedState = ({ articles }) => ({
   articles: articles.all,
-  loadingArticles: articles.loadingArticles,
-  articlesLoaded: articles.articlesLoaded
 });
 
 const mappedActions = {
-  loadArticles,
   removeArticle,
   pushState: push
 };
@@ -26,15 +23,8 @@ const mappedActions = {
 export default class ArticlesPage extends Component {
   static propTypes = {
     articles: PropTypes.array.isRequired,
-    loadingArticles: PropTypes.bool.isRequired,
-    articlesLoaded: PropTypes.bool.isRequired,
-    loadArticles: PropTypes.func.isRequired,
     removeArticle: PropTypes.func.isRequired,
     pushState: PropTypes.func.isRequired
-  }
-
-  componentWillMount() {
-    if (!this.props.articlesLoaded) this.props.loadArticles();
   }
 
   onMenuItemClick = (action) => {
@@ -55,15 +45,13 @@ export default class ArticlesPage extends Component {
   }
 
   render() {
-    const { articles, loadingArticles } = this.props;
+    const { articles } = this.props;
 
     return (
       <Grid>
         <Row>
           <Col xs={12}>
             <h1>Articles</h1>
-            {loadingArticles &&
-              <p>Loading...</p>}
             <ArticlesList
               articles={articles}
               onListItemClick={this.redirectToArticle}

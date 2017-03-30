@@ -1,6 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import _isEmpty from 'lodash/isEmpty';
+// STORE
+import { addArticle } from 'redux/modules/articlesModule';
+// COMPONENTS
+import RichTextEditor from 'components/RichTextEditor';
 // LAYOUT
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
@@ -8,10 +13,6 @@ import Col from 'react-bootstrap/lib/Col';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
-// STORE
-import { addArticle } from 'redux/modules/articlesModule';
-// COMPONENTS
-import RichTextEditor from 'components/RichTextEditor';
 
 const mappedState = ({ articles }) => ({
   addingArticle: articles.addingArticle,
@@ -20,16 +21,18 @@ const mappedState = ({ articles }) => ({
 });
 
 const mappedActions = {
-  addArticle
+  addArticle,
+  pushState: push
 };
 
 @connect(mappedState, mappedActions)
 export default class NewArticlePage extends Component {
   static propTypes = {
     addingArticle: PropTypes.bool.isRequired,
-    articleAdded: PropTypes.bool.isRequired,
+    articleAdded: PropTypes.number,
     addArticleError: PropTypes.string.isRequired,
-    addArticle: PropTypes.func.isRequired
+    addArticle: PropTypes.func.isRequired,
+    pushState: PropTypes.func.isRequired
   }
 
   state = {
@@ -57,6 +60,14 @@ export default class NewArticlePage extends Component {
     validationErrors: {
       title: '',
       content: ''
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // When article was successfully added...
+    if (nextProps.articleAdded !== null && nextProps.articleAdded !== this.props.articleAdded) {
+      // Redirect user to that article
+      this.props.pushState(`/article/${nextProps.articleAdded}`);
     }
   }
 
@@ -89,7 +100,8 @@ export default class NewArticlePage extends Component {
     const newArticle = { ...this.state.newArticle };
 
     if (!this.validateArticle(newArticle)) {
-      console.warn('INVALID ARTICLE', newArticle);
+      // TODO: display error message on the page
+      console.error('INVALID ARTICLE', newArticle);
       return;
     }
 

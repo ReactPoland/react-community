@@ -8,6 +8,11 @@ const ADD_ARTICLE_REQUEST = 'ADD_ARTICLE_REQUEST';
 const ADD_ARTICLE_SUCCESS = 'ADD_ARTICLE_SUCCESS';
 const ADD_ARTICLE_FAIL = 'ADD_ARTICLE_FAIL';
 const CLEAR_ADD_ARTICLE_ERROR = 'CLEAR_ADD_ARTICLE_ERROR';
+// --- EDIT ---
+const EDIT_ARTICLE_REQUEST = 'EDIT_ARTICLE_REQUEST';
+const EDIT_ARTICLE_SUCCESS = 'EDIT_ARTICLE_SUCCESS';
+const EDIT_ARTICLE_FAIL = 'EDIT_ARTICLE_FAIL';
+const CLEAR_EDIT_ARTICLE_ERROR = 'CLEAR_EDIT_ARTICLE_ERROR';
 // --- REMOVE ---
 const REMOVE_ARTICLE_REQUEST = 'REMOVE_ARTICLE_REQUEST';
 const REMOVE_ARTICLE_SUCCESS = 'REMOVE_ARTICLE_SUCCESS';
@@ -22,8 +27,12 @@ const initialState = {
   loadArticlesError: '',
   // Adding new article
   addingArticle: false,
-  articleAdded: false,
+  articleAdded: null, // ID of an article that was just added
   addArticleError: '',
+  // Editing article
+  editingArticle: false,
+  articleEdited: false,
+  editArticleError: '',
   // Removing a article
   removingArticle: null, // ID of an article being removed
   articleRemoved: false,
@@ -43,7 +52,7 @@ export default function articlesModule(state = initialState, action = {}) {
     case LOAD_ARTICLES_SUCCESS:
       return {
         ...state,
-        all: action.result.message,
+        all: action.result.message.map(article => ({ ...article, content: JSON.parse(article.content) })),
         loadingArticles: false,
         articlesLoaded: true
       };
@@ -64,7 +73,7 @@ export default function articlesModule(state = initialState, action = {}) {
     case ADD_ARTICLE_REQUEST:
       return {
         ...state,
-        articleAdded: false,
+        articleAdded: null,
         addingArticle: true,
         addArticleError: ''
       };
@@ -73,22 +82,54 @@ export default function articlesModule(state = initialState, action = {}) {
         ...state,
         all: [
           ...state.all,
-          action.result.message
+          {
+            ...action.result.message,
+            content: JSON.parse(action.result.message.content)
+          }
         ],
         addingArticle: false,
-        articleAdded: true
+        articleAdded: action.result.message.id
       };
     case ADD_ARTICLE_FAIL:
       return {
         ...state,
         addingArticle: false,
-        articleAdded: false,
+        articleAdded: null,
         addArticleError: action.error
       };
     case CLEAR_ADD_ARTICLE_ERROR:
       return {
         ...state,
         addArticleError: ''
+      };
+    // --- EDIT ---
+    case EDIT_ARTICLE_REQUEST:
+      return {
+        ...state,
+        articleEdited: false,
+        editingArticle: true,
+        editArticleError: ''
+      };
+    case EDIT_ARTICLE_SUCCESS:
+      return {
+        ...state,
+        // TODO: uncomment this line when API starts returning edited article
+        // all: state.all.map(article => article.id === action.payload.articleId ? action.result.message : article),
+        all: state.all.map(article => article.id === action.payload.articleId ? action.payload.article : article),
+        editingArticle: false,
+        articleEdited: true
+      };
+    case EDIT_ARTICLE_FAIL:
+      return {
+        ...state,
+        editingArticle: false,
+        articleEdited: false,
+        editArticleError: action.error
+      };
+    case CLEAR_EDIT_ARTICLE_ERROR:
+      return {
+        ...state,
+        editArticleError: ''
       };
     // --- REMOVE ---
     case REMOVE_ARTICLE_REQUEST:
@@ -134,13 +175,35 @@ export const clearLoadArticlesError = () => ({ type: CLEAR_LOAD_ARTICLES_ERROR }
 
 // --- ADD ---
 export function addArticle(article) {
+  const data = {
+    ...article,
+    content: JSON.stringify(article.content)
+  };
+
   return {
     types: [ADD_ARTICLE_REQUEST, ADD_ARTICLE_SUCCESS, ADD_ARTICLE_FAIL],
-    promise: (client) => client.post('/article/addArticle', { data: article })
+    promise: (client) => client.post('/article/addArticle', { data })
   };
 }
 
 export const clearAddArticleError = () => ({ type: CLEAR_ADD_ARTICLE_ERROR });
+
+// --- EDIT ---
+export function editArticle(article) {
+  const data = {
+    ...article,
+    content: JSON.stringify(article.content)
+  };
+
+  return {
+    types: [EDIT_ARTICLE_REQUEST, EDIT_ARTICLE_SUCCESS, EDIT_ARTICLE_FAIL],
+    // TODO: remove "article" below when API starts returning edited article
+    payload: { articleId: article.id, article },
+    promise: client => client.post('/article/updateArticle', { data })
+  };
+}
+
+export const clearEditArticleError = () => ({ type: CLEAR_EDIT_ARTICLE_ERROR });
 
 // --- REMOVE ---
 export function removeArticle(articleId) {
