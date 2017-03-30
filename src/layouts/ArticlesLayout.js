@@ -2,7 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 // STORE
-import { loadArticles } from 'redux/modules/articlesModule';
+import {
+  loadArticles, clearLoadArticlesError, clearAddArticleError,
+  clearEditArticleError, clearRemoveArticleError
+} from 'redux/modules/articlesModule';
 // COMPONENTS
 import { LoadingScreen, ErrorSnackbar, SuccessSnackbar } from 'components';
 
@@ -10,6 +13,7 @@ const mappedState = ({ articles }) => ({
   // Load all
   loadingArticles: articles.loadingArticles,
   articlesLoaded: articles.articlesLoaded,
+  loadArticlesError: articles.loadArticlesError,
   // Add
   articleAdded: articles.articleAdded,
   addArticleError: articles.addArticleError,
@@ -23,6 +27,10 @@ const mappedState = ({ articles }) => ({
 
 const mappedActions = {
   loadArticles,
+  clearLoadArticlesError,
+  clearAddArticleError,
+  clearEditArticleError,
+  clearRemoveArticleError,
   pushState: push
 };
 
@@ -36,19 +44,28 @@ class ArticlesLayout extends Component {
     loadArticles: PropTypes.func.isRequired,
     loadingArticles: PropTypes.bool.isRequired,
     articlesLoaded: PropTypes.bool.isRequired,
+    loadArticlesError: PropTypes.string.isRequired,
+    clearLoadArticlesError: PropTypes.func.isRequired,
     // Add
     articleAdded: PropTypes.number,
     addArticleError: PropTypes.string.isRequired,
+    clearAddArticleError: PropTypes.func.isRequired,
     // Edit
     articleEdited: PropTypes.bool.isRequired,
     editArticleError: PropTypes.string.isRequired,
+    clearEditArticleError: PropTypes.func.isRequired,
     // Remove
     articleRemoved: PropTypes.bool.isRequired,
     removeArticleError: PropTypes.string.isRequired,
+    clearRemoveArticleError: PropTypes.func.isRequired
   }
 
   state = {
-    successMessage: ''
+    successMessage: '',
+    error: {
+      message: '',
+      callback: null
+    }
   }
 
   componentWillMount() {
@@ -72,6 +89,43 @@ class ArticlesLayout extends Component {
       this.setState({ successMessage: 'Article removed' });
       this.props.pushState('/articles');
     }
+
+    // ERROR HANDLING
+    if (nextProps.loadArticlesError && !this.props.loadArticlesError) {
+      this.setState({
+        error: {
+          message: nextProps.loadArticlesError,
+          callback: this.props.clearLoadArticlesError
+        }
+      });
+    }
+
+    if (nextProps.addArticleError && !this.props.addArticleError) {
+      this.setState({
+        error: {
+          message: nextProps.addArticleError,
+          callback: this.props.clearAddArticleError
+        }
+      });
+    }
+
+    if (nextProps.editArticleError && !this.props.editArticleError) {
+      this.setState({
+        error: {
+          message: nextProps.editArticleError,
+          callback: this.props.clearEditArticleError
+        }
+      });
+    }
+
+    if (nextProps.removeArticleError && !this.props.removeArticleError) {
+      this.setState({
+        error: {
+          message: nextProps.removeArticleError,
+          callback: this.props.clearRemoveArticleError
+        }
+      });
+    }
   }
 
   // TODO: add support form muliple messages displayed at once
@@ -79,10 +133,13 @@ class ArticlesLayout extends Component {
     this.setState({ successMessage: '' });
   }
 
+  clearErrors = () => {
+    this.state.error.callback();
+    this.setState({ error: { message: '', callback: null } });
+  }
+
   render() {
-    const { addArticleError, editArticleError, removeArticleError } = this.props;
-    const { successMessage } = this.state;
-    const errorMessage = addArticleError || editArticleError || removeArticleError;
+    const { successMessage, error } = this.state;
     const styles = require('./ArticlesLayout.scss');
 
     return (
@@ -95,9 +152,9 @@ class ArticlesLayout extends Component {
             onRequestClose={this.clearSuccessMessage}
           />
           <ErrorSnackbar
-            open={errorMessage !== ''}
-            message={errorMessage}
-            // onRequestClose={this.props.clearLoadMapMarkersError}
+            open={error.message !== ''}
+            message={error.message}
+            onRequestClose={this.clearErrors}
           />
         </div>
       </LoadingScreen>

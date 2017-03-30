@@ -61,7 +61,7 @@ export default function articlesModule(state = initialState, action = {}) {
         ...state,
         loadingArticles: false,
         articlesLoaded: false,
-        loadArticlesError: action.error
+        loadArticlesError: `Load articles error: ${action.error.message}`
       };
     case CLEAR_LOAD_ARTICLES_ERROR:
       return {
@@ -95,7 +95,7 @@ export default function articlesModule(state = initialState, action = {}) {
         ...state,
         addingArticle: false,
         articleAdded: null,
-        addArticleError: action.error
+        addArticleError: `Add article error: ${action.error.message}`
       };
     case CLEAR_ADD_ARTICLE_ERROR:
       return {
@@ -124,7 +124,7 @@ export default function articlesModule(state = initialState, action = {}) {
         ...state,
         editingArticle: false,
         articleEdited: false,
-        editArticleError: action.error
+        editArticleError: `Edit article error: ${action.error.message}`
       };
     case CLEAR_EDIT_ARTICLE_ERROR:
       return {
@@ -151,7 +151,7 @@ export default function articlesModule(state = initialState, action = {}) {
         ...state,
         removingArticle: null,
         articleRemoved: false,
-        removeArticleError: action.error
+        removeArticleError: `Delete article error: ${action.error.message}`
       };
     case CLEAR_REMOVE_ARTICLE_ERROR:
       return {
@@ -182,7 +182,7 @@ export function addArticle(article) {
 
   return {
     types: [ADD_ARTICLE_REQUEST, ADD_ARTICLE_SUCCESS, ADD_ARTICLE_FAIL],
-    promise: (client) => client.post('/article/addArticle', { data })
+    promise: (client) => client.post('/article/addArticler', { data })
   };
 }
 
@@ -199,7 +199,7 @@ export function editArticle(article) {
     types: [EDIT_ARTICLE_REQUEST, EDIT_ARTICLE_SUCCESS, EDIT_ARTICLE_FAIL],
     // TODO: remove "article" below when API starts returning edited article
     payload: { articleId: article.id, article },
-    promise: client => client.post('/article/updateArticle', { data })
+    promise: client => client.post('/article/updateArticler', { data })
   };
 }
 
@@ -210,7 +210,7 @@ export function removeArticle(articleId) {
   return {
     types: [REMOVE_ARTICLE_REQUEST, REMOVE_ARTICLE_SUCCESS, REMOVE_ARTICLE_FAIL],
     payload: { articleId },
-    promise: (client) => client.post('/article/removeArticle', { data: { id: articleId } })
+    promise: (client) => client.post('/article/removeArticler', { data: { id: articleId } })
   };
 }
 
