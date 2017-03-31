@@ -6,6 +6,7 @@ import _isEmpty from 'lodash/isEmpty';
 // STORE
 import { editArticle, removeArticle } from 'redux/modules/articlesModule';
 // COMPONENTS
+import { Conversation } from 'containers';
 import { PlainTextEditor, RichTextEditor } from 'components';
 // LAYOUT
 import Grid from 'react-bootstrap/lib/Grid';
@@ -201,6 +202,7 @@ export default class ArticlePage extends Component {
               <List right>
                 {this.renderDeleteButton()}
               </List>
+              <Conversation articleId={article.id} />
             </Flex>
           </Col>
         </Row>

@@ -6,10 +6,12 @@ import {
   loadArticles, clearLoadArticlesError, clearAddArticleError,
   clearEditArticleError, clearRemoveArticleError
 } from 'redux/modules/articlesModule';
+import { clearLoadConversationError } from 'redux/modules/conversationModule';
 // COMPONENTS
 import { LoadingScreen, ErrorSnackbar, SuccessSnackbar } from 'components';
 
-const mappedState = ({ articles }) => ({
+const mappedState = ({ articles, conversation }) => ({
+  // ARTICLES
   // Load all
   loadingArticles: articles.loadingArticles,
   articlesLoaded: articles.articlesLoaded,
@@ -22,7 +24,9 @@ const mappedState = ({ articles }) => ({
   editArticleError: articles.editArticleError,
   // Remove
   articleRemoved: articles.articleRemoved,
-  removeArticleError: articles.removeArticleError
+  removeArticleError: articles.removeArticleError,
+  // CONVERSATION
+  loadConversationError: conversation.loadConversationError
 });
 
 const mappedActions = {
@@ -31,6 +35,7 @@ const mappedActions = {
   clearAddArticleError,
   clearEditArticleError,
   clearRemoveArticleError,
+  clearLoadConversationError,
   pushState: push
 };
 
@@ -40,6 +45,7 @@ class ArticlesLayout extends Component {
     children: PropTypes.element.isRequired,
     params: PropTypes.object.isRequired,
     pushState: PropTypes.func.isRequired,
+    // ARTICLE
     // Load all
     loadArticles: PropTypes.func.isRequired,
     loadingArticles: PropTypes.bool.isRequired,
@@ -57,7 +63,10 @@ class ArticlesLayout extends Component {
     // Remove
     articleRemoved: PropTypes.bool.isRequired,
     removeArticleError: PropTypes.string.isRequired,
-    clearRemoveArticleError: PropTypes.func.isRequired
+    clearRemoveArticleError: PropTypes.func.isRequired,
+    // CONVERSATION
+    loadConversationError: PropTypes.string.isRequired,
+    clearLoadConversationError: PropTypes.func.isRequired
   }
 
   state = {
@@ -95,7 +104,8 @@ class ArticlesLayout extends Component {
       { name: 'loadArticlesError', callback: 'clearLoadArticlesError' },
       { name: 'addArticleError', callback: 'clearAddArticleError' },
       { name: 'editArticleError', callback: 'clearEditArticleError' },
-      { name: 'removeArticleError', callback: 'clearRemoveArticleError' }
+      { name: 'removeArticleError', callback: 'clearRemoveArticleError' },
+      { name: 'loadConversationError', callback: 'clearLoadConversationError' }
     ];
 
     // Show error snackbar if any of the above errors is thrown
