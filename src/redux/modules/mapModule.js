@@ -19,15 +19,15 @@ const initialState = {
   markers: [],
   loadingMarkers: false,
   markersLoaded: false,
-  loadMapMarkersError: '',
+  loadMapMarkersError: null,
   // Adding new marker
   addingMarker: false,
   markerAdded: false,
-  addMarkerError: '',
+  addMarkerError: null,
   // Removing a marker
   removingMarker: null, // ID of a marker being removed
   markerRemoved: false,
-  removeMarkerError: ''
+  removeMarkerError: null
 };
 
 export default function articleModule(state = initialState, action = {}) {
@@ -38,7 +38,7 @@ export default function articleModule(state = initialState, action = {}) {
         ...state,
         markersLoaded: false,
         loadingMarkers: true,
-        loadMapMarkersError: ''
+        loadMapMarkersError: null
       };
     case LOAD_MAP_MARKERS_SUCCESS:
       return {
@@ -52,12 +52,12 @@ export default function articleModule(state = initialState, action = {}) {
         ...state,
         loadingMarkers: false,
         markersLoaded: false,
-        loadMapMarkersError: action.error
+        loadMapMarkersError: `Error while loading map markers: ${action.error.message}`
       };
     case CLEAR_LOAD_MAP_MARKERS_ERROR:
       return {
         ...state,
-        loadMapMarkersError: ''
+        loadMapMarkersError: null
       };
       // --- ADD ---
     // --- ADD ---
@@ -66,7 +66,7 @@ export default function articleModule(state = initialState, action = {}) {
         ...state,
         markerAdded: false,
         addingMarker: true,
-        addMarkerError: ''
+        addMarkerError: null
       };
     case ADD_MAP_MARKER_SUCCESS:
       return {
@@ -83,12 +83,12 @@ export default function articleModule(state = initialState, action = {}) {
         ...state,
         addingMarker: false,
         markerAdded: false,
-        addMarkerError: action.error
+        addMarkerError: `Error while adding a marker: ${action.error.message}`
       };
     case CLEAR_ADD_MAP_MARKER_ERROR:
       return {
         ...state,
-        addMarkerError: ''
+        addMarkerError: null
       };
     // --- REMOVE ---
     case REMOVE_MAP_MARKER:
@@ -96,7 +96,7 @@ export default function articleModule(state = initialState, action = {}) {
         ...state,
         markerRemoved: false,
         removingMarker: action.payload.markerId,
-        removeMarkerError: ''
+        removeMarkerError: null
       };
     case REMOVE_MAP_MARKER_SUCCESS:
       return {
@@ -110,12 +110,12 @@ export default function articleModule(state = initialState, action = {}) {
         ...state,
         removingMarker: null,
         markerRemoved: false,
-        removeMarkerError: action.error
+        removeMarkerError: `Error while removing a marker: ${action.error.message}`
       };
     case CLEAR_REMOVE_MAP_MARKER_ERROR:
       return {
         ...state,
-        removeMarkerError: ''
+        removeMarkerError: null
       };
     default:
       return state;

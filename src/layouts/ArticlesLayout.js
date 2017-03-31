@@ -50,29 +50,29 @@ class ArticlesLayout extends Component {
     loadArticles: PropTypes.func.isRequired,
     loadingArticles: PropTypes.bool.isRequired,
     articlesLoaded: PropTypes.bool.isRequired,
-    loadArticlesError: PropTypes.string.isRequired,
+    loadArticlesError: PropTypes.string,
     clearLoadArticlesError: PropTypes.func.isRequired,
     // Add
     articleAdded: PropTypes.number,
-    addArticleError: PropTypes.string.isRequired,
+    addArticleError: PropTypes.string,
     clearAddArticleError: PropTypes.func.isRequired,
     // Edit
     articleEdited: PropTypes.bool.isRequired,
-    editArticleError: PropTypes.string.isRequired,
+    editArticleError: PropTypes.string,
     clearEditArticleError: PropTypes.func.isRequired,
     // Remove
     articleRemoved: PropTypes.bool.isRequired,
-    removeArticleError: PropTypes.string.isRequired,
+    removeArticleError: PropTypes.string,
     clearRemoveArticleError: PropTypes.func.isRequired,
     // CONVERSATION
-    loadConversationError: PropTypes.string.isRequired,
+    loadConversationError: PropTypes.string,
     clearLoadConversationError: PropTypes.func.isRequired
   }
 
   state = {
-    successMessage: '',
+    successMessage: null,
     error: {
-      message: '',
+      message: null,
       callback: null
     }
   }
@@ -105,7 +105,7 @@ class ArticlesLayout extends Component {
       { name: 'addArticleError', callback: 'clearAddArticleError' },
       { name: 'editArticleError', callback: 'clearEditArticleError' },
       { name: 'removeArticleError', callback: 'clearRemoveArticleError' },
-      { name: 'loadConversationError', callback: 'clearLoadConversationError' }
+      { name: 'loadConversationError' }
     ];
 
     // Show error snackbar if any of the above errors is thrown
@@ -123,12 +123,12 @@ class ArticlesLayout extends Component {
 
   // TODO: add support form muliple messages displayed at once
   clearSuccessMessage = () => {
-    this.setState({ successMessage: '' });
+    this.setState({ successMessage: null });
   }
 
   clearErrors = () => {
-    this.state.error.callback();
-    this.setState({ error: { message: '', callback: null } });
+    if (this.state.error.callback) this.state.error.callback();
+    this.setState({ error: { message: null, callback: null } });
   }
 
   render() {
@@ -140,12 +140,12 @@ class ArticlesLayout extends Component {
         <div className={styles.ArticlesLayout}>
           {this.props.children}
           <SuccessSnackbar
-            open={successMessage !== ''}
+            open={successMessage !== null}
             message={successMessage}
             onRequestClose={this.clearSuccessMessage}
           />
           <ErrorSnackbar
-            open={error.message !== ''}
+            open={error.message !== null}
             message={error.message}
             onRequestClose={this.clearErrors}
           />

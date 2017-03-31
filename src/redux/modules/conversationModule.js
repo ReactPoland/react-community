@@ -9,7 +9,7 @@ const initialState = {
   comments: [],
   conversationLoaded: false,
   loadingConversation: false,
-  loadConversationError: ''
+  loadConversationError: null
 };
 
 export default function articlesModule(state = initialState, action = {}) {
@@ -22,7 +22,7 @@ export default function articlesModule(state = initialState, action = {}) {
         comments: [],
         conversationLoaded: false,
         loadingConversation: true,
-        loadConversationError: ''
+        loadConversationError: null
       };
     case LOAD_CONVERSATION_SUCCESS:
       const conversation = action.result.message;
@@ -44,7 +44,7 @@ export default function articlesModule(state = initialState, action = {}) {
     case CLEAR_LOAD_CONVERSATION_ERROR:
       return {
         ...state,
-        loadConversationError: ''
+        loadConversationError: null
       };
     default:
       return state;

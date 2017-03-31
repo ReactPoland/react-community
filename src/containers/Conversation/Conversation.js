@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { loadConversation, clearLoadConversationError } from 'redux/modules/conversationModule';
+import { loadConversation } from 'redux/modules/conversationModule';
 // COMPONENTS
 import CommentsList from './CommentsList';
+import { LoadingScreen } from 'components';
 
 const mappedState = ({ conversation }) => ({
   conversationId: conversation.id,
@@ -13,8 +14,7 @@ const mappedState = ({ conversation }) => ({
 });
 
 const mappedActions = {
-  loadConversation,
-  clearLoadConversationError
+  loadConversation
 };
 
 @connect(mappedState, mappedActions)
@@ -25,34 +25,29 @@ class Conversation extends Component {
     comments: PropTypes.array.isRequired,
     loadingConversation: PropTypes.bool.isRequired,
     conversationLoaded: PropTypes.bool.isRequired,
-    loadConversationError: PropTypes.string.isRequired,
-    loadConversation: PropTypes.func.isRequired,
-    clearLoadConversationError: PropTypes.func.isRequired
+    loadConversationError: PropTypes.string,
+    loadConversation: PropTypes.func.isRequired
   }
 
   componentWillMount() {
-    this.props.loadConversation(this.props.articleId);
+    this.loadComments();
   }
 
-  loadConversation = () => {
+  loadComments = () => {
     this.props.loadConversation(this.props.articleId);
   }
 
   render() {
     return (
-      <div>
-        <h3>Conversation ID: {this.props.conversationId}</h3>
-        <CommentsList
-          comments={this.props.comments}
-          onListItemClick={(id) => { console.log(id); }}
-        />
-        <button
-          onClick={this.loadConversation}
-          disabled={this.props.loadingConversation}
-        >
-          {this.props.loadingConversation ? 'Loading...' : 'Load'}
-        </button>
-      </div>
+      <LoadingScreen loading={this.props.loadingConversation}>
+        <div>
+          <CommentsList
+            comments={this.props.comments}
+            showReloadList={this.props.loadConversationError !== null}
+            onReloadList={this.loadComments}
+          />
+        </div>
+      </LoadingScreen>
     );
   }
 }

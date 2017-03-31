@@ -28,7 +28,7 @@ class AddLocationDialog extends Component {
     closePopup: PropTypes.func.isRequired,
     addingMarker: PropTypes.bool.isRequired,
     markerAdded: PropTypes.bool.isRequired,
-    errorMessage: PropTypes.string.isRequired,
+    errorMessage: PropTypes.string,
     clearError: PropTypes.func.isRequired
   }
 

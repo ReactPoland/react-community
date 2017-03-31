@@ -37,7 +37,7 @@ export default class ArticlePage extends Component {
     editingArticle: PropTypes.bool.isRequired,
     articleEdited: PropTypes.bool.isRequired,
     removingArticle: PropTypes.number,
-    editArticleError: PropTypes.string.isRequired,
+    editArticleError: PropTypes.string,
     editArticle: PropTypes.func.isRequired,
     removeArticle: PropTypes.func.isRequired,
     pushState: PropTypes.func.isRequired
