@@ -5,3 +5,7 @@ export WorldPage from './WorldPage/WorldPage';
 export Login from './Login/Login';
 export LoginSuccess from './LoginSuccess/LoginSuccess';
 export NotFound from './NotFound/NotFound';
+export NewArticlePage from './NewArticlePage/NewArticlePage';
+export ArticlesPage from './ArticlesPage/ArticlesPage';
+export ArticlePage from './ArticlePage/ArticlePage';
+export MainNavbar from './MainNavbar/MainNavbar';

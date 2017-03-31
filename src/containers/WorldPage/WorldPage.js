@@ -7,7 +7,8 @@ import {
   loadMarkers, removeMarker, addMarker, clearLoadMapMarkersError,
   clearAddMapMarkerError
 } from 'redux/modules/mapModule';
-import { Spinner, ErrorSnackbar } from '../../components';
+import { LoadingScreen, ErrorSnackbar } from 'components';
+
 import AddLocationDialog from './AddLocationDialog';
 import LocationMap from './LocationMap';
 
@@ -107,9 +108,6 @@ export default class WorldPage extends Component {
     const { showAddLocationDialog, mapCenterCoord, mapZoomLevel } = this.state;
     const styles = require('./WorldPage.scss');
 
-    // NOTE: adding the "|| __SERVER__" prevents "markup generated on the server was not what the client was expecting" warning
-    if (loadingMarkers || __SERVER__) return <Spinner />;
-
     const AddMarkerButton = (
       <FloatingActionButton
         className={styles.AddMarkerButton}
@@ -120,30 +118,32 @@ export default class WorldPage extends Component {
     );
 
     return (
-      <div className={styles.WorldPage}>
-        {AddMarkerButton}
-        <LocationMap
-          centerCoords={mapCenterCoord}
-          zoomLevel={mapZoomLevel}
-          markers={mapMarkers}
-          removeMarker={this.removeMarker}
-          removingMarker={removingMarker}
-        />
-        <AddLocationDialog
-          popupVisible={showAddLocationDialog}
-          closePopup={this.closeAddLocationDialog}
-          addMarker={this.addMarker}
-          addingMarker={addingMarker}
-          markerAdded={markerAdded}
-          errorMessage={addMarkerError}
-          clearError={this.props.clearAddMapMarkerError}
-        />
-        <ErrorSnackbar
-          open={loadMapMarkersError !== ''}
-          message={loadMapMarkersError}
-          onRequestClose={this.props.clearLoadMapMarkersError}
-        />
-      </div>
+      <LoadingScreen loading={loadingMarkers}>
+        <div className={styles.WorldPage}>
+          {AddMarkerButton}
+          <LocationMap
+            centerCoords={mapCenterCoord}
+            zoomLevel={mapZoomLevel}
+            markers={mapMarkers}
+            removeMarker={this.removeMarker}
+            removingMarker={removingMarker}
+          />
+          <AddLocationDialog
+            popupVisible={showAddLocationDialog}
+            closePopup={this.closeAddLocationDialog}
+            addMarker={this.addMarker}
+            addingMarker={addingMarker}
+            markerAdded={markerAdded}
+            errorMessage={addMarkerError}
+            clearError={this.props.clearAddMapMarkerError}
+          />
+          <ErrorSnackbar
+            open={loadMapMarkersError !== ''}
+            message={loadMapMarkersError}
+            onRequestClose={this.props.clearLoadMapMarkersError}
+          />
+        </div>
+      </LoadingScreen>
     );
   }
 }
