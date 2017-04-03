@@ -9,7 +9,7 @@ import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/module
 import config from '../../config';
 
 import { MainNavbar } from 'containers';
-import { ErrorHandler } from 'components';
+import { SuccessHandler, ErrorHandler } from 'components';
 
 @asyncConnect([{
   promise: ({store: {dispatch, getState}}) => {
@@ -65,6 +65,7 @@ export default class App extends Component {
         <div className={styles.appContent}>
           {this.props.children}
         </div>
+        <SuccessHandler />
         <ErrorHandler />
       </div>
     );
