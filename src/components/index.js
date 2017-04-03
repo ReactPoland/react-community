@@ -1,3 +1,4 @@
+export CommentEditor from './editors/CommentEditor';
 export PlainTextEditor from './editors/PlainTextEditor';
 export RichTextEditor from './editors/RichTextEditor';
 

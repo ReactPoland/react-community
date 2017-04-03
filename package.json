@@ -105,6 +105,8 @@
     "body-parser": "^1.14.1",
     "compression": "^1.6.0",
     "draft-js": "^0.10.0",
+    "draft-js-hashtag-plugin": "^2.0.0-beta1",
+    "draft-js-plugins-editor": "^2.0.0-beta10",
     "express": "^4.13.3",
     "express-session": "^1.12.1",
     "file-loader": "^0.8.5",
