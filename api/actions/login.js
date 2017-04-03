@@ -1,6 +1,6 @@
 export default function login(req) {
   const user = {
-    name: req.body.name
+    id: req.body.id
   };
   req.session.user = user;
   return Promise.resolve(user);
