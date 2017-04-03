@@ -2,13 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 // STORE
-import {
-  loadArticles, clearLoadArticlesError, clearAddArticleError,
-  clearEditArticleError, clearRemoveArticleError
-} from 'redux/modules/articlesModule';
-import { clearLoadConversationError } from 'redux/modules/conversationModule';
+import { loadArticles } from 'redux/modules/articlesModule';
 // COMPONENTS
-import { LoadingScreen, ErrorSnackbar, SuccessSnackbar } from 'components';
+import { LoadingScreen, SuccessSnackbar } from 'components';
 
 const mappedState = ({ articles, conversation }) => ({
   // ARTICLES
@@ -31,11 +27,6 @@ const mappedState = ({ articles, conversation }) => ({
 
 const mappedActions = {
   loadArticles,
-  clearLoadArticlesError,
-  clearAddArticleError,
-  clearEditArticleError,
-  clearRemoveArticleError,
-  clearLoadConversationError,
   pushState: push
 };
 
@@ -45,37 +36,16 @@ class ArticlesLayout extends Component {
     children: PropTypes.element.isRequired,
     params: PropTypes.object.isRequired,
     pushState: PropTypes.func.isRequired,
-    // ARTICLE
-    // Load all
+    // ARTICLES
     loadArticles: PropTypes.func.isRequired,
     loadingArticles: PropTypes.bool.isRequired,
     articlesLoaded: PropTypes.bool.isRequired,
-    loadArticlesError: PropTypes.string,
-    clearLoadArticlesError: PropTypes.func.isRequired,
-    // Add
     articleAdded: PropTypes.number,
-    addArticleError: PropTypes.string,
-    clearAddArticleError: PropTypes.func.isRequired,
-    // Edit
     articleEdited: PropTypes.bool.isRequired,
-    editArticleError: PropTypes.string,
-    clearEditArticleError: PropTypes.func.isRequired,
-    // Remove
-    articleRemoved: PropTypes.bool.isRequired,
-    removeArticleError: PropTypes.string,
-    clearRemoveArticleError: PropTypes.func.isRequired,
-    // CONVERSATION
-    loadConversationError: PropTypes.string,
-    clearLoadConversationError: PropTypes.func.isRequired
+    articleRemoved: PropTypes.bool.isRequired
   }
 
-  state = {
-    successMessage: null,
-    error: {
-      message: null,
-      callback: null
-    }
-  }
+  state = { successMessage: null }
 
   componentWillMount() {
     if (!this.props.articlesLoaded) this.props.loadArticles();
@@ -98,41 +68,14 @@ class ArticlesLayout extends Component {
       this.setState({ successMessage: 'Article removed' });
       this.props.pushState('/articles');
     }
-
-    // ERROR HANDLING
-    const errors = [
-      { name: 'loadArticlesError', callback: 'clearLoadArticlesError' },
-      { name: 'addArticleError', callback: 'clearAddArticleError' },
-      { name: 'editArticleError', callback: 'clearEditArticleError' },
-      { name: 'removeArticleError', callback: 'clearRemoveArticleError' },
-      { name: 'loadConversationError' }
-    ];
-
-    // Show error snackbar if any of the above errors is thrown
-    errors.forEach(({ name, callback }) => {
-      if (nextProps[name] && !this.props[name]) {
-        this.setState({
-          error: {
-            message: nextProps[name],
-            callback: this.props[callback]
-          }
-        });
-      }
-    });
   }
 
-  // TODO: add support form muliple messages displayed at once
   clearSuccessMessage = () => {
     this.setState({ successMessage: null });
   }
 
-  clearErrors = () => {
-    if (this.state.error.callback) this.state.error.callback();
-    this.setState({ error: { message: null, callback: null } });
-  }
-
   render() {
-    const { successMessage, error } = this.state;
+    const { successMessage } = this.state;
     const styles = require('./ArticlesLayout.scss');
 
     return (
@@ -143,11 +86,6 @@ class ArticlesLayout extends Component {
             open={successMessage !== null}
             message={successMessage}
             onRequestClose={this.clearSuccessMessage}
-          />
-          <ErrorSnackbar
-            open={error.message !== null}
-            message={error.message}
-            onRequestClose={this.clearErrors}
           />
         </div>
       </LoadingScreen>

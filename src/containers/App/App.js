@@ -9,6 +9,7 @@ import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/module
 import config from '../../config';
 
 import { MainNavbar } from 'containers';
+import { ErrorHandler } from 'components';
 
 @asyncConnect([{
   promise: ({store: {dispatch, getState}}) => {
@@ -25,8 +26,8 @@ import { MainNavbar } from 'containers';
   }
 }])
 @connect(
-  state => ({user: state.auth.user}),
-  {logout, pushState: push})
+  state => ({ user: state.auth.user }),
+  { logout, pushState: push })
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
@@ -64,6 +65,7 @@ export default class App extends Component {
         <div className={styles.appContent}>
           {this.props.children}
         </div>
+        <ErrorHandler />
       </div>
     );
   }
