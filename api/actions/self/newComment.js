@@ -38,7 +38,7 @@ const newCommentRequest = async ({ body, session }) => {
   const commentEntity = {
     body: commentBody,
     userId: session.user.id,
-    conversId: converResp.itemId
+    conversationId: converResp.itemId
   };
 
   return CommentModel.create(commentEntity)

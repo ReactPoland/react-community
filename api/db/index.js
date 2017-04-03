@@ -22,7 +22,8 @@ const models = {};
 models.comments.belongsTo(models.users);
 models.comments.belongsTo(models.conversations);
 
-models.conversations.hasMany(models.comments, { foreignKey: 'conversId' });
+models.users.hasMany(models.comments);
+models.conversations.hasMany(models.comments, { foreignKey: 'conversationId' });
 models.conversations.belongsTo(models.articles);
 
 // sequelize.sync({force: true})

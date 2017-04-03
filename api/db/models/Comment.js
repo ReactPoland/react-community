@@ -7,7 +7,7 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: false
     },
-    conversId: {
+    conversationId: {
       type: Sequelize.INTEGER,
       references: {
         model: 'conversations',
