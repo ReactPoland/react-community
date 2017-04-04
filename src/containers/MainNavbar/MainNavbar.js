@@ -37,7 +37,11 @@ class MainNavbar extends Component {
               <NavItem>World Map</NavItem>
             </LinkContainer>
 
-            <LinkContainer to="/articles" onlyActiveOnIndex>
+            <LinkContainer to="/tutorials">
+              <NavItem>Tutorials</NavItem>
+            </LinkContainer>
+
+            <LinkContainer to="/articles">
               <NavItem>Articles</NavItem>
             </LinkContainer>
 
