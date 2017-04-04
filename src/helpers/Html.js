@@ -34,7 +34,10 @@ export default class Html extends Component {
           {head.script.toComponent()}
 
           <link rel="shortcut icon" href="/favicon.ico" />
+          {/* Map component used at "/world" */}
           <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+          {/* Icons for text editor */}
+          <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
 
           {/* styles (will be present only in production with webpack extract text plugin) */}

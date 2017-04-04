@@ -1,16 +1,15 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { IndexLink } from 'react-router';
-import { LinkContainer } from 'react-router-bootstrap';
-import Navbar from 'react-bootstrap/lib/Navbar';
-import Nav from 'react-bootstrap/lib/Nav';
-import NavItem from 'react-bootstrap/lib/NavItem';
+import { asyncConnect } from 'redux-async-connect';
+import { push } from 'react-router-redux';
 import Helmet from 'react-helmet';
+
 import { isLoaded as isInfoLoaded, load as loadInfo } from 'redux/modules/info';
 import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
-import { push } from 'react-router-redux';
 import config from '../../config';
-import { asyncConnect } from 'redux-async-connect';
+
+import { MainNavbar } from 'containers';
+import { SuccessHandler, ErrorHandler } from 'components';
 
 @asyncConnect([{
   promise: ({store: {dispatch, getState}}) => {
@@ -27,8 +26,8 @@ import { asyncConnect } from 'redux-async-connect';
   }
 }])
 @connect(
-  state => ({user: state.auth.user}),
-  {logout, pushState: push})
+  state => ({ user: state.auth.user }),
+  { logout, pushState: push })
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
@@ -57,54 +56,17 @@ export default class App extends Component {
   };
 
   render() {
-    const {user} = this.props;
     const styles = require('./App.scss');
 
     return (
       <div className={styles.appContainer}>
         <Helmet {...config.app.head}/>
-        <Navbar fixedTop>
-          <Navbar.Header>
-            <Navbar.Brand>
-              <IndexLink to="/" activeStyle={{color: '#33e0ff'}}>
-                <div className={styles.brand}/>
-                <span>{config.app.title}</span>
-              </IndexLink>
-            </Navbar.Brand>
-            <Navbar.Toggle/>
-          </Navbar.Header>
-
-          <Navbar.Collapse>
-            <Nav navbar>
-              {user && <LinkContainer to="/chat">
-                <NavItem>Chat</NavItem>
-              </LinkContainer>}
-
-              <LinkContainer to="/world">
-                <NavItem>World Map</NavItem>
-              </LinkContainer>
-
-              {!user &&
-              <LinkContainer to="/login">
-                <NavItem>Login</NavItem>
-              </LinkContainer>}
-
-              {user &&
-              <LinkContainer to="/logout">
-                <NavItem className="logout-link" onClick={this.handleLogout}>
-                  Logout
-                </NavItem>
-              </LinkContainer>}
-            </Nav>
-
-            {user &&
-            <p className={styles.loggedInMessage + ' navbar-text'}>Logged in as <strong>{user.name}</strong>.</p>}
-          </Navbar.Collapse>
-        </Navbar>
-
+        <MainNavbar user={this.props.user} config={config} />
         <div className={styles.appContent}>
           {this.props.children}
         </div>
+        <SuccessHandler />
+        <ErrorHandler />
       </div>
     );
   }

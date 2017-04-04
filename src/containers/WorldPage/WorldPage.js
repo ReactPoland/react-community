@@ -5,9 +5,10 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import {
   loadMarkers, removeMarker, addMarker, clearLoadMapMarkersError,
-  clearAddMapMarkerError
+  clearAddMapMarkerError, clearRemoveMarkerError
 } from 'redux/modules/mapModule';
-import { Spinner, ErrorSnackbar } from '../../components';
+import { LoadingScreen, ErrorSnackbar } from 'components';
+
 import AddLocationDialog from './AddLocationDialog';
 import LocationMap from './LocationMap';
 
@@ -19,7 +20,8 @@ const mappedState = ({ map }) => ({
   addingMarker: map.addingMarker,
   markerAdded: map.markerAdded,
   addMarkerError: map.addMarkerError,
-  removingMarker: map.removingMarker
+  removingMarker: map.removingMarker,
+  removeMarkerError: map.removeMarkerError
 });
 
 const mappedActions = {
@@ -27,25 +29,28 @@ const mappedActions = {
   addMarker,
   removeMarker,
   clearLoadMapMarkersError,
-  clearAddMapMarkerError
+  clearAddMapMarkerError,
+  clearRemoveMarkerError
 };
 
 @connect(mappedState, mappedActions)
 export default class WorldPage extends Component {
   static propTypes = {
     mapMarkers: PropTypes.array.isRequired,
-    loadMapMarkersError: PropTypes.string.isRequired,
+    loadMapMarkersError: PropTypes.string,
     markersLoaded: PropTypes.bool.isRequired,
     loadingMarkers: PropTypes.bool.isRequired,
     addingMarker: PropTypes.bool.isRequired,
     markerAdded: PropTypes.bool.isRequired,
     removingMarker: PropTypes.number,
-    addMarkerError: PropTypes.string.isRequired,
+    addMarkerError: PropTypes.string,
     loadMarkers: PropTypes.func.isRequired,
     addMarker: PropTypes.func.isRequired,
     removeMarker: PropTypes.func.isRequired,
     clearLoadMapMarkersError: PropTypes.func.isRequired,
-    clearAddMapMarkerError: PropTypes.func.isRequired
+    clearAddMapMarkerError: PropTypes.func.isRequired,
+    removeMarkerError: PropTypes.string,
+    clearRemoveMarkerError: PropTypes.func.isRequired
   }
 
   state = {
@@ -102,13 +107,10 @@ export default class WorldPage extends Component {
   render() {
     const {
       mapMarkers, loadMapMarkersError, loadingMarkers, addingMarker,
-      markerAdded, addMarkerError, removingMarker
+      markerAdded, addMarkerError, removingMarker, removeMarkerError
     } = this.props;
     const { showAddLocationDialog, mapCenterCoord, mapZoomLevel } = this.state;
     const styles = require('./WorldPage.scss');
-
-    // NOTE: adding the "|| __SERVER__" prevents "markup generated on the server was not what the client was expecting" warning
-    if (loadingMarkers || __SERVER__) return <Spinner />;
 
     const AddMarkerButton = (
       <FloatingActionButton
@@ -120,30 +122,37 @@ export default class WorldPage extends Component {
     );
 
     return (
-      <div className={styles.WorldPage}>
-        {AddMarkerButton}
-        <LocationMap
-          centerCoords={mapCenterCoord}
-          zoomLevel={mapZoomLevel}
-          markers={mapMarkers}
-          removeMarker={this.removeMarker}
-          removingMarker={removingMarker}
-        />
-        <AddLocationDialog
-          popupVisible={showAddLocationDialog}
-          closePopup={this.closeAddLocationDialog}
-          addMarker={this.addMarker}
-          addingMarker={addingMarker}
-          markerAdded={markerAdded}
-          errorMessage={addMarkerError}
-          clearError={this.props.clearAddMapMarkerError}
-        />
-        <ErrorSnackbar
-          open={loadMapMarkersError !== ''}
-          message={loadMapMarkersError}
-          onRequestClose={this.props.clearLoadMapMarkersError}
-        />
-      </div>
+      <LoadingScreen loading={loadingMarkers}>
+        <div className={styles.WorldPage}>
+          {AddMarkerButton}
+          <LocationMap
+            centerCoords={mapCenterCoord}
+            zoomLevel={mapZoomLevel}
+            markers={mapMarkers}
+            removeMarker={this.removeMarker}
+            removingMarker={removingMarker}
+          />
+          <AddLocationDialog
+            popupVisible={showAddLocationDialog}
+            closePopup={this.closeAddLocationDialog}
+            addMarker={this.addMarker}
+            addingMarker={addingMarker}
+            markerAdded={markerAdded}
+            errorMessage={addMarkerError}
+            clearError={this.props.clearAddMapMarkerError}
+          />
+          <ErrorSnackbar
+            open={loadMapMarkersError !== null}
+            message={loadMapMarkersError}
+            onRequestClose={this.props.clearLoadMapMarkersError}
+          />
+          <ErrorSnackbar
+            open={removeMarkerError !== null}
+            message={removeMarkerError}
+            onRequestClose={this.props.clearRemoveMarkerError}
+          />
+        </div>
+      </LoadingScreen>
     );
   }
 }

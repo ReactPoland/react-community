@@ -1,0 +1,135 @@
+:global {
+.RichTextEditor {
+  // GENERIC STYLES
+
+  input,
+  textarea {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.4;
+    background: #eee;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  pre {
+    padding: 10px;
+    background-color: #eee;
+    white-space: pre-wrap;
+  }
+
+  :not(pre) > code {
+    background-color: #eee;
+    padding: 3px;
+  }
+
+  img {
+    max-width: 100%;
+    max-height: 20em;
+  }
+
+  img.active {
+    box-shadow: 0 0 0 2px blue;
+  }
+
+  blockquote {
+    border-left: 2px solid #ddd;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 10px;
+    color: #aaa;
+    font-style: italic;
+  }
+
+  blockquote[dir="rtl"] {
+    border-left: none;
+    padding-left: 0;
+    padding-right: 10px;
+    border-right: 2px solid #ddd;
+  }
+
+  table {
+    border-collapse: collapse;
+  }
+
+  td {
+    padding: 10px;
+    border: 2px solid #ddd;
+  }
+
+  input {
+    font-size: .85em;
+    width: 100%;
+    padding: .5em;
+    border: 2px solid #ddd;
+    background: #fafafa;
+  }
+
+  input:focus {
+    outline: 0;
+    border-color: blue;
+  }
+
+  // EDITOR PANEL STYLES
+
+  .editor > * > * + * {
+    margin-top: 1em;
+  }
+
+  .menu > * {
+    display: inline-block;
+  }
+
+  .menu > * + * {
+    margin-left: 15px;
+  }
+
+  .button {
+    color: #ccc;
+    cursor: pointer;
+  }
+
+  .button[data-active="true"] {
+    color: black;
+  }
+
+  .toolbar-menu {
+    padding: 16px 0;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 24px;
+  }
+
+  .hover-menu {
+    padding: 8px 7px 6px;
+    position: absolute;
+    z-index: 1;
+    top: -10000px;
+    left: -10000px;
+    margin-top: -6px;
+    opacity: 0;
+    background-color: #222;
+    border-radius: 4px;
+    transition: opacity .75s;
+  }
+
+  .hover-menu .button {
+    color: #aaa;
+  }
+
+  .hover-menu .button[data-active="true"] {
+    color: #fff;
+  }
+
+  .emoji.selected {
+    outline: 2px solid blue;
+  }
+
+  // ICONS
+
+  .material-icons {
+    font-size: 18px;
+    vertical-align: text-bottom;
+  }
+}
+}

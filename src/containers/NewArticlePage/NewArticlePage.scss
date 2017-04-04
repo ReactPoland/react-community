@@ -1,0 +1,15 @@
+.container {
+  height: 100%;
+}
+
+.editor {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  h2 {
+    margin-top: 0;
+  }
+  button {
+    align-self: flex-end;
+  }
+}
