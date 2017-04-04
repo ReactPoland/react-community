@@ -1,3 +1,27 @@
+/**
+  @api {POST} /api/user/removeUser/ Remove user
+  @apiDescription Remove user from database
+  **Warning** It is a temporary solution and will removed after authorization flow.
+  @apiName Remove user
+  @apiGroup Users
+
+  @apiParam {Number} id Users unique ID.
+  @apiSuccess {Number} message Count of removed users.
+
+  @apiExample Example request:
+  POST /api/user/removeUser HTTP/1.1
+
+  {
+      "id": "3"
+  }
+
+  @apiSuccessExample Example data on success:
+  {
+    "message": 1,
+    "type": "success"
+  }
+ */
+
 // TODO: temporary solution. Must be removed by self action
 const resp = require('../../utils/serverResp');
 const UserModel = require('../../db').users;

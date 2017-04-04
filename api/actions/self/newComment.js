@@ -2,6 +2,39 @@ const resp = require('../../utils/serverResp');
 const CommentModel = require('../../db').comments;
 const ConversationModel = require('../../db').conversations;
 
+/**
+  @api {POST} /api/self/newComment/ Create comment
+  @apiDescription Add new comment for article
+  @apiName Create comment
+  @apiGroup Self
+
+  @apiParam {String} body Comment message.
+  @apiParam {Number} articleId Article id, which user want to comment.
+
+  @apiPermission Authorized user from the database See how to authorize(#General:Login).
+
+  @apiExample Example request:
+  POST /api/self/newComment HTTP/1.1
+
+  {
+      "body": "bla bla comment",
+      "articleId": 27
+  }
+
+  @apiSuccessExample Example data on success:
+  {
+    "message": {
+      "id": 3,
+      "body": "bla bla comment",
+      "userId": 1,
+      "conversationId": 1,
+      "updatedAt": "2017-04-04T09:31:05.743Z",
+      "createdAt": "2017-04-04T09:31:05.743Z"
+    },
+    "type": "success"
+  }
+ */
+
 const getConversationId = async (articleId) => {
   const currConvers = await ConversationModel.findOne({
     where: { articleId }
