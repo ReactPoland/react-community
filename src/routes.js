@@ -4,7 +4,8 @@ import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
 import { ArticlesLayout } from 'layouts';
 import {
   App, HomePage, Chat, Login, LoginSuccess, WorldPage, NotFound,
-  NewArticlePage, ArticlesPage, ArticlePage, TutorialsPage
+  NewArticlePage, ArticlesPage, ArticlePage, TutorialsPage,
+  BestPracticesPage
 } from 'containers';
 
 export default (store) => {
@@ -40,6 +41,7 @@ export default (store) => {
       <Route path="login" component={Login} />
       <Route path="world" component={WorldPage} />
       <Route path="tutorials" component={TutorialsPage} />
+      <Route path="best-practices" component={BestPracticesPage} />
       <Route path="articles" component={ArticlesLayout}>
         <IndexRoute component={ArticlesPage} />
         <Route path="/article/:id" component={ArticlePage} />

@@ -1,6 +1,7 @@
 export App from './App/App';
 export ArticlesPage from './ArticlesPage/ArticlesPage';
 export ArticlePage from './ArticlePage/ArticlePage';
+export BestPracticesPage from './BestPracticesPage/BestPracticesPage';
 export Chat from './Chat/Chat';
 export Conversation from './Conversation/Conversation';
 export HomePage from './HomePage/HomePage';

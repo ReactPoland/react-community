@@ -37,6 +37,10 @@ class MainNavbar extends Component {
               <NavItem>World Map</NavItem>
             </LinkContainer>
 
+            <LinkContainer to="/best-practices">
+              <NavItem>Best Practices</NavItem>
+            </LinkContainer>
+
             <LinkContainer to="/tutorials">
               <NavItem>Tutorials</NavItem>
             </LinkContainer>

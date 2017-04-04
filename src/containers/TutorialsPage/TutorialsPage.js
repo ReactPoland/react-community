@@ -10,7 +10,7 @@ export default class TutorialsPage extends Component {
   render() {
     return (
       <Grid className={styles.TutorialsPage}>
-        <Helmet title="Home" />
+        <Helmet title="Tutorials" />
         <Jumbotron>
           <h1>Tutorials</h1>
           <p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
