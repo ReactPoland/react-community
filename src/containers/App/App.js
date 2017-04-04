@@ -3,13 +3,14 @@ import { connect } from 'react-redux';
 import { asyncConnect } from 'redux-async-connect';
 import { push } from 'react-router-redux';
 import Helmet from 'react-helmet';
-
+import config from '../../config';
+// STORE
 import { isLoaded as isInfoLoaded, load as loadInfo } from 'redux/modules/info';
 import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
-import config from '../../config';
-
-import { MainNavbar } from 'containers';
+// COMPONENTS
+import { MainNavbar, MainFooter } from 'containers';
 import { SuccessHandler, ErrorHandler } from 'components';
+import styles from './App.scss';
 
 @asyncConnect([{
   promise: ({store: {dispatch, getState}}) => {
@@ -56,8 +57,6 @@ export default class App extends Component {
   };
 
   render() {
-    const styles = require('./App.scss');
-
     return (
       <div className={styles.appContainer}>
         <Helmet {...config.app.head}/>
@@ -65,6 +64,7 @@ export default class App extends Component {
         <div className={styles.appContent}>
           {this.props.children}
         </div>
+        <MainFooter />
         <SuccessHandler />
         <ErrorHandler />
       </div>

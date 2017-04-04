@@ -6,6 +6,7 @@ export Conversation from './Conversation/Conversation';
 export HomePage from './HomePage/HomePage';
 export Login from './Login/Login';
 export LoginSuccess from './LoginSuccess/LoginSuccess';
+export MainFooter from './MainFooter/MainFooter';
 export MainNavbar from './MainNavbar/MainNavbar';
 export NewArticlePage from './NewArticlePage/NewArticlePage';
 export NotFound from './NotFound/NotFound';
