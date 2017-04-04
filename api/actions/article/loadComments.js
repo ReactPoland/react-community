@@ -27,7 +27,10 @@ const loadCommentsRequest = async ({ body }) => {
     include: [{
       model: UserModel,
       attributes: ['id', 'firstName', 'lastName', 'pictureURL']
-    }]
+    }],
+    order: [
+      [ 'createdAt', 'DESC']
+    ]
   })
   .then(commentsResponse => resp.success(commentsResponse))
   .catch(err => resp.error(err.message));
