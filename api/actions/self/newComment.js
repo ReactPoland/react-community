@@ -61,7 +61,23 @@ const newCommentRequest = async ({ body, session }) => {
   if (!session.user || !session.user.id ) return resp.error('Not authorized');
   if (!body) return resp.error('bad request');
 
-  const { body: commentBody, articleId } = body;
+  const { body: commentBody, articleId, parentCommentId } = body;
+
+  const parentComment = await CommentModel.findOne({ where: {
+    id: parentCommentId
+  } })
+    .then(item => {
+      if (!item) return null;
+      return item.toJSON();
+    })
+    .catch(() => null);
+
+  let depth = 0;
+  let pCommentId = null;
+  if (parentComment) {
+    depth = parentComment.depth + 1;
+    pCommentId = parentComment.id;
+  }
 
   const converResp = await getConversationId(articleId)
   .catch(err => err);
@@ -71,7 +87,9 @@ const newCommentRequest = async ({ body, session }) => {
   const commentEntity = {
     body: commentBody,
     userId: session.user.id,
-    conversationId: converResp.itemId
+    conversationId: converResp.itemId,
+    depth,
+    parentCommentId: pCommentId
   };
 
   return CommentModel.create(commentEntity)

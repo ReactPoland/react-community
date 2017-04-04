@@ -4,7 +4,7 @@ import Snackbar from 'material-ui/Snackbar';
 const style = {
   height: 'auto',
   padding: '8px 24px',
-  backgroundColor: 'red',
+  backgroundColor: 'green',
   lineHeight: 1.5
 };
 
