@@ -15,6 +15,18 @@ module.exports = {
       },
       allowNull: false
     },
+    parentCommentId: {
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'comment',
+        key: 'id'
+      }
+    },
+    depth: {
+      type: Sequelize.INTEGER,
+      defaultValue: 0,
+      allowNull: false
+    },
     userId: {
       type: Sequelize.INTEGER,
       references: {
