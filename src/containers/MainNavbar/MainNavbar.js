@@ -4,6 +4,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import Navbar from 'react-bootstrap/lib/Navbar';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
+import gitConf from '../../../api/utils/github/config';
 
 class MainNavbar extends Component {
   static propTypes = {
@@ -40,6 +41,8 @@ class MainNavbar extends Component {
             <LinkContainer to="/articles" onlyActiveOnIndex>
               <NavItem>Articles</NavItem>
             </LinkContainer>
+
+            <a href={gitConf.getAuthLink()}>Git Login</a>
 
             {!user &&
             <LinkContainer to="/login">
