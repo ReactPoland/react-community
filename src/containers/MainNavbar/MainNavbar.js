@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import { IndexLink } from 'react-router';
 import { openDialog } from 'redux/modules/dialogModule';
 import { LinkContainer } from 'react-router-bootstrap';
+import LoginLogoutButton from 'containers/LoginLogoutButton';
 import Navbar from 'react-bootstrap/lib/Navbar';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
-import gitConf from '../../../api/utils/github/config';
 
 @connect(() => ({}), { openDialog })
 class MainNavbar extends Component {
@@ -50,22 +50,10 @@ class MainNavbar extends Component {
               <NavItem>Articles</NavItem>
             </LinkContainer>
 
-            <a href={gitConf.getAuthLink()}>Git Login</a>
-
-            {!user &&
-              <NavItem onClick={() => this.props.openDialog({ name: 'LoginDialog' })}>Login</NavItem>
-            }
-
-            {user &&
-            <LinkContainer to="/logout">
-              <NavItem className="logout-link" onClick={this.handleLogout}>
-                Logout
-              </NavItem>
-            </LinkContainer>}
+            <LoginLogoutButton />
           </Nav>
 
-          { user &&
-          <p className="navbar-text">Logged in as <strong>{user.name}</strong>.</p>}
+          {user && <p className="navbar-text">Logged in as <strong>{user.firstName}</strong>.</p>}
         </Navbar.Collapse>
       </Navbar>
     );

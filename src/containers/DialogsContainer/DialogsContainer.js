@@ -34,7 +34,6 @@ class DialogsContainer extends Component {
 
   render() {
     const { openedDialog, dialogProps } = this.props;
-    console.warn('openedDialog', openedDialog);
 
     switch (openedDialog) {
       case 'LoginDialog': return <LoginDialog dialogProps={dialogProps} dialogOpened={this.state.open} closeDialog={this.handleClose} />;

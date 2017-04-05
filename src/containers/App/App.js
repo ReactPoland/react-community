@@ -5,7 +5,6 @@ import { push } from 'react-router-redux';
 import Helmet from 'react-helmet';
 import config from '../../config';
 // STORE
-import { isLoaded as isInfoLoaded, load as loadInfo } from 'redux/modules/info';
 import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
 // COMPONENTS
 import { MainNavbar, MainFooter, DialogsContainer } from 'containers';
@@ -13,12 +12,9 @@ import { SuccessHandler, ErrorHandler } from 'components';
 import styles from './App.scss';
 
 @asyncConnect([{
-  promise: ({store: {dispatch, getState}}) => {
+  promise: ({ store: { dispatch, getState } }) => {
     const promises = [];
 
-    if (!isInfoLoaded(getState())) {
-      promises.push(dispatch(loadInfo()));
-    }
     if (!isAuthLoaded(getState())) {
       promises.push(dispatch(loadAuth()));
     }
@@ -28,20 +24,21 @@ import styles from './App.scss';
 }])
 @connect(
   state => ({ user: state.auth.user }),
-  { logout, pushState: push })
+  { logout, pushState: push, loadAuth })
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
     user: PropTypes.object,
     logout: PropTypes.func.isRequired,
-    pushState: PropTypes.func.isRequired
+    pushState: PropTypes.func.isRequired,
+    loadAuth: PropTypes.func.isRequired
   };
 
   static contextTypes = {
     store: PropTypes.object.isRequired
   };
 
-  componentWillReceiveProps(nextProps) {
+  /* componentWillReceiveProps(nextProps) {
     if (!this.props.user && nextProps.user) {
       // login
       this.props.pushState('/loginSuccess');
@@ -49,7 +46,7 @@ export default class App extends Component {
       // logout
       this.props.pushState('/');
     }
-  }
+  }*/
 
   handleLogout = (event) => {
     event.preventDefault();

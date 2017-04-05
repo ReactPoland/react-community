@@ -1,15 +1,22 @@
-const LOAD = 'redux-example/auth/LOAD';
-const LOAD_SUCCESS = 'redux-example/auth/LOAD_SUCCESS';
-const LOAD_FAIL = 'redux-example/auth/LOAD_FAIL';
-const LOGIN = 'redux-example/auth/LOGIN';
-const LOGIN_SUCCESS = 'redux-example/auth/LOGIN_SUCCESS';
-const LOGIN_FAIL = 'redux-example/auth/LOGIN_FAIL';
-const LOGOUT = 'redux-example/auth/LOGOUT';
-const LOGOUT_SUCCESS = 'redux-example/auth/LOGOUT_SUCCESS';
-const LOGOUT_FAIL = 'redux-example/auth/LOGOUT_FAIL';
+const LOAD = 'auth/LOAD';
+const LOAD_SUCCESS = 'auth/LOAD_SUCCESS';
+const LOAD_FAIL = 'auth/LOAD_FAIL';
+const LOGIN = 'auth/LOGIN';
+const LOGIN_SUCCESS = 'auth/LOGIN_SUCCESS';
+const LOGIN_FAIL = 'auth/LOGIN_FAIL';
+const LOGOUT = 'auth/LOGOUT';
+const LOGOUT_SUCCESS = 'auth/LOGOUT_SUCCESS';
+const LOGOUT_FAIL = 'auth/LOGOUT_FAIL';
 
 const initialState = {
-  loaded: false
+  loaded: false,
+  loading: false,
+  loggingIn: false,
+  loggingOut: false,
+  user: null,
+  loadError: '',
+  loginError: '',
+  logoutError: ''
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -31,7 +38,7 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         loading: false,
         loaded: false,
-        error: action.error
+        loadError: action.error
       };
     case LOGIN:
       return {
@@ -71,6 +78,10 @@ export default function reducer(state = initialState, action = {}) {
     default:
       return state;
   }
+}
+
+export function showLoginSpinner() {
+  return { type: LOGIN };
 }
 
 export function isLoaded(globalState) {
