@@ -16,6 +16,8 @@ const removeMarkerRequest = async (body) => {
     .catch(err => resp.error(err.message));
 };
 
-const removeMarker = (data) => removeMarkerRequest(data.body);
+const removeMarker = (data) => {
+  return data.permission.shouldAuth().then(() => removeMarkerRequest(data.body));
+};
 
 export default removeMarker;
