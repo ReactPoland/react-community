@@ -14,7 +14,7 @@ const updateArticleRequest = async ({title, content, id}) => {
 };
 
 function updateArticle(data) {
-  return updateArticleRequest(data.body);
+  return data.permission.shouldAuth().then(() => updateArticleRequest(data.body));
 }
 
 export default updateArticle;

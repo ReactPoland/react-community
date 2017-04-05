@@ -8,6 +8,7 @@ import PrettyError from 'pretty-error';
 import http from 'http';
 import SocketIo from 'socket.io';
 import errorHandler from './utils/errorHandler';
+import permMiddleware from './utils/permMiddleware';
 
 const pretty = new PrettyError();
 const app = express();
@@ -24,6 +25,7 @@ app.use(session({
   cookie: { maxAge: 60000 }
 }));
 app.use(bodyParser.json());
+app.use(permMiddleware());
 
 
 app.use((req, res) => {

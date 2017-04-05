@@ -6,6 +6,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import Navbar from 'react-bootstrap/lib/Navbar';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
+import gitConf from '../../../api/utils/github/config';
 
 @connect(() => ({}), { openDialog })
 class MainNavbar extends Component {
@@ -48,6 +49,8 @@ class MainNavbar extends Component {
             <LinkContainer to="/articles">
               <NavItem>Articles</NavItem>
             </LinkContainer>
+
+            <a href={gitConf.getAuthLink()}>Git Login</a>
 
             {!user &&
               <NavItem onClick={() => this.props.openDialog({ name: 'LoginDialog' })}>Login</NavItem>

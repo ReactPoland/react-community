@@ -16,6 +16,8 @@ const removeArticleRequest = async (body) => {
     .catch(err => resp.error(err.message));
 };
 
-const removeArticle = (data) => removeArticleRequest(data.body);
+const removeArticle = (data) => {
+  return data.permission.shouldAuth().then(() => removeArticleRequest(data.body));
+};
 
 export default removeArticle;

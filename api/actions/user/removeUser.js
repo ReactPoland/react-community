@@ -1,7 +1,8 @@
+// TODO: temporary solution. Must be removed by self action
 const resp = require('../../utils/serverResp');
-const MarkerModel = require('../../db').markers;
+const UserModel = require('../../db').users;
 
-const removeMarkerRequest = async (body) => {
+const removeUserRequest = async (body) => {
   if (!body) return resp.error('bad request type');
 
   let { id } = body;
@@ -9,15 +10,13 @@ const removeMarkerRequest = async (body) => {
 
   if (isNaN(id)) return resp.error('id is not a number');
 
-  return await MarkerModel.destroy({
+  return await UserModel.destroy({
     where: { id }
   })
     .then(data => resp.success(data))
     .catch(err => resp.error(err.message));
 };
 
-const removeMarker = (data) => {
-  return data.permission.shouldAuth().then(() => removeMarkerRequest(data.body));
-};
+const removeUser = (data) => removeUserRequest(data.body);
 
-export default removeMarker;
+export default removeUser;
