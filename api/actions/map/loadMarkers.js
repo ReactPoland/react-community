@@ -1,6 +1,43 @@
 const resp = require('../../utils/serverResp');
 const MarkerModel = require('../../db').markers;
 
+/**
+  @api {GET} /api/map/loadMarkers/ Load marker list
+  @apiDescription Fetch all markers from the database
+  @apiName Fetch markers
+  @apiGroup Map
+
+  @apiExample Example request:
+  GET /api/map/loadMarkers HTTP/1.1
+
+  @apiSuccessExample Example data on success:
+  {
+    "message": [
+      {
+        "id": 9,
+        "name": "eretr",
+        "link": "http://ertert",
+        "description": "wertret",
+        "lat": 51.5073509,
+        "lng": -0.127758299999982,
+        "createdAt": "2017-03-28T21:48:20.072Z",
+        "updatedAt": "2017-03-28T21:48:20.072Z"
+      },
+      {
+        "id": 11,
+        "name": "eee",
+        "link": "http://eee",
+        "description": "eee",
+        "lat": 40.2276093,
+        "lng": -7.53051959999993,
+        "createdAt": "2017-03-29T09:56:45.805Z",
+        "updatedAt": "2017-03-29T09:56:45.805Z"
+      }
+    ],
+    "type": "success"
+  },
+ */
+
 const loadMarkersRequest = async () => {
   return await MarkerModel.findAll({})
     .then(data => resp.success(data))
