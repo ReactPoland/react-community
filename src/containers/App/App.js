@@ -8,7 +8,7 @@ import config from '../../config';
 import { isLoaded as isInfoLoaded, load as loadInfo } from 'redux/modules/info';
 import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
 // COMPONENTS
-import { MainNavbar, MainFooter } from 'containers';
+import { MainNavbar, MainFooter, DialogsContainer } from 'containers';
 import { SuccessHandler, ErrorHandler } from 'components';
 import styles from './App.scss';
 
@@ -67,6 +67,7 @@ export default class App extends Component {
         <MainFooter />
         <SuccessHandler />
         <ErrorHandler />
+        <DialogsContainer />
       </div>
     );
   }

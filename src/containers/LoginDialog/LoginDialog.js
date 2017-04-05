@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { logIn } from 'redux/modules/mapModule';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
@@ -17,19 +16,19 @@ const getInitialState = () => ({
   }
 });
 
-const mappedState = ({ session }) => ({
-  loggingIn: session.markers
+const mappedState = ({ auth }) => ({
+  loggingIn: auth.loggingIn
 });
 
-const mappedActions = { logIn };
+const mappedActions = {};
 
 @connect(mappedState, mappedActions)
 class LoginDialog extends Component {
   static propTypes = {
     loggingIn: PropTypes.bool,
-    popupVisible: PropTypes.bool.isRequired,
-    logIn: PropTypes.func.isRequired,
-    closePopup: PropTypes.func.isRequired
+    dialogOpened: PropTypes.bool.isRequired,
+    logIn: PropTypes.func,
+    closeDialog: PropTypes.func.isRequired
   }
 
   state = getInitialState()
@@ -37,7 +36,7 @@ class LoginDialog extends Component {
   /* componentWillReceiveProps(nextProps) {
     // If user successfully logged in, close the dialog
     if (!this.props.markerAdded && nextProps.markerAdded) {
-      this.closePopup();
+      this.closeDialog();
     }
   }*/
 
@@ -55,16 +54,16 @@ class LoginDialog extends Component {
 
   // Passes marker data to parent component if form is valid
   // and no request is pending
-  addMarker = () => {
+  logIn = () => {
     if (this.validateForm() && !this.props.loggingIn) {
-      this.props.logIn(this.state.formData);
+      console.log('login');
+      // this.props.logIn(this.state.formData);
     }
   }
 
   // Clears state and closes dialog window
-  closePopup = () => {
-    this.setState(getInitialState());
-    this.props.closePopup();
+  closeDialog = () => {
+    this.props.closeDialog();
   }
 
   validateForm = () => {
@@ -80,19 +79,20 @@ class LoginDialog extends Component {
   }
 
   render() {
-    const { popupVisible, loggingIn } = this.props;
+    const { dialogOpened, loggingIn } = this.props;
     const { formData, validationErrors } = this.state;
+
     const actions = [
       <FlatButton
         label="Cancel"
         primary
-        onTouchTap={this.closePopup}
+        onTouchTap={this.closeDialog}
       />,
       <FlatButton
         label={loggingIn ? 'Logging in...' : 'Log in'}
         style={{ marginLeft: 8 }}
         primary
-        onTouchTap={this.addMarker}
+        onTouchTap={this.logIn}
         disabled={loggingIn}
       />
     ];
@@ -103,8 +103,8 @@ class LoginDialog extends Component {
         titleStyle={{ paddingBottom: 0 }}
         title="Log in"
         actions={actions}
-        open={popupVisible}
-        onRequestClose={this.closePopup}
+        open={dialogOpened}
+        onRequestClose={this.closeDialog}
       >
         <TextField
           floatingLabelText="Name"

@@ -12,9 +12,10 @@ export default function dialogModule(state = initialState, action = {}) {
       return {
         ...state,
         openedDialog: action.payload.dialogName,
-        dialogProps: action.payload.dialogProps
+        dialogProps: action.payload.dialogProps || {}
       };
     case CLOSE_DIALOG:
+      console.warn('CLOSE');
       return {
         ...state,
         openedDialog: '',

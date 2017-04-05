@@ -4,6 +4,7 @@ export ArticlePage from './ArticlePage/ArticlePage';
 export BestPracticesPage from './BestPracticesPage/BestPracticesPage';
 export Chat from './Chat/Chat';
 export Conversation from './Conversation/Conversation';
+export DialogsContainer from './DialogsContainer/DialogsContainer';
 export HomePage from './HomePage/HomePage';
 export Login from './Login/Login';
 export LoginDialog from './LoginDialog/LoginDialog';

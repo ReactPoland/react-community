@@ -50,7 +50,7 @@ class MainNavbar extends Component {
             </LinkContainer>
 
             {!user &&
-              <NavItem onClick={() => this.props.openDialog('LoginDialog')}>Login</NavItem>
+              <NavItem onClick={() => this.props.openDialog({ name: 'LoginDialog' })}>Login</NavItem>
             }
 
             {user &&
