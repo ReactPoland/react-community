@@ -16,7 +16,7 @@ class MainNavbar extends Component {
     const styles = require('./MainNavbar.scss');
 
     return (
-      <Navbar fixedTop>
+      <Navbar fixedTop className={styles.MainNavbar}>
         <Navbar.Header>
           <Navbar.Brand>
             <IndexLink to="/" activeStyle={{ color: '#33e0ff' }}>
@@ -28,11 +28,7 @@ class MainNavbar extends Component {
         </Navbar.Header>
 
         <Navbar.Collapse>
-          <Nav navbar>
-            {user && <LinkContainer to="/chat">
-              <NavItem>Chat</NavItem>
-            </LinkContainer>}
-
+          <Nav navbar pullRight>
             <LinkContainer to="/world">
               <NavItem>World Map</NavItem>
             </LinkContainer>

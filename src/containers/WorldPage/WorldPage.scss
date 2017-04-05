@@ -1,6 +1,6 @@
 // MAP PAGE
 .WorldPage {
-  height: 100%;
+  height: calc(100vh - 160px); // Temporary solution for current layout
 }
 
 // MAP

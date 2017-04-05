@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 // STORE
 import { clearLoadArticlesError, clearAddArticleError, clearEditArticleError, clearRemoveArticleError } from 'redux/modules/articlesModule';
+import { clearLoadMapMarkersError, clearAddMapMarkerError, clearRemoveMarkerError } from 'redux/modules/mapModule';
 import { clearLoadConversationError } from 'redux/modules/conversationModule';
 // COMPONENTS
 import { ErrorSnackbar } from 'components';
@@ -11,15 +12,21 @@ const errorsArray = [
   { name: 'addArticleError', callback: 'clearAddArticleError' },
   { name: 'editArticleError', callback: 'clearEditArticleError' },
   { name: 'removeArticleError', callback: 'clearRemoveArticleError' },
-  { name: 'loadConversationError' }
+  { name: 'loadConversationError' },
+  { name: 'loadMapMarkersError', callback: 'clearLoadMapMarkersError' },
+  { name: 'addMapMarkerError', callback: 'clearAddMapMarkerError' },
+  { name: 'removeMapMarkerError', callback: 'clearRemoveMarkerError' }
 ];
 
-const mappedState = ({ articles, conversation }) => ({
+const mappedState = ({ articles, conversation, map }) => ({
   loadArticlesError: articles.loadArticlesError,
   addArticleError: articles.addArticleError,
   editArticleError: articles.editArticleError,
   removeArticleError: articles.removeArticleError,
-  loadConversationError: conversation.loadConversationError
+  loadConversationError: conversation.loadConversationError,
+  loadMapMarkersError: map.loadMapMarkersError,
+  addMapMarkerError: map.addMapMarkerError,
+  removeMapMarkerError: map.removeMapMarkerError
 });
 
 const mappedActions = {
@@ -27,7 +34,10 @@ const mappedActions = {
   clearAddArticleError,
   clearEditArticleError,
   clearRemoveArticleError,
-  clearLoadConversationError
+  clearLoadConversationError,
+  clearLoadMapMarkersError,
+  clearAddMapMarkerError,
+  clearRemoveMarkerError
 };
 
 @connect(mappedState, mappedActions)
@@ -42,7 +52,10 @@ class ErrorHandler extends Component {
     clearAddArticleError: PropTypes.func.isRequired,
     clearEditArticleError: PropTypes.func.isRequired,
     clearRemoveArticleError: PropTypes.func.isRequired,
-    clearLoadConversationError: PropTypes.func.isRequired
+    clearLoadConversationError: PropTypes.func.isRequired,
+    loadMapMarkersError: PropTypes.string,
+    addMapMarkerError: PropTypes.string,
+    removeMapMarkerError: PropTypes.string
   }
 
   state = {
@@ -61,9 +74,7 @@ class ErrorHandler extends Component {
   checkErrors = (props) => {
     // Show error snackbar if any of the errors from "errorsArray" is thrown
     errorsArray.forEach(({ name, callback }) => {
-      // if (props[name] && !this.props[name]) {
       if (props[name]) {
-        console.warn('show error', name);
         this.setState({
           errorMessage: props[name],
           errorCallback: props[callback]
@@ -73,7 +84,6 @@ class ErrorHandler extends Component {
   }
 
   clearErrors = () => {
-    console.warn('hide error', this.state.errorMessage);
     if (this.state.errorCallback) this.state.errorCallback();
     this.setState({ errorMessage: null, errorCallback: null });
   }

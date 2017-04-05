@@ -1,7 +1,6 @@
 .appContainer {
   display: flex;
   flex-direction: column;
-  background: powderblue;
   min-height: 100vh;
   height: 100%;
 }
@@ -9,5 +8,4 @@
 .appContent {
   flex: 1;
   padding: 50px 0 0; // for fixed navbar
-  background: yellow;
 }
