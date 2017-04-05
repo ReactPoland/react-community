@@ -8,6 +8,7 @@ import info from './info';
 import mapModule from './mapModule';
 import articlesModule from './articlesModule';
 import conversationModule from './conversationModule';
+import dialogModule from './dialogModule';
 
 export default combineReducers({
   routing: routerReducer,
@@ -17,5 +18,6 @@ export default combineReducers({
   info,
   map: mapModule,
   articles: articlesModule,
-  conversation: conversationModule
+  conversation: conversationModule,
+  dialog: dialogModule
 });

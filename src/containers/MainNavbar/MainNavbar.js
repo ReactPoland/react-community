@@ -1,14 +1,18 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { IndexLink } from 'react-router';
+import { openDialog } from 'redux/modules/dialogModule';
 import { LinkContainer } from 'react-router-bootstrap';
 import Navbar from 'react-bootstrap/lib/Navbar';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 
+@connect(() => ({}), { openDialog })
 class MainNavbar extends Component {
   static propTypes = {
     user: PropTypes.object,
-    config: PropTypes.object.isRequired
+    config: PropTypes.object.isRequired,
+    openDialog: PropTypes.func.isRequired
   }
 
   render() {
@@ -46,9 +50,8 @@ class MainNavbar extends Component {
             </LinkContainer>
 
             {!user &&
-            <LinkContainer to="/login">
-              <NavItem>Login</NavItem>
-            </LinkContainer>}
+              <NavItem onClick={() => this.props.openDialog('LoginDialog')}>Login</NavItem>
+            }
 
             {user &&
             <LinkContainer to="/logout">
