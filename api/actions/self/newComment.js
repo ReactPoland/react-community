@@ -85,7 +85,6 @@ const getConversationId = async (articleId) => {
 };
 
 const newCommentRequest = async ({ body, session }) => {
-  if (!session.user || !session.user.id ) return resp.error('Not authorized');
   if (!body) return resp.error('bad request');
 
   const { body: commentBody, articleId, parentCommentId } = body;
@@ -124,6 +123,8 @@ const newCommentRequest = async ({ body, session }) => {
     .catch(err => resp.error(err.message));
 };
 
-const newComment = (req) => newCommentRequest(req);
+const newComment = (req) => {
+  return req.permission.shouldAuth().then(() => newCommentRequest(req));
+};
 
 export default newComment;

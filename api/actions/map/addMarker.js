@@ -10,7 +10,7 @@ const addMarkerRequest = async ({name, link, description, lat, lng}) => {
 };
 
 function addMarket(data) {
-  return addMarkerRequest(data.body);
+  return data.permission.shouldAuth().then(() => addMarkerRequest(data.body));
 }
 
 export default addMarket;
