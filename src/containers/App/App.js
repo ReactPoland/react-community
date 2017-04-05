@@ -39,10 +39,6 @@ export default class App extends Component {
     store: PropTypes.object.isRequired
   };
 
-  componentDidMount() {
-    console.warn('this.props', this.props);
-  }
-
   handleLogout = (event) => {
     event.preventDefault();
     this.props.logout();
@@ -50,7 +46,6 @@ export default class App extends Component {
 
   renderFooter = () => {
     const noFooter = this.props.routes && this.props.routes.find(route => route.noFooter);
-    console.warn('noFooter', this.props.routes, noFooter);
 
     if (noFooter) return null;
 

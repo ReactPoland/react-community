@@ -5,6 +5,7 @@ import NavItem from 'react-bootstrap/lib/NavItem';
 import gitConf from '../../api/utils/github/config';
 
 const mappedState = ({ auth }) => ({
+  user: auth.user,
   loggingIn: auth.loggingIn,
   loggingOut: auth.loggingOut
 });
