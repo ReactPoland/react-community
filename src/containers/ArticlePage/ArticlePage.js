@@ -136,7 +136,7 @@ export default class ArticlePage extends Component {
 
   renderEditor = () => (
     <RichTextEditor
-      initialState={JSON.parse(this.props.article.content)}
+      initialState={this.props.article.content}
       style={{ width: '100%' }}
       readOnly={!this.state.editingMode}
       onChange={this.editContent}

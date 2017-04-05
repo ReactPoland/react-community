@@ -30,8 +30,6 @@ class LoginLogoutButton extends Component {
 
 
   render() {
-    console.warn('🙃 this.props.user', this.props.user);
-
     return this.props.user
       ? <NavItem onClick={this.logOut}>{this.props.loggingOut ? 'Logging out...' : 'Logout'}</NavItem>
       : <NavItem href={gitConf.getAuthLink()} onClick={this.logIn}>{this.props.loggingIn ? 'Logging in...' : 'Log in with GitHub'}</NavItem>;

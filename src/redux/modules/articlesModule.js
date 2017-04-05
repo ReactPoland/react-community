@@ -19,6 +19,37 @@ const REMOVE_ARTICLE_SUCCESS = 'REMOVE_ARTICLE_SUCCESS';
 const REMOVE_ARTICLE_FAIL = 'REMOVE_ARTICLE_FAIL';
 const CLEAR_REMOVE_ARTICLE_ERROR = 'CLEAR_REMOVE_ARTICLE_ERROR';
 
+// --- UTILS ---
+export function prepareContent(jsonString) {
+  if (typeof jsonString === 'object') return jsonString;
+
+  try {
+    const obj = JSON.parse(JSON.parse(jsonString));
+
+    if (obj && typeof obj === 'object') return obj;
+  } catch (error) {
+    console.error('ERROR: string cannot be parsed as JSON:', error);
+    return {
+      'nodes': [
+        {
+          'kind': 'block',
+          'type': 'paragraph',
+          'nodes': [
+            {
+              'kind': 'text',
+              'ranges': [
+                {
+                  'text': `${jsonString}`
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    };
+  }
+}
+
 const initialState = {
   // Loading all articles
   all: [],
@@ -50,9 +81,10 @@ export default function articlesModule(state = initialState, action = {}) {
         loadArticlesError: null
       };
     case LOAD_ARTICLES_SUCCESS:
+      const all = action.result.message.map(article => ({ ...article, content: prepareContent(article.content) }));
       return {
         ...state,
-        all: action.result.message.map(article => ({ ...article, content: JSON.parse(article.content) })),
+        all: all,
         loadingArticles: false,
         articlesLoaded: true
       };
