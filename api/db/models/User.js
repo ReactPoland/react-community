@@ -14,6 +14,9 @@ module.exports = {
     pictureURL: {
       type: Sequelize.STRING,
       allowNull: false
+    },
+    ghID: {
+      type: Sequelize.INTEGER
     }
   }
 };
