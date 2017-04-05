@@ -9,6 +9,8 @@ import http from 'http';
 import SocketIo from 'socket.io';
 import errorHandler from './utils/errorHandler';
 import permMiddleware from './utils/permMiddleware';
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
+import sequelize from './db/init';
 
 const pretty = new PrettyError();
 const app = express();
@@ -19,8 +21,11 @@ const io = new SocketIo(server);
 io.path('/ws');
 
 app.use(session({
-  secret: 'react and redux rule!!!!',
+  secret: 'muBs1PCv1JIqs8PEcqLJK7M7JNulyyqMa7Rdtwel0pLqj6zA05lBPrf4IBxt',
   resave: false,
+  store: new SequelizeStore({
+    db: sequelize
+  }),
   saveUninitialized: false,
   cookie: { maxAge: 60000 }
 }));
