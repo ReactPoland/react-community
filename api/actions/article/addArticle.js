@@ -1,6 +1,37 @@
 const ArticleModel = require('../../db').articles;
 const resp = require('../../utils/serverResp');
 
+/**
+  @api {POST} /api/article/addArticle/ Add new article
+  @apiDescription Add new article to database
+  @apiName Add article
+  @apiGroup Article
+
+  @apiPermission Authorized user from the database See how to authorize(#General:Login).
+
+  @apiParam {String} title Article title.
+  @apiParam {String} content Article body.
+
+  @apiExample Example request:
+  POST /api/article/addArticle HTTP/1.1
+
+  {
+      "title": "Alan Turing",
+      "content": "test content"
+  }
+  @apiSuccessExample Example data on success:
+  {
+    "message": {
+      "id": 30,
+      "title": "Alan Turing",
+      "content": "test content",
+      "updatedAt": "2017-04-05T12:22:46.389Z",
+      "createdAt": "2017-04-05T12:22:46.389Z"
+    },
+    "type": "success"
+  }
+ */
+
 const addArticleRequest = async ({title, content}) => {
   return await ArticleModel.create({
     title, content
