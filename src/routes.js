@@ -39,7 +39,7 @@ export default (store) => {
 
       { /* Routes */ }
       <Route path="login" component={Login} />
-      <Route path="world" component={WorldPage} />
+      <Route path="world" component={WorldPage} noFooter />
       <Route path="tutorials" component={TutorialsPage} />
       <Route path="best-practices" component={BestPracticesPage} />
       <Route path="articles" component={ArticlesLayout}>

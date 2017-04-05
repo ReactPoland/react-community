@@ -14,7 +14,7 @@ import styles from './App.scss';
 @asyncConnect([{
   promise: ({ store: { dispatch, getState } }) => {
     const promises = [];
-
+    // Get user's data
     if (!isAuthLoaded(getState())) {
       promises.push(dispatch(loadAuth()));
     }
@@ -31,27 +31,31 @@ export default class App extends Component {
     user: PropTypes.object,
     logout: PropTypes.func.isRequired,
     pushState: PropTypes.func.isRequired,
-    loadAuth: PropTypes.func.isRequired
+    loadAuth: PropTypes.func.isRequired,
+    routes: PropTypes.array
   };
 
   static contextTypes = {
     store: PropTypes.object.isRequired
   };
 
-  /* componentWillReceiveProps(nextProps) {
-    if (!this.props.user && nextProps.user) {
-      // login
-      this.props.pushState('/loginSuccess');
-    } else if (this.props.user && !nextProps.user) {
-      // logout
-      this.props.pushState('/');
-    }
-  }*/
+  componentDidMount() {
+    console.warn('this.props', this.props);
+  }
 
   handleLogout = (event) => {
     event.preventDefault();
     this.props.logout();
-  };
+  }
+
+  renderFooter = () => {
+    const noFooter = this.props.routes && this.props.routes.find(route => route.noFooter);
+    console.warn('noFooter', this.props.routes, noFooter);
+
+    if (noFooter) return null;
+
+    return <MainFooter />;
+  }
 
   render() {
     return (
@@ -61,7 +65,7 @@ export default class App extends Component {
         <div className={styles.appContent}>
           {this.props.children}
         </div>
-        <MainFooter />
+        {this.renderFooter()}
         <SuccessHandler />
         <ErrorHandler />
         <DialogsContainer />
