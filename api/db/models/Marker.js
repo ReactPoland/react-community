@@ -8,10 +8,19 @@ const Sequelize = require('sequelize');
 module.exports = {
   name: 'markers',
   model: {
-    name: Sequelize.STRING,
+    name: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
     link: Sequelize.STRING,
     description: Sequelize.STRING(1234),
-    lat: Sequelize.FLOAT,
-    lng: Sequelize.FLOAT
+    lat: {
+      type: Sequelize.FLOAT,
+      allowNull: false
+    },
+    lng: {
+      type: Sequelize.FLOAT,
+      allowNull: false
+    }
   }
 };
