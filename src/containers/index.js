@@ -14,4 +14,5 @@ export MainNavbar from './MainNavbar/MainNavbar';
 export NewArticlePage from './NewArticlePage/NewArticlePage';
 export NotFound from './NotFound/NotFound';
 export TutorialsPage from './TutorialsPage/TutorialsPage';
+export ProfilePage from './ProfilePage/ProfilePage';
 export WorldPage from './WorldPage/WorldPage';

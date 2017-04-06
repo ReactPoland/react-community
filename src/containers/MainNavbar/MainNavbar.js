@@ -50,6 +50,10 @@ class MainNavbar extends Component {
               <NavItem>Articles</NavItem>
             </LinkContainer>
 
+            {user && <LinkContainer to="/profile">
+              <NavItem>Profile</NavItem>
+            </LinkContainer>}
+
             <LoginLogoutButton />
           </Nav>
 

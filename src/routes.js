@@ -5,7 +5,7 @@ import { ArticlesLayout } from 'layouts';
 import {
   App, HomePage, Chat, Login, LoginSuccess, WorldPage, NotFound,
   NewArticlePage, ArticlesPage, ArticlePage, TutorialsPage,
-  BestPracticesPage
+  BestPracticesPage, ProfilePage
 } from 'containers';
 
 export default (store) => {
@@ -38,6 +38,7 @@ export default (store) => {
       </Route>
 
       { /* Routes */ }
+      <Route path="profile" component={ProfilePage} />
       <Route path="login" component={Login} />
       <Route path="world" component={WorldPage} noFooter />
       <Route path="tutorials" component={TutorialsPage} />
