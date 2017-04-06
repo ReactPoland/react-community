@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import Helmet from 'react-helmet';
+import { Link } from 'react-router';
 // LAYOUT
 // TODO: import only necessary components in production
 import { Jumbotron, Grid, Row, Col } from 'react-bootstrap';
+import Paper from 'material-ui/Paper';
 import styles from './HomePage.scss';
 import { MockCard } from 'components/mocked';
+import { Div } from 'components/styled';
+import LocationMap from 'containers/WorldPage/LocationMap';
 
 export default class HomePage extends Component {
   render() {
@@ -12,8 +16,7 @@ export default class HomePage extends Component {
       <Grid className={styles.HomePage}>
         <Helmet title="Home" />
         <Jumbotron>
-          <h1>Home</h1>
-          <p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+          <h1>React Community</h1>
         </Jumbotron>
         <Row>
           <Col md={7}>
@@ -33,7 +36,14 @@ export default class HomePage extends Component {
             </Row>
           </Col>
           <Col md={5}>
-            <MockCard image />
+            <Link to="/world">
+              <Div flex column justifyContent="center" alignItems="center" relative>
+                <Paper style={{ position: 'absolute', margin: 'auto', padding: 16, zIndex: 500 }} zDepth={3}>
+                  Pin yourself
+                </Paper>
+                <LocationMap static style={{ height: 300, marginBottom: 24 }} />
+              </Div>
+            </Link>
             <MockCard title content buttons />
             <MockCard title content buttons />
           </Col>

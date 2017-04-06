@@ -1,4 +1,4 @@
 export ArticleHeader from './ArticleHeader';
 export Flex from './Flex';
-export FlexItem from './FlexItem';
+export Div from './Div';
 export List from './List';

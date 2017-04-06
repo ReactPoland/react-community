@@ -6,7 +6,7 @@ import Helmet from 'react-helmet';
 import { Grid } from 'react-bootstrap';
 import styles from './ProfilePage.scss';
 import { MockCard } from 'components/mocked';
-import { Flex, FlexItem } from 'components/styled';
+import { Flex, Div } from 'components/styled';
 
 const mappedState = () => ({
   user: {
@@ -32,21 +32,21 @@ export default class ProfilePage extends Component {
       <Grid className={styles.ProfilePage}>
         <Helmet title="Profile" />
         <Flex>
-          <FlexItem flex={1}>
+          <Div flexVal={1}>
             <MockCard
               title
               titleText={`${user.firstName} ${user.lastName}`}
               content
             />
-          </FlexItem>
+          </Div>
         </Flex>
         <Flex>
-          <FlexItem flex={2}>
+          <Div flexVal={2}>
             <MockCard image />
-          </FlexItem>
-          <FlexItem flex={3}>
+          </Div>
+          <Div flexVal={3}>
             <MockCard title titleText="Map" subtitleText="" />
-          </FlexItem>
+          </Div>
         </Flex>
       </Grid>
     );
