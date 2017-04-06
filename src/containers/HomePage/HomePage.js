@@ -2,13 +2,17 @@ import React, { Component } from 'react';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router';
 // LAYOUT
-// TODO: import only necessary components in production
-import { Jumbotron, Grid, Row, Col } from 'react-bootstrap';
+import Jumbotron from 'react-bootstrap/lib/Jumbotron';
+import Grid from 'react-bootstrap/lib/Grid';
+import Row from 'react-bootstrap/lib/Row';
+import Col from 'react-bootstrap/lib/Col';
 import Paper from 'material-ui/Paper';
-import styles from './HomePage.scss';
 import { MockCard } from 'components/mocked';
 import { Div } from 'components/styled';
+import styles from './HomePage.scss';
+// COMPONENTS
 import LocationMap from 'containers/WorldPage/LocationMap';
+import ArticlesGrid from './ArticlesGrid';
 
 export default class HomePage extends Component {
   render() {
@@ -20,20 +24,7 @@ export default class HomePage extends Component {
         </Jumbotron>
         <Row>
           <Col md={7}>
-            <Row>
-              <Col md={6}>
-                <MockCard title content />
-              </Col>
-              <Col md={6}>
-                <MockCard title content />
-              </Col>
-              <Col md={12}>
-                <MockCard title content buttons />
-              </Col>
-              <Col md={12}>
-                <MockCard title content buttons />
-              </Col>
-            </Row>
+            <ArticlesGrid />
           </Col>
           <Col md={5}>
             <Link to="/world">

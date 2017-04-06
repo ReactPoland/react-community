@@ -34,10 +34,6 @@ class MainNavbar extends Component {
 
         <Navbar.Collapse>
           <Nav navbar pullRight>
-            <LinkContainer to="/world">
-              <NavItem>World Map</NavItem>
-            </LinkContainer>
-
             <LinkContainer to="/best-practices">
               <NavItem>Best Practices</NavItem>
             </LinkContainer>
