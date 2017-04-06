@@ -1,3 +1,5 @@
+import _sample from 'lodash/sample';
+
 // --- LOAD ---
 const LOAD_ARTICLES_REQUEST = 'LOAD_ARTICLES_REQUEST';
 const LOAD_ARTICLES_SUCCESS = 'LOAD_ARTICLES_SUCCESS';
@@ -83,7 +85,7 @@ export default function articlesModule(state = initialState, action = {}) {
     case LOAD_ARTICLES_SUCCESS:
       const all = action.result.message.map(article => ({
         ...article,
-        size: Math.floor(Math.random() * 2) + 1,
+        size: _sample([6, 12]), // TODO: this will be set on the page, and should be stored in the DB
         content: prepareContent(article.content)
       }));
       return {

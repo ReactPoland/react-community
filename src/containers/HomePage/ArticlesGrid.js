@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import { descendingBy } from 'utils';
 // LAYOUT
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
@@ -36,12 +37,12 @@ class ArticlesGrid extends Component {
       <LoadingScreen loading={this.props.loadingArticles}>
         <Row>
           {
-            this.props.articles.map((article) => {
+            this.props.articles.sort(descendingBy('size')).map((article) => {
               const date = moment(article.createdAt).format('dddd, MMMM Do YYYY, h:mm:ss a');
               return (
-                <Col key={article.id} md={6}>
+                <Col key={article.id} md={article.size}>
                   <MockCard
-                    title={article.size + ' ' + article.title}
+                    title={article.title}
                     subtitle={date}
                   />
                 </Col>

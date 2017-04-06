@@ -15,7 +15,7 @@ const LocationMap = (props) => {
       dragging={!props.static}
       touchZoom={!props.static}
       scrollWheelZoom={!props.static}
-      minZoom={3}
+      minZoom={props.static ? 1 : 3}
       maxBounds={[[-90, -180], [90, 180]]} // Prevents scrolling outside map edges
       style={props.style}
     >
@@ -49,8 +49,8 @@ LocationMap.propTypes = {
 };
 
 LocationMap.defaultProps = {
-  centerCoords: [40, -90],
-  zoomLevel: 4,
+  centerCoords: [46, 2],
+  zoomLevel: 2,
   markers: [],
   removeMarker: () => {},
   removingMarker: -1,

@@ -35,19 +35,19 @@ export default class HomePage extends Component {
                 <LocationMap static style={{ height: 300, marginBottom: 24 }} />
               </Div>
             </Link>
-            <MockCard title content buttons />
-            <MockCard title content buttons />
+            <MockCard title="Test" content />
+            <MockCard title="Test" content />
           </Col>
         </Row>
         <Row>
           <Col md={4}>
-            <MockCard title content buttons />
+            <MockCard title="Test" content />
           </Col>
           <Col md={4}>
-            <MockCard title content buttons />
+            <MockCard title="Test" content />
           </Col>
           <Col md={4}>
-            <MockCard title content buttons />
+            <MockCard title="Test" content />
           </Col>
         </Row>
       </Grid>

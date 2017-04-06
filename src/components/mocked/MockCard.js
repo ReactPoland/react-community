@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 
-const CardExample = (props) => (
+const MockCard = (props) => (
   <Card style={{ marginBottom: 24 }}>
 
     {props.header && <CardHeader
@@ -44,7 +44,7 @@ const CardExample = (props) => (
   </Card>
 );
 
-CardExample.propTypes = {
+MockCard.propTypes = {
   header: PropTypes.bool,
   image: PropTypes.bool,
   imageOverlay: PropTypes.bool,
@@ -54,4 +54,4 @@ CardExample.propTypes = {
   buttons: PropTypes.bool
 };
 
-export default CardExample;
+export default MockCard;
