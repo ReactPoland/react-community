@@ -12,6 +12,7 @@ import { Div } from 'components/styled';
 import styles from './HomePage.scss';
 // COMPONENTS
 import LocationMap from 'containers/WorldPage/LocationMap';
+import Poll from './Poll';
 import ArticlesGrid from './ArticlesGrid';
 
 export default class HomePage extends Component {
@@ -41,7 +42,7 @@ export default class HomePage extends Component {
         </Row>
         <Row>
           <Col md={4}>
-            <MockCard title="Test" content />
+            <Poll />
           </Col>
           <Col md={4}>
             <MockCard title="Test" content />
