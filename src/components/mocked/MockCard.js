@@ -24,9 +24,9 @@ const CardExample = (props) => (
       <img src="https://placebear.com/600/400" />
     </CardMedia>}
 
-    {props.title && <CardTitle
-      title={props.titleText}
-      subtitle={props.subtitleText}
+    {(props.title || props.subtitle) && <CardTitle
+      title={props.title}
+      subtitle={props.subtitle}
     />}
 
     {props.content && <CardText>
@@ -48,16 +48,10 @@ CardExample.propTypes = {
   header: PropTypes.bool,
   image: PropTypes.bool,
   imageOverlay: PropTypes.bool,
-  title: PropTypes.bool,
-  titleText: PropTypes.string,
-  subtitleText: PropTypes.string,
+  title: PropTypes.string,
+  subtitle: PropTypes.string,
   content: PropTypes.bool,
   buttons: PropTypes.bool
-};
-
-CardExample.defaultProps = {
-  titleText: 'Card title',
-  subtitleText: 'Card subtitle'
 };
 
 export default CardExample;

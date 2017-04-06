@@ -81,7 +81,11 @@ export default function articlesModule(state = initialState, action = {}) {
         loadArticlesError: null
       };
     case LOAD_ARTICLES_SUCCESS:
-      const all = action.result.message.map(article => ({ ...article, content: prepareContent(article.content) }));
+      const all = action.result.message.map(article => ({
+        ...article,
+        size: Math.floor(Math.random() * 2) + 1,
+        content: prepareContent(article.content)
+      }));
       return {
         ...state,
         all: all,

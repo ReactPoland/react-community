@@ -35,7 +35,7 @@ export default class ProfilePage extends Component {
           <Div flexVal={1}>
             <MockCard
               title
-              titleText={`${user.firstName} ${user.lastName}`}
+              title={`${user.firstName} ${user.lastName}`}
               content
             />
           </Div>
@@ -45,7 +45,7 @@ export default class ProfilePage extends Component {
             <MockCard image />
           </Div>
           <Div flexVal={3}>
-            <MockCard title titleText="Map" subtitleText="" />
+            <MockCard title title="Map" subtitle="" />
           </Div>
         </Flex>
       </Grid>
