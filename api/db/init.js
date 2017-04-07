@@ -12,7 +12,8 @@ const sequelize = new Sequelize(dbConf.url, {
     max: 4,
     min: 0,
     idle: 10000
-  }
+  },
+  logging: false
 });
 
 sequelize.authenticate()
