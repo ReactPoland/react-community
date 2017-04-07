@@ -1,0 +1,1 @@
+export newComment from './newComment';
