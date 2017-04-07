@@ -20,6 +20,7 @@ const server = new http.Server(app);
 const io = new SocketIo(server);
 io.path('/ws');
 
+// NOTE: cookie: { secure true } ? check on the client side
 app.use(session({
   secret: 'muBs1PCv1JIqs8PEcqLJK7M7JNulyyqMa7Rdtwel0pLqj6zA05lBPrf4IBxt',
   resave: false,
