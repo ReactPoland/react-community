@@ -7,7 +7,7 @@ import config from '../../config';
 import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
 // COMPONENTS
 import { MainNavbar, MainFooter, DialogsContainer } from 'containers';
-import { SuccessHandler, ErrorHandler } from 'components';
+import { SuccessHandler, ErrorHandler, LoadingScreen } from 'components';
 import styles from './App.scss';
 
 @asyncConnect([{
@@ -37,6 +37,15 @@ export default class App extends Component {
     store: PropTypes.object.isRequired
   };
 
+  state = { showPage: false }
+
+  componentDidMount() {
+    // TODO: change that to a proper solution for SSR errors in the console
+    if (__CLIENT__) {
+      setTimeout(() => this.setState({ showPage: true }), 300);
+    }
+  }
+
   handleLogout = (event) => {
     event.preventDefault();
     this.props.logout();
@@ -52,17 +61,19 @@ export default class App extends Component {
 
   render() {
     return (
-      <div className={styles.appContainer}>
-        <Helmet {...config.app.head}/>
-        <MainNavbar user={this.props.user} config={config} />
-        <div className={styles.appContent}>
-          {this.props.children}
+      <LoadingScreen loading={!this.state.showPage}>
+        <div className={styles.appContainer}>
+          <Helmet {...config.app.head}/>
+          <MainNavbar user={this.props.user} config={config} />
+          <div className={styles.appContent}>
+            {this.props.children}
+          </div>
+          {this.renderFooter()}
+          <SuccessHandler />
+          <ErrorHandler />
+          <DialogsContainer />
         </div>
-        {this.renderFooter()}
-        <SuccessHandler />
-        <ErrorHandler />
-        <DialogsContainer />
-      </div>
+      </LoadingScreen>
     );
   }
 }
