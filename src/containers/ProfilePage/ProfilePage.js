@@ -14,9 +14,7 @@ import styles from './ProfilePage.scss';
 
 const mappedState = ({ auth }) => ({ user: auth.user });
 
-const mappedActions = {};
-
-@connect(mappedState, mappedActions)
+@connect(mappedState)
 export default class ProfilePage extends Component {
   static propTypes = {
     user: PropTypes.object
@@ -29,7 +27,6 @@ export default class ProfilePage extends Component {
       <Grid className={styles.ProfilePage}>
         <Helmet title="Profile" />
         <MockCard
-          title
           title={`${user.firstName} ${user.lastName}`}
           content
         />
