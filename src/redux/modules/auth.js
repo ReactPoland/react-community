@@ -13,7 +13,7 @@ const initialState = {
   loading: false,
   loggingIn: false,
   loggingOut: false,
-  user: null,
+  user: null, // Contains: id, firstName, lastName, pictureURL
   loadError: '',
   loginError: '',
   logoutError: ''

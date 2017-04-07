@@ -25,7 +25,7 @@ const Flex = styled.div`
     if (props.columnReverse) return 'columnReverse';
     return 'row';
   }};
-  flex-wrap: ${props => props.wrap || 'nowrap'};
+  flex-wrap: ${props => props.wrap ? 'wrap' : 'nowrap'};
   justify-content: ${props => props.justifyContent || 'flex-start'};
   align-items: ${props => props.alignItems || 'stretch'};
   align-content: ${props => props.alignContent || 'stretch'};

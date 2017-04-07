@@ -35,10 +35,10 @@ export default (store) => {
       <Route onEnter={requireLogin}>
         <Route path="loginSuccess" component={LoginSuccess}/>
         <Route path="chat" component={Chat} />
+        <Route path="profile" component={ProfilePage} />
       </Route>
 
       { /* Routes */ }
-      <Route path="profile" component={ProfilePage} />
       <Route path="login" component={Login} />
       <Route path="world" component={WorldPage} noFooter />
       <Route path="tutorials" component={TutorialsPage} />
