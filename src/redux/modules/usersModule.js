@@ -52,7 +52,7 @@ export default function usersModule(state = initialState, action = {}) {
     case LOAD_USERS_SUCCESS:
       return {
         ...state,
-        all: action.result.message.map(user => ({ ...user, content: JSON.parse(user.content) })),
+        all: action.result.message,
         loadingUsers: false,
         usersLoaded: true
       };

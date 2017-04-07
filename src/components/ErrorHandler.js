@@ -1,9 +1,10 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // STORE
 import { clearLoadArticlesError, clearAddArticleError, clearEditArticleError, clearRemoveArticleError } from 'redux/modules/articlesModule';
 import { clearLoadMapMarkersError, clearAddMapMarkerError, clearRemoveMarkerError } from 'redux/modules/mapModule';
 import { clearLoadConversationError } from 'redux/modules/conversationModule';
+import { clearLoadUsersError } from 'redux/modules/usersModule';
 // COMPONENTS
 import { ErrorSnackbar } from 'components';
 
@@ -15,10 +16,11 @@ const errorsArray = [
   { name: 'loadConversationError' },
   { name: 'loadMapMarkersError', callback: 'clearLoadMapMarkersError' },
   { name: 'addMapMarkerError', callback: 'clearAddMapMarkerError' },
-  { name: 'removeMapMarkerError', callback: 'clearRemoveMarkerError' }
+  { name: 'removeMapMarkerError', callback: 'clearRemoveMarkerError' },
+  { name: 'loadUsersError', callback: 'clearLoadUsersError' }
 ];
 
-const mappedState = ({ articles, conversation, map }) => ({
+const mappedState = ({ articles, conversation, map, users }) => ({
   loadArticlesError: articles.loadArticlesError,
   addArticleError: articles.addArticleError,
   editArticleError: articles.editArticleError,
@@ -26,7 +28,8 @@ const mappedState = ({ articles, conversation, map }) => ({
   loadConversationError: conversation.loadConversationError,
   loadMapMarkersError: map.loadMapMarkersError,
   addMapMarkerError: map.addMapMarkerError,
-  removeMapMarkerError: map.removeMapMarkerError
+  removeMapMarkerError: map.removeMapMarkerError,
+  loadUsersError: users.loadUsersError
 });
 
 const mappedActions = {
@@ -37,27 +40,12 @@ const mappedActions = {
   clearLoadConversationError,
   clearLoadMapMarkersError,
   clearAddMapMarkerError,
-  clearRemoveMarkerError
+  clearRemoveMarkerError,
+  clearLoadUsersError
 };
 
 @connect(mappedState, mappedActions)
 class ErrorHandler extends Component {
-  static propTypes = {
-    loadArticlesError: PropTypes.string,
-    addArticleError: PropTypes.string,
-    editArticleError: PropTypes.string,
-    removeArticleError: PropTypes.string,
-    loadConversationError: PropTypes.string,
-    clearLoadArticlesError: PropTypes.func.isRequired,
-    clearAddArticleError: PropTypes.func.isRequired,
-    clearEditArticleError: PropTypes.func.isRequired,
-    clearRemoveArticleError: PropTypes.func.isRequired,
-    clearLoadConversationError: PropTypes.func.isRequired,
-    loadMapMarkersError: PropTypes.string,
-    addMapMarkerError: PropTypes.string,
-    removeMapMarkerError: PropTypes.string
-  }
-
   state = {
     errorMessage: null,
     errorCallback: null

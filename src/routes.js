@@ -5,7 +5,7 @@ import { ArticlesLayout } from 'layouts';
 import {
   App, HomePage, Chat, Login, LoginSuccess, WorldPage, NotFound,
   NewArticlePage, ArticlesPage, ArticlePage, TutorialsPage,
-  BestPracticesPage, ProfilePage
+  BestPracticesPage, ProfilePage, UsersPage
 } from 'containers';
 
 export default (store) => {
@@ -43,6 +43,8 @@ export default (store) => {
       <Route path="world" component={WorldPage} noFooter />
       <Route path="tutorials" component={TutorialsPage} />
       <Route path="best-practices" component={BestPracticesPage} />
+      <Route path="users" component={UsersPage} />
+
       <Route path="articles" component={ArticlesLayout}>
         <IndexRoute component={ArticlesPage} />
         <Route path="/article/:id" component={ArticlePage} />
