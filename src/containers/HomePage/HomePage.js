@@ -14,6 +14,7 @@ import styles from './HomePage.scss';
 import LocationMap from 'containers/WorldPage/LocationMap';
 import Poll from './Poll';
 import ArticlesGrid from './ArticlesGrid';
+import Calendar from './Calendar';
 
 export default class HomePage extends Component {
   render() {
@@ -36,8 +37,7 @@ export default class HomePage extends Component {
                 <LocationMap static style={{ height: 300, marginBottom: 24 }} />
               </Div>
             </Link>
-            <MockCard title="Test" content />
-            <MockCard title="Test" content />
+            <Calendar />
           </Col>
         </Row>
         <Row>
