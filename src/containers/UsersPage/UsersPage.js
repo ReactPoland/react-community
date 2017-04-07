@@ -39,7 +39,7 @@ class UsersPage extends Component {
   }
 
   handleUserClick(userId) {
-    this.props.pushState(`/users/${userId}`);
+    this.props.pushState(`/user/${userId}`);
   }
 
   render() {

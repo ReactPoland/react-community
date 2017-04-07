@@ -43,7 +43,11 @@ export default (store) => {
       <Route path="world" component={WorldPage} noFooter />
       <Route path="tutorials" component={TutorialsPage} />
       <Route path="best-practices" component={BestPracticesPage} />
-      <Route path="users" component={UsersPage} />
+
+      <Route path="users">
+        <IndexRoute component={UsersPage} />
+        <Route path="/user/:id" component={ProfilePage} />
+      </Route>
 
       <Route path="articles" component={ArticlesLayout}>
         <IndexRoute component={ArticlesPage} />

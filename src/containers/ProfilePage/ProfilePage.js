@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
+import _find from 'lodash/find';
 // COMPONENTS
 import LocationMap from 'containers/WorldPage/LocationMap';
 // LAYOUT
@@ -12,13 +13,13 @@ import { MockCard } from 'components/mocked';
 import { Div } from 'components/styled';
 import styles from './ProfilePage.scss';
 
-const mappedState = ({ auth }) => ({ user: auth.user });
+const mappedState = ({ auth, users }, props) => ({
+  user: auth.user || _find(users.all, user => props.params.id === `${user.id}`)
+});
 
 @connect(mappedState)
 export default class ProfilePage extends Component {
-  static propTypes = {
-    user: PropTypes.object
-  }
+  static propTypes = { user: PropTypes.object }
 
   render() {
     const { user } = this.props;
