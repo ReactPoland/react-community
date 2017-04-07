@@ -14,7 +14,7 @@ import { Div } from 'components/styled';
 import styles from './ProfilePage.scss';
 
 const mappedState = ({ auth, users }, props) => ({
-  user: auth.user || _find(users.all, user => props.params.id === `${user.id}`)
+  user: _find(users.all, user => props.params.id === `${user.id}`) || auth.user
 });
 
 @connect(mappedState)
