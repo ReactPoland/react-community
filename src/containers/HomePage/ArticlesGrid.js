@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { descendingBy } from 'utils';
+import { push } from 'react-router-redux';
 // LAYOUT
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
@@ -17,7 +18,10 @@ const mappedState = ({ articles }) => ({
   articlesLoaded: articles.articlesLoaded,
 });
 
-const mappedActions = { loadArticles };
+const mappedActions = {
+  loadArticles,
+  pushState: push
+};
 
 @connect(mappedState, mappedActions)
 class ArticlesGrid extends Component {
@@ -25,11 +29,16 @@ class ArticlesGrid extends Component {
     articles: PropTypes.array.isRequired,
     loadArticles: PropTypes.func.isRequired,
     loadingArticles: PropTypes.bool.isRequired,
-    articlesLoaded: PropTypes.bool.isRequired
+    articlesLoaded: PropTypes.bool.isRequired,
+    pushState: PropTypes.func.isRequired
   }
 
   componentWillMount() {
     if (!this.props.articlesLoaded) this.props.loadArticles();
+  }
+
+  redirectToArticle = (articleId) => {
+    this.props.pushState(`/article/${articleId}`);
   }
 
   render() {
@@ -44,6 +53,8 @@ class ArticlesGrid extends Component {
                   <MockCard
                     title={article.title}
                     subtitle={date}
+                    onClick={() => this.redirectToArticle(article.id)}
+                    style={{ cursor: 'pointer' }}
                   />
                 </Col>
               );

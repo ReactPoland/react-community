@@ -4,7 +4,7 @@ import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'm
 import FlatButton from 'material-ui/FlatButton';
 
 const MockCard = (props) => (
-  <Card style={{ marginBottom: 24 }}>
+  <Card style={{ marginBottom: 24, ...props.style }} onClick={props.onClick}>
 
     {props.header && <CardHeader
       title="URL Avatar"
@@ -51,7 +51,14 @@ MockCard.propTypes = {
   title: PropTypes.string,
   subtitle: PropTypes.string,
   content: PropTypes.bool,
-  buttons: PropTypes.bool
+  buttons: PropTypes.bool,
+  onClick: PropTypes.func,
+  style: PropTypes.object
+};
+
+MockCard.defaultProps = {
+  onClick: () => {},
+  style: {}
 };
 
 export default MockCard;

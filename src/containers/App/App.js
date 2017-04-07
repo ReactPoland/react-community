@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { asyncConnect } from 'redux-async-connect';
-import { push } from 'react-router-redux';
 import Helmet from 'react-helmet';
 import config from '../../config';
 // STORE
@@ -24,13 +23,12 @@ import styles from './App.scss';
 }])
 @connect(
   state => ({ user: state.auth.user }),
-  { logout, pushState: push, loadAuth })
+  { logout, loadAuth })
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
     user: PropTypes.object,
     logout: PropTypes.func.isRequired,
-    pushState: PropTypes.func.isRequired,
     loadAuth: PropTypes.func.isRequired,
     routes: PropTypes.array
   };
