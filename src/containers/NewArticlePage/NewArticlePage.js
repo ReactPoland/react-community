@@ -81,11 +81,7 @@ export default class NewArticlePage extends Component {
   addArticle = () => {
     const newArticle = { ...this.state.newArticle };
 
-    if (!this.validateArticle(newArticle)) {
-      // TODO: display error message on the page
-      console.error('INVALID ARTICLE', newArticle);
-      return;
-    }
+    if (!this.validateArticle(newArticle)) return;
 
     newArticle.content = JSON.stringify(newArticle.content);
     this.props.addArticle(newArticle);

@@ -3,8 +3,9 @@ import { IndexRoute, Route } from 'react-router';
 import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
 import { ArticlesLayout } from 'layouts';
 import {
-  App, Home, Chat, Login, LoginSuccess, WorldPage, NotFound,
-  NewArticlePage, ArticlesPage, ArticlePage
+  App, HomePage, Chat, Login, LoginSuccess, WorldPage, NotFound,
+  NewArticlePage, ArticlesPage, ArticlePage, TutorialsPage,
+  BestPracticesPage, ProfilePage, UsersPage
 } from 'containers';
 
 export default (store) => {
@@ -28,7 +29,7 @@ export default (store) => {
   return (
     <Route path="/" component={App}>
       { /* Home (main) route */ }
-      <IndexRoute component={Home} />
+      <IndexRoute component={HomePage} />
 
       { /* Routes requiring login */ }
       <Route onEnter={requireLogin}>
@@ -37,8 +38,12 @@ export default (store) => {
       </Route>
 
       { /* Routes */ }
+      <Route path="profile" component={ProfilePage} />
       <Route path="login" component={Login} />
-      <Route path="world" component={WorldPage} />
+      <Route path="world" component={WorldPage} noFooter />
+      <Route path="tutorials" component={TutorialsPage} />
+      <Route path="best-practices" component={BestPracticesPage} />
+      <Route path="users" component={UsersPage} />
 
       <Route path="articles" component={ArticlesLayout}>
         <IndexRoute component={ArticlesPage} />

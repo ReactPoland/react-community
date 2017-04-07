@@ -23,11 +23,11 @@ const initialState = {
   // Adding new marker
   addingMarker: false,
   markerAdded: false,
-  addMarkerError: null,
+  addMapMarkerError: null,
   // Removing a marker
   removingMarker: null, // ID of a marker being removed
   markerRemoved: false,
-  removeMarkerError: null
+  removeMapMarkerError: null
 };
 
 export default function articleModule(state = initialState, action = {}) {
@@ -66,7 +66,7 @@ export default function articleModule(state = initialState, action = {}) {
         ...state,
         markerAdded: false,
         addingMarker: true,
-        addMarkerError: null
+        addMapMarkerError: null
       };
     case ADD_MAP_MARKER_SUCCESS:
       return {
@@ -83,12 +83,12 @@ export default function articleModule(state = initialState, action = {}) {
         ...state,
         addingMarker: false,
         markerAdded: false,
-        addMarkerError: `Error while adding a marker: ${action.error.message}`
+        addMapMarkerError: `Error while adding a marker: ${action.error.message}`
       };
     case CLEAR_ADD_MAP_MARKER_ERROR:
       return {
         ...state,
-        addMarkerError: null
+        addMapMarkerError: null
       };
     // --- REMOVE ---
     case REMOVE_MAP_MARKER:
@@ -96,7 +96,7 @@ export default function articleModule(state = initialState, action = {}) {
         ...state,
         markerRemoved: false,
         removingMarker: action.payload.markerId,
-        removeMarkerError: null
+        removeMapMarkerError: null
       };
     case REMOVE_MAP_MARKER_SUCCESS:
       return {
@@ -110,12 +110,12 @@ export default function articleModule(state = initialState, action = {}) {
         ...state,
         removingMarker: null,
         markerRemoved: false,
-        removeMarkerError: `Error while removing a marker: ${action.error.message}`
+        removeMapMarkerError: `Error while removing a marker: ${action.error.message}`
       };
     case CLEAR_REMOVE_MAP_MARKER_ERROR:
       return {
         ...state,
-        removeMarkerError: null
+        removeMapMarkerError: null
       };
     default:
       return state;
