@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-// TODO: import only necessary components in production
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 

@@ -109,11 +109,7 @@ export default class ArticlePage extends Component {
       content: (this.state.editedContent && JSON.stringify(this.state.editedContent)) || article.content
     };
 
-    if (!this.validateArticle(editedArticle)) {
-      // TODO: display error message on the page
-      console.error('INVALID ARTICLE', editedArticle);
-      return;
-    }
+    if (!this.validateArticle(editedArticle)) return;
 
     this.props.editArticle(editedArticle);
   }

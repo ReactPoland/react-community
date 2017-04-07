@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import Helmet from 'react-helmet';
 // LAYOUT
-// TODO: import only necessary components in production
-import { Jumbotron, Grid, Row, Col } from 'react-bootstrap';
+import Jumbotron from 'react-bootstrap/lib/Jumbotron';
+import Grid from 'react-bootstrap/lib/Grid';
+import Row from 'react-bootstrap/lib/Row';
+import Col from 'react-bootstrap/lib/Col';
 import styles from './TutorialsPage.scss';
 import { MockCard } from 'components/mocked';
 

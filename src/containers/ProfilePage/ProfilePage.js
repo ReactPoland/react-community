@@ -2,11 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 // LAYOUT
-// TODO: import only necessary components in production
-import { Grid } from 'react-bootstrap';
-import styles from './ProfilePage.scss';
+import Grid from 'react-bootstrap/lib/Grid';
 import { MockCard } from 'components/mocked';
 import { Flex, Div } from 'components/styled';
+import styles from './ProfilePage.scss';
 
 const mappedState = () => ({
   user: {
