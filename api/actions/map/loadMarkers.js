@@ -20,6 +20,7 @@ const MarkerModel = require('../../db').markers;
         "description": "wertret",
         "lat": 51.5073509,
         "lng": -0.127758299999982,
+        "googleLocationId": "6b893c3d05bf5fb2caa4b033c9aa27a41fab6fc3",
         "createdAt": "2017-03-28T21:48:20.072Z",
         "updatedAt": "2017-03-28T21:48:20.072Z"
       },
@@ -30,6 +31,7 @@ const MarkerModel = require('../../db').markers;
         "description": "eee",
         "lat": 40.2276093,
         "lng": -7.53051959999993,
+        "googleLocationId": "6b893c3d05bf5fb2caa4b033c9aa27a41fab6fc3",
         "createdAt": "2017-03-29T09:56:45.805Z",
         "updatedAt": "2017-03-29T09:56:45.805Z"
       }
