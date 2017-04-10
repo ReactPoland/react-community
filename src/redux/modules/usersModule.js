@@ -42,7 +42,7 @@ export function loadUsers() {
   return {
     requestName: 'Load users',
     types: [LOAD_USERS_REQUEST, LOAD_USERS_SUCCESS, LOAD_USERS_FAIL],
-    promise: (client) => client.get('/user/x-loadUsers')
+    promise: (client) => client.get('/user/loadUsers')
   };
 }
 
