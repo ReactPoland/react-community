@@ -69,8 +69,8 @@ const ArticleModel = require('../../db').articles;
     @apiExample Example request:
     GET /api/article/loadArticles?content=olo HTTP/1.1
 
-    @apiParam {String} title Find article which contains current title.
-    @apiParam {String} content Find article which contains current content.
+    @apiParam {String} [title] Find article which contains current title.
+    @apiParam {String} [content] Find article which contains current content.
 
    */
 
