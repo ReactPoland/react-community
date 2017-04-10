@@ -2,12 +2,38 @@ import moment from 'moment';
 import _reject from 'lodash/reject';
 import _startsWith from 'lodash/startsWith';
 
+const debug = true;
+
+// --- ACTION TYPES ---
 export const SHOW_ERROR = 'SHOW_ERROR';
 export const HIDE_ERROR = 'HIDE_ERROR';
 export const HIDE_ALL_ERRORS = 'HIDE_ALL_ERRORS';
 export const HIDE_ERRORS_OF_TYPE = 'HIDE_ERRORS_OF_TYPE';
 
-export const errorsModule = (state = [], action = {}) => {
+// --- HELPERS ---
+const composeError = ({ requestName, error }) => {
+  if (debug) console.warn('Request: ', requestName, 'error', error);
+  const errorMessage = `${error.status} ${error.message}`;
+
+  return {
+    ...error,
+    type: 'generic',
+    timestamp: moment(),
+    message: `Error at "${requestName}": ${errorMessage}`
+  };
+};
+
+// --- ACTIONS ---
+export const showError = ({ requestName, error }) => ({
+  type: SHOW_ERROR,
+  payload: { error: composeError({ requestName, error }) }
+});
+export const hideError = () => ({ type: HIDE_ERROR });
+export const hideAllErrors = () => ({ type: HIDE_ALL_ERRORS });
+export const hideErrorsOfType = errorType => ({ type: HIDE_ERRORS_OF_TYPE, payload: { errorType } });
+
+// --- REDUCER ---
+export default (state = [], action = {}) => {
   switch (action.type) {
     case SHOW_ERROR:
       return [...state, action.payload.error];
@@ -23,9 +49,3 @@ export const errorsModule = (state = [], action = {}) => {
       return state;
   }
 };
-
-export const composeError = error => ({ type: 'generic', time: moment(), message: '', ...error });
-export const showError = error => ({ type: SHOW_ERROR, payload: { error: composeError(error) } });
-export const hideErrorsOfType = errorType => ({ type: HIDE_ERRORS_OF_TYPE, payload: { errorType } });
-export const hideError = () => ({ type: HIDE_ERROR });
-export const hideAllErrors = () => ({ type: HIDE_ALL_ERRORS });

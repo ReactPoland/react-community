@@ -1,28 +1,32 @@
-export default function clientMiddleware(client) {
-  return ({dispatch, getState}) => {
-    return next => action => {
-      if (typeof action === 'function') {
-        return action(dispatch, getState);
-      }
+import { showError } from 'redux/modules/errorsModule';
 
-      const { promise, types, ...rest } = action; // eslint-disable-line no-redeclare
-      if (!promise) {
-        return next(action);
-      }
+export default client => store => next => action => {
+  const { dispatch, getState } = store;
 
-      const [REQUEST, SUCCESS, FAILURE] = types;
-      next({...rest, type: REQUEST});
+  if (typeof action === 'function') return action(dispatch, getState);
 
-      const actionPromise = promise(client);
-      actionPromise.then(
-        (result) => next({...rest, result, type: SUCCESS}),
-        (error) => next({...rest, error, type: FAILURE})
-      ).catch((error)=> {
-        console.error('MIDDLEWARE ERROR:', error);
-        next({...rest, error, type: FAILURE});
-      });
+  const { promise, types, requestName, ...rest } = action;
 
-      return actionPromise;
-    };
-  };
-}
+  if (!promise) return next(action);
+
+  const [REQUEST, SUCCESS, FAILURE] = types;
+
+  next({ ...rest, type: REQUEST });
+
+  const actionPromise = promise(client);
+
+  actionPromise.then(
+    (result) => next({ ...rest, result, type: SUCCESS }),
+    (error) => {
+      next({ ...rest, error, type: FAILURE });
+      // Catch error and save it in the store
+      dispatch(showError({ requestName, error }));
+    }
+  ).catch((error) => {
+    next({ ...rest, error, type: FAILURE });
+    // Catch error and save it in the store
+    dispatch(showError({ requestName, error }));
+  });
+
+  return actionPromise;
+};
