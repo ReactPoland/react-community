@@ -1,9 +1,12 @@
 const ArticleModel = require('../../db').articles;
 const resp = require('../../utils/serverResp');
+import * as ArticleValidation from '../../utils/validation/article';
 
-const updateArticleRequest = async ({title, content, id}) => {
+const updateArticleRequest = async ({title, content, id, previewSize}) => {
+  const articleBody = ArticleValidation.checkArticleBody({title, content, previewSize});
+
   return await ArticleModel.update({
-    title, content
+    ...articleBody
   }, {
     where: {
       id
