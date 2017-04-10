@@ -90,7 +90,7 @@ describe('articlesReducer', () => {
     const result = articlesReducer(initialState, { type: 'LOAD_ARTICLES_REQUEST'})
     expect(result.articlesLoaded).to.equal(false)
     expect(result.loadingArticles).to.equal(true)
-    expect(result.loadArticlesError).to.equal('')
+    expect(result.loadArticlesError).to.equal(null)
   })
 
   it('should handle LOAD_ARTICLES_SUCCESS', () => {
@@ -104,6 +104,6 @@ describe('articlesReducer', () => {
     const result = articlesReducer(initialState, { type: 'LOAD_ARTICLES_FAIL', error: { message: `test error` } })
     expect(result.loadingArticles).to.equal(false)
     expect(result.articlesLoaded).to.equal(false)
-    expect(result.loadArticlesError).to.equal(`Load articles error: test error`)
+    expect(result.loadArticlesError).to.equal(`Error while loading articles: test error`)
   })
 })

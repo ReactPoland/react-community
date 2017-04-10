@@ -31,7 +31,7 @@ describe('Home', () => {
   it('should render with img', () => {
     const element = dom.getElementsByTagName('img')[0];
     expect(element).to.exist
-  });  
+  });
 
   it('should render with h1', () => {
     const element = dom.getElementsByTagName('h1')[0];
