@@ -13,7 +13,7 @@ export const HIDE_ERRORS_OF_TYPE = 'HIDE_ERRORS_OF_TYPE';
 // --- HELPERS ---
 const composeError = ({ requestName, error }) => {
   if (debug) console.warn('Request: ', requestName, 'error', error);
-  const errorMessage = `${error.status} ${error.message}`;
+  const errorMessage = `${error.status || ''} ${error.message || ''}`;
 
   return {
     ...error,

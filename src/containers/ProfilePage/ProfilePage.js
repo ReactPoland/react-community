@@ -21,6 +21,8 @@ const mappedState = ({ auth, users }, props) => ({
 export default class ProfilePage extends Component {
   static propTypes = { user: PropTypes.object }
 
+  // TODO: make sure user is available when loading the page
+
   render() {
     const { user } = this.props;
 

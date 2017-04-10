@@ -3,10 +3,7 @@ import { connect } from 'react-redux';
 import _last from 'lodash/last';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import {
-  loadMarkers, removeMarker, addMarker, clearLoadMapMarkersError,
-  clearAddMapMarkerError, clearRemoveMarkerError
-} from 'redux/modules/mapModule';
+import { loadMarkers, removeMarker, addMarker } from 'redux/modules/mapModule';
 import { LoadingScreen } from 'components';
 
 import AddLocationDialog from './AddLocationDialog';
@@ -24,10 +21,7 @@ const mappedState = ({ map }) => ({
 const mappedActions = {
   loadMarkers,
   addMarker,
-  removeMarker,
-  clearLoadMapMarkersError,
-  clearAddMapMarkerError,
-  clearRemoveMarkerError
+  removeMarker
 };
 
 @connect(mappedState, mappedActions)
@@ -41,10 +35,7 @@ export default class WorldPage extends Component {
     removingMarker: PropTypes.number,
     loadMarkers: PropTypes.func.isRequired,
     addMarker: PropTypes.func.isRequired,
-    removeMarker: PropTypes.func.isRequired,
-    clearLoadMapMarkersError: PropTypes.func.isRequired,
-    clearAddMapMarkerError: PropTypes.func.isRequired,
-    clearRemoveMarkerError: PropTypes.func.isRequired
+    removeMarker: PropTypes.func.isRequired
   }
 
   state = {

@@ -1,5 +1,7 @@
 import _sample from 'lodash/sample';
 
+const debug = false;
+
 // --- LOAD ---
 const LOAD_ARTICLES_REQUEST = 'LOAD_ARTICLES_REQUEST';
 const LOAD_ARTICLES_SUCCESS = 'LOAD_ARTICLES_SUCCESS';
@@ -30,7 +32,7 @@ export function prepareContent(jsonString) {
 
     if (obj && typeof obj === 'object') return obj;
   } catch (error) {
-    console.error('ERROR: string cannot be parsed as JSON:', error);
+    if (debug) console.warn('ERROR: string cannot be parsed as JSON:', error);
     return {
       'nodes': [
         {
