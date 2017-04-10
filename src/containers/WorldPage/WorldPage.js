@@ -71,15 +71,13 @@ export default class WorldPage extends Component {
 
   // Adds new marker to the map and centers the view on it
   addMarker = markerData => {
-    const lat = markerData.location.geometry.location.lat();
-    const lng = markerData.location.geometry.location.lng();
-
     const newMarker = {
       name: markerData.name,
       link: markerData.link,
       description: markerData.description,
-      lat,
-      lng
+      lat: markerData.location.geometry.location.lat(),
+      lng: markerData.location.geometry.location.lng(),
+      googleLocationId: markerData.location.place_id
     };
 
     this.props.addMarker(newMarker);
