@@ -2,7 +2,7 @@ import moment from 'moment';
 import _reject from 'lodash/reject';
 import _startsWith from 'lodash/startsWith';
 
-const debug = true;
+const debug = false;
 
 // --- ACTION TYPES ---
 export const SHOW_ERROR = 'SHOW_ERROR';

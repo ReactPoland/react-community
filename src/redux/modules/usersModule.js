@@ -1,47 +1,95 @@
-// --- LOAD ---
+// --- ACTION TYPES ---
+// LOAD
 const LOAD_USERS_REQUEST = 'LOAD_USERS_REQUEST';
 const LOAD_USERS_SUCCESS = 'LOAD_USERS_SUCCESS';
 const LOAD_USERS_FAIL = 'LOAD_USERS_FAIL';
-const CLEAR_LOAD_USERS_ERROR = 'CLEAR_LOAD_USERS_ERROR';
-// --- ADD ---
+// ADD
 const ADD_USER_REQUEST = 'ADD_USER_REQUEST';
 const ADD_USER_SUCCESS = 'ADD_USER_SUCCESS';
 const ADD_USER_FAIL = 'ADD_USER_FAIL';
-const CLEAR_ADD_USER_ERROR = 'CLEAR_ADD_USER_ERROR';
-// --- EDIT ---
+// EDIT
 const EDIT_USER_REQUEST = 'EDIT_USER_REQUEST';
 const EDIT_USER_SUCCESS = 'EDIT_USER_SUCCESS';
 const EDIT_USER_FAIL = 'EDIT_USER_FAIL';
-const CLEAR_EDIT_USER_ERROR = 'CLEAR_EDIT_USER_ERROR';
-// --- REMOVE ---
+// REMOVE
 const REMOVE_USER_REQUEST = 'REMOVE_USER_REQUEST';
 const REMOVE_USER_SUCCESS = 'REMOVE_USER_SUCCESS';
 const REMOVE_USER_FAIL = 'REMOVE_USER_FAIL';
-const CLEAR_REMOVE_USER_ERROR = 'CLEAR_REMOVE_USER_ERROR';
 
 const initialState = {
   // Loading all users
   all: [],
   loadingUsers: false,
   usersLoaded: false,
-  loadUsersError: null,
+  loadUsersError: false,
   // Adding new user
   addingUser: false,
   userAdded: null, // (Number) ID of an user that was just added
-  addUserError: null,
+  addUserError: false,
   // Editing user
   editingUser: false,
   userEdited: false,
-  editUserError: null,
+  editUserError: false,
   // Removing a user
   removingUser: null, // (Number) ID of an user being removed
   userRemoved: false,
-  removeUserError: null
+  removeUserError: false
 };
 
-export default function usersModule(state = initialState, action = {}) {
+// --- ACTIONS ---
+// LOAD
+export function loadUsers() {
+  return {
+    requestName: 'Load users',
+    types: [LOAD_USERS_REQUEST, LOAD_USERS_SUCCESS, LOAD_USERS_FAIL],
+    promise: (client) => client.get('/user/x-loadUsers')
+  };
+}
+
+// ADD
+export function addUser(user) {
+  const data = {
+    ...user,
+    content: JSON.stringify(user.content)
+  };
+
+  return {
+    requestName: 'Add user',
+    types: [ADD_USER_REQUEST, ADD_USER_SUCCESS, ADD_USER_FAIL],
+    promise: (client) => client.post('/user/addUser', { data })
+  };
+}
+
+// EDIT
+export function editUser(user) {
+  const data = {
+    ...user,
+    content: JSON.stringify(user.content)
+  };
+
+  return {
+    requestName: 'Edit user',
+    types: [EDIT_USER_REQUEST, EDIT_USER_SUCCESS, EDIT_USER_FAIL],
+    // TODO: remove "user" below when API starts returning edited user
+    payload: { userId: user.id, user },
+    promise: client => client.post('/user/updateUser', { data })
+  };
+}
+
+// REMOVE
+export function removeUser(userId) {
+  return {
+    requestName: 'Remove user',
+    types: [REMOVE_USER_REQUEST, REMOVE_USER_SUCCESS, REMOVE_USER_FAIL],
+    payload: { userId },
+    promise: (client) => client.post('/user/removeUser', { data: { id: userId } })
+  };
+}
+
+// --- REDUCER ---
+export default (state = initialState, action = {}) => {
   switch (action.type) {
-    // --- LOAD ---
+    // LOAD
     case LOAD_USERS_REQUEST:
       return {
         ...state,
@@ -61,15 +109,9 @@ export default function usersModule(state = initialState, action = {}) {
         ...state,
         loadingUsers: false,
         usersLoaded: false,
-        loadUsersError: `Error while loading users: ${action.error.message}`
+        loadUsersError: true
       };
-    case CLEAR_LOAD_USERS_ERROR:
-      return {
-        ...state,
-        loadUsersError: null
-      };
-      // --- ADD ---
-    // --- ADD ---
+    // ADD
     case ADD_USER_REQUEST:
       return {
         ...state,
@@ -95,14 +137,9 @@ export default function usersModule(state = initialState, action = {}) {
         ...state,
         addingUser: false,
         userAdded: null,
-        addUserError: `Error while adding an user: ${action.error.message}`
+        addUserError: true
       };
-    case CLEAR_ADD_USER_ERROR:
-      return {
-        ...state,
-        addUserError: null
-      };
-    // --- EDIT ---
+    // EDIT
     case EDIT_USER_REQUEST:
       return {
         ...state,
@@ -124,14 +161,9 @@ export default function usersModule(state = initialState, action = {}) {
         ...state,
         editingUser: false,
         userEdited: false,
-        editUserError: `Error while editing an user: ${action.error.message}`
+        editUserError: true
       };
-    case CLEAR_EDIT_USER_ERROR:
-      return {
-        ...state,
-        editUserError: null
-      };
-    // --- REMOVE ---
+    // REMOVE
     case REMOVE_USER_REQUEST:
       return {
         ...state,
@@ -151,67 +183,9 @@ export default function usersModule(state = initialState, action = {}) {
         ...state,
         removingUser: null,
         userRemoved: false,
-        removeUserError: `Error while deleting an user: ${action.error.message}`
-      };
-    case CLEAR_REMOVE_USER_ERROR:
-      return {
-        ...state,
-        removeUserError: null
+        removeUserError: true
       };
     default:
       return state;
   }
-}
-
-// --- LOAD ---
-export function loadUsers() {
-  return {
-    types: [LOAD_USERS_REQUEST, LOAD_USERS_SUCCESS, LOAD_USERS_FAIL],
-    promise: (client) => client.get('/user/loadUsers')
-  };
-}
-
-export const clearLoadUsersError = () => ({ type: CLEAR_LOAD_USERS_ERROR });
-
-// --- ADD ---
-export function addUser(user) {
-  const data = {
-    ...user,
-    content: JSON.stringify(user.content)
-  };
-
-  return {
-    types: [ADD_USER_REQUEST, ADD_USER_SUCCESS, ADD_USER_FAIL],
-    promise: (client) => client.post('/user/addUser', { data })
-  };
-}
-
-export const clearAddUserError = () => ({ type: CLEAR_ADD_USER_ERROR });
-
-// --- EDIT ---
-export function editUser(user) {
-  const data = {
-    ...user,
-    content: JSON.stringify(user.content)
-  };
-
-  return {
-    types: [EDIT_USER_REQUEST, EDIT_USER_SUCCESS, EDIT_USER_FAIL],
-    // TODO: remove "user" below when API starts returning edited user
-    payload: { userId: user.id, user },
-    promise: client => client.post('/user/updateUser', { data })
-  };
-}
-
-export const clearEditUserError = () => ({ type: CLEAR_EDIT_USER_ERROR });
-
-// --- REMOVE ---
-export function removeUser(userId) {
-  return {
-    types: [REMOVE_USER_REQUEST, REMOVE_USER_SUCCESS, REMOVE_USER_FAIL],
-    payload: { userId },
-    promise: (client) => client.post('/user/removeUser', { data: { id: userId } })
-  };
-}
-
-export const clearRemoveUserError = () => ({ type: CLEAR_REMOVE_USER_ERROR });
+};
