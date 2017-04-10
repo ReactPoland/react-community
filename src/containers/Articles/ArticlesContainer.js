@@ -13,7 +13,7 @@ const mappedState = ({ articles }) => ({
 const mappedActions = { loadArticles };
 
 @connect(mappedState, mappedActions)
-class ArticlesLayout extends Component {
+class ArticlesContainer extends Component {
   static propTypes = {
     children: PropTypes.element.isRequired,
     params: PropTypes.object.isRequired,
@@ -27,11 +27,11 @@ class ArticlesLayout extends Component {
   }
 
   render() {
-    const styles = require('./ArticlesLayout.scss');
+    const styles = require('./ArticlesContainer.scss');
 
     return (
       <LoadingScreen loading={this.props.loadingArticles}>
-        <div className={styles.ArticlesLayout}>
+        <div className={styles.ArticlesContainer}>
           {this.props.children}
         </div>
       </LoadingScreen>
@@ -39,4 +39,4 @@ class ArticlesLayout extends Component {
   }
 }
 
-export default ArticlesLayout;
+export default ArticlesContainer;

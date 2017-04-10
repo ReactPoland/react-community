@@ -1,10 +1,9 @@
 import React from 'react';
 import { IndexRoute, Route } from 'react-router';
 import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
-import { ArticlesLayout } from 'layouts';
 import {
   App, HomePage, Chat, Login, LoginSuccess, WorldPage, NotFound,
-  NewArticlePage, ArticlesPage, ArticlePage, TutorialsPage,
+  ArticlesContainer, NewArticlePage, ArticlesPage, ArticlePage, TutorialsPage,
   BestPracticesPage, ProfilePage, UsersPage
 } from 'containers';
 
@@ -49,7 +48,7 @@ export default (store) => {
         <Route path="/user/:id" component={ProfilePage} />
       </Route>
 
-      <Route path="articles" component={ArticlesLayout}>
+      <Route path="articles" component={ArticlesContainer}>
         <IndexRoute component={ArticlesPage} />
         <Route path="/article/:id" component={ArticlePage} />
         <Route path="add" component={NewArticlePage} />
