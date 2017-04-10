@@ -19,8 +19,7 @@ const mappedState = ({ articles }, props) => ({
   article: _find(articles.all, art => props.params.id === `${art.id}`),
   editingArticle: articles.editingArticle,
   articleEdited: articles.articleEdited,
-  removingArticle: articles.removingArticle,
-  editArticleError: articles.editArticleError
+  removingArticle: articles.removingArticle
 });
 
 const mappedActions = {
@@ -37,7 +36,6 @@ export default class ArticlePage extends Component {
     editingArticle: PropTypes.bool.isRequired,
     articleEdited: PropTypes.bool.isRequired,
     removingArticle: PropTypes.number,
-    editArticleError: PropTypes.string,
     editArticle: PropTypes.func.isRequired,
     removeArticle: PropTypes.func.isRequired,
     pushState: PropTypes.func.isRequired
@@ -185,7 +183,7 @@ export default class ArticlePage extends Component {
     return (
       <Grid style={{ height: '100%' }}>
         <Div flex column fullHeight>
-          <Div noFlex>
+          <Div flexNone>
             <ArticleHeader>
               {this.renderTitle()}
               <List right>
