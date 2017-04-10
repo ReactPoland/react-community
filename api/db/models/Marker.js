@@ -25,7 +25,7 @@ module.exports = {
     googleLocationId: {
       type: Sequelize.STRING,
       allowNull: false,
-      defaultValue: [1, 1]
+      defaultValue: ''
     }
   }
 };
