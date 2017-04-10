@@ -30,6 +30,7 @@ const LocationMap = (props) => {
             marker={marker}
             removeMarker={props.removeMarker}
             removingMarker={props.removingMarker}
+            loggedIn={props.loggedIn}
           />
         ))
       }
@@ -46,6 +47,7 @@ LocationMap.propTypes = {
   style: PropTypes.object,
   noZoom: PropTypes.bool,
   static: PropTypes.bool,
+  loggedIn: PropTypes.bool
 };
 
 LocationMap.defaultProps = {

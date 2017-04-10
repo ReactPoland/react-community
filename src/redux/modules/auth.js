@@ -1,27 +1,52 @@
-const LOAD = 'auth/LOAD';
-const LOAD_SUCCESS = 'auth/LOAD_SUCCESS';
-const LOAD_FAIL = 'auth/LOAD_FAIL';
-const LOGIN = 'auth/LOGIN';
-const LOGIN_SUCCESS = 'auth/LOGIN_SUCCESS';
-const LOGIN_FAIL = 'auth/LOGIN_FAIL';
-const LOGOUT = 'auth/LOGOUT';
-const LOGOUT_SUCCESS = 'auth/LOGOUT_SUCCESS';
-const LOGOUT_FAIL = 'auth/LOGOUT_FAIL';
+// --- ACTION TYPES ---
+const LOAD_REQUEST = 'LOAD_REQUEST';
+const LOAD_SUCCESS = 'LOAD_SUCCESS';
+const LOAD_FAIL = 'LOAD_FAIL';
+const LOGIN_REQUEST = 'LOGIN_REQUEST';
+const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+const LOGIN_FAIL = 'LOGIN_FAIL';
+const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
+const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
+const LOGOUT_FAIL = 'LOGOUT_FAIL';
+
+// --- HELPERS ---
+export const isLoaded = globalState => globalState.auth && globalState.auth.loaded;
+
+// --- ACTIONS ---
+export const load = () => ({
+  reguestName: 'Load user',
+  types: [LOAD_REQUEST, LOAD_SUCCESS, LOAD_FAIL],
+  promise: client => client.get('/loadAuth')
+});
+
+export const login = () => ({ type: LOGIN_REQUEST });
+
+export const logout = () => ({
+  types: [LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAIL],
+  promise: client => client.get('/logout')
+});
 
 const initialState = {
-  loaded: false,
-  loading: false,
-  loggingIn: false,
-  loggingOut: false,
+  // User
   user: null, // Contains: id, firstName, lastName, pictureURL
-  loadError: '',
-  loginError: '',
-  logoutError: ''
+  // Lodaing user data
+  loading: false,
+  loaded: false,
+  loadError: false,
+  // Logging in
+  loggingIn: false,
+  loggedIn: false,
+  loginError: false,
+  // Logging out
+  loggingOut: false,
+  loggedOut: false,
+  logoutError: false
 };
 
-export default function reducer(state = initialState, action = {}) {
+// --- REDUCER ---
+export default (state = initialState, action = {}) => {
   switch (action.type) {
-    case LOAD:
+    case LOAD_REQUEST:
       return {
         ...state,
         loading: true
@@ -31,6 +56,7 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         loading: false,
         loaded: true,
+        loggedIn: true,
         user: action.result
       };
     case LOAD_FAIL:
@@ -38,17 +64,20 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         loading: false,
         loaded: false,
-        loadError: action.error
+        loadError: true
       };
-    case LOGIN:
+    case LOGIN_REQUEST:
       return {
         ...state,
         loggingIn: true
       };
     case LOGIN_SUCCESS:
+      // NOTE: this action handler is not used at the moment
+      // Logging in is being done through GitHub
       return {
         ...state,
         loggingIn: false,
+        loggedIn: true,
         user: action.result
       };
     case LOGIN_FAIL:
@@ -56,9 +85,9 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         loggingIn: false,
         user: null,
-        loginError: action.error
+        loginError: true
       };
-    case LOGOUT:
+    case LOGOUT_REQUEST:
       return {
         ...state,
         loggingOut: true
@@ -67,48 +96,17 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         loggingOut: false,
+        loggedIn: false,
+        loggedOut: true,
         user: null
       };
     case LOGOUT_FAIL:
       return {
         ...state,
         loggingOut: false,
-        logoutError: action.error
+        logoutError: true
       };
     default:
       return state;
   }
-}
-
-export function showLoginSpinner() {
-  return { type: LOGIN };
-}
-
-export function isLoaded(globalState) {
-  return globalState.auth && globalState.auth.loaded;
-}
-
-export function load() {
-  return {
-    types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: (client) => client.get('/loadAuth')
-  };
-}
-
-export function login(name) {
-  return {
-    types: [LOGIN, LOGIN_SUCCESS, LOGIN_FAIL],
-    promise: (client) => client.post('/login', {
-      data: {
-        name: name
-      }
-    })
-  };
-}
-
-export function logout() {
-  return {
-    types: [LOGOUT, LOGOUT_SUCCESS, LOGOUT_FAIL],
-    promise: (client) => client.get('/logout')
-  };
-}
+};
