@@ -1,5 +1,6 @@
 export App from './App/App';
 export Chat from './Chat/Chat';
+export Conversation from './Conversation/Conversation';
 export Home from './Home/Home';
 export WorldPage from './WorldPage/WorldPage';
 export Login from './Login/Login';

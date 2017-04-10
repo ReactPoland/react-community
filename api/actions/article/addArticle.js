@@ -10,7 +10,9 @@ const addArticleRequest = async ({title, content}) => {
 };
 
 function addArticle(data) {
-  return addArticleRequest(data.body);
+  return data.permission.shouldAuth().then(() => {
+    return addArticleRequest(data.body);
+  });
 }
 
 export default addArticle;

@@ -6,7 +6,8 @@ import _isEmpty from 'lodash/isEmpty';
 // STORE
 import { editArticle, removeArticle } from 'redux/modules/articlesModule';
 // COMPONENTS
-import { PlainTextEditor, RichTextEditor } from 'components';
+import { Conversation } from 'containers';
+import { PlainTextEditor, RichTextEditor, CommentEditor } from 'components';
 // LAYOUT
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
@@ -36,7 +37,7 @@ export default class ArticlePage extends Component {
     editingArticle: PropTypes.bool.isRequired,
     articleEdited: PropTypes.bool.isRequired,
     removingArticle: PropTypes.number,
-    editArticleError: PropTypes.string.isRequired,
+    editArticleError: PropTypes.string,
     editArticle: PropTypes.func.isRequired,
     removeArticle: PropTypes.func.isRequired,
     pushState: PropTypes.func.isRequired
@@ -201,6 +202,13 @@ export default class ArticlePage extends Component {
               <List right>
                 {this.renderDeleteButton()}
               </List>
+              <Row>
+                <Col sm={12} md={8}>
+                  <h3>Add a comment:</h3>
+                  <CommentEditor />
+                </Col>
+              </Row>
+              <Conversation articleId={article.id} />
             </Flex>
           </Col>
         </Row>

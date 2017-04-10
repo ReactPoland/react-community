@@ -7,6 +7,7 @@ import { reducer as form } from 'redux-form';
 import info from './info';
 import mapModule from './mapModule';
 import articlesModule from './articlesModule';
+import conversationModule from './conversationModule';
 
 export default combineReducers({
   routing: routerReducer,
@@ -15,5 +16,6 @@ export default combineReducers({
   form,
   info,
   map: mapModule,
-  articles: articlesModule
+  articles: articlesModule,
+  conversation: conversationModule
 });

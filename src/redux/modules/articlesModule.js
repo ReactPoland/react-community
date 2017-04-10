@@ -24,19 +24,19 @@ const initialState = {
   all: [],
   loadingArticles: false,
   articlesLoaded: false,
-  loadArticlesError: '',
+  loadArticlesError: null,
   // Adding new article
   addingArticle: false,
   articleAdded: null, // (Number) ID of an article that was just added
-  addArticleError: '',
+  addArticleError: null,
   // Editing article
   editingArticle: false,
   articleEdited: false,
-  editArticleError: '',
+  editArticleError: null,
   // Removing a article
   removingArticle: null, // (Number) ID of an article being removed
   articleRemoved: false,
-  removeArticleError: ''
+  removeArticleError: null
 };
 
 export default function articlesModule(state = initialState, action = {}) {
@@ -47,7 +47,7 @@ export default function articlesModule(state = initialState, action = {}) {
         ...state,
         articlesLoaded: false,
         loadingArticles: true,
-        loadArticlesError: ''
+        loadArticlesError: null
       };
     case LOAD_ARTICLES_SUCCESS:
       return {
@@ -61,12 +61,12 @@ export default function articlesModule(state = initialState, action = {}) {
         ...state,
         loadingArticles: false,
         articlesLoaded: false,
-        loadArticlesError: `Load articles error: ${action.error.message}`
+        loadArticlesError: `Error while loading articles: ${action.error.message}`
       };
     case CLEAR_LOAD_ARTICLES_ERROR:
       return {
         ...state,
-        loadArticlesError: ''
+        loadArticlesError: null
       };
       // --- ADD ---
     // --- ADD ---
@@ -75,7 +75,7 @@ export default function articlesModule(state = initialState, action = {}) {
         ...state,
         articleAdded: null,
         addingArticle: true,
-        addArticleError: ''
+        addArticleError: null
       };
     case ADD_ARTICLE_SUCCESS:
       return {
@@ -95,12 +95,12 @@ export default function articlesModule(state = initialState, action = {}) {
         ...state,
         addingArticle: false,
         articleAdded: null,
-        addArticleError: `Add article error: ${action.error.message}`
+        addArticleError: `Error while adding an article: ${action.error.message}`
       };
     case CLEAR_ADD_ARTICLE_ERROR:
       return {
         ...state,
-        addArticleError: ''
+        addArticleError: null
       };
     // --- EDIT ---
     case EDIT_ARTICLE_REQUEST:
@@ -108,7 +108,7 @@ export default function articlesModule(state = initialState, action = {}) {
         ...state,
         articleEdited: false,
         editingArticle: true,
-        editArticleError: ''
+        editArticleError: null
       };
     case EDIT_ARTICLE_SUCCESS:
       return {
@@ -124,12 +124,12 @@ export default function articlesModule(state = initialState, action = {}) {
         ...state,
         editingArticle: false,
         articleEdited: false,
-        editArticleError: `Edit article error: ${action.error.message}`
+        editArticleError: `Error while editing an article: ${action.error.message}`
       };
     case CLEAR_EDIT_ARTICLE_ERROR:
       return {
         ...state,
-        editArticleError: ''
+        editArticleError: null
       };
     // --- REMOVE ---
     case REMOVE_ARTICLE_REQUEST:
@@ -137,7 +137,7 @@ export default function articlesModule(state = initialState, action = {}) {
         ...state,
         articleRemoved: false,
         removingArticle: action.payload.articleId,
-        removeArticleError: ''
+        removeArticleError: null
       };
     case REMOVE_ARTICLE_SUCCESS:
       return {
@@ -151,12 +151,12 @@ export default function articlesModule(state = initialState, action = {}) {
         ...state,
         removingArticle: null,
         articleRemoved: false,
-        removeArticleError: `Delete article error: ${action.error.message}`
+        removeArticleError: `Error while deleting an article: ${action.error.message}`
       };
     case CLEAR_REMOVE_ARTICLE_ERROR:
       return {
         ...state,
-        removeArticleError: ''
+        removeArticleError: null
       };
     default:
       return state;
