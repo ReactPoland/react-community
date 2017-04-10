@@ -4,7 +4,7 @@ export default function loadAuth(req) {
   if (user) {
     resp = {};
     ['id', 'pictureURL', 'firstName', 'lastName']
-      .map(fieldName => resp[fieldName] = resp[fieldName]);
+      .map(fieldName => resp[fieldName] = user[fieldName]);
   }
 
   return Promise.resolve(resp);

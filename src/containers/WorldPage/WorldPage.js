@@ -7,21 +7,18 @@ import {
   loadMarkers, removeMarker, addMarker, clearLoadMapMarkersError,
   clearAddMapMarkerError, clearRemoveMarkerError
 } from 'redux/modules/mapModule';
-import { LoadingScreen, ErrorSnackbar } from 'components';
+import { LoadingScreen } from 'components';
 
 import AddLocationDialog from './AddLocationDialog';
 import LocationMap from './LocationMap';
 
 const mappedState = ({ map }) => ({
   mapMarkers: map.markers,
-  loadMapMarkersError: map.loadMapMarkersError,
   markersLoaded: map.markersLoaded,
   loadingMarkers: map.loadingMarkers,
   addingMarker: map.addingMarker,
   markerAdded: map.markerAdded,
-  addMarkerError: map.addMarkerError,
-  removingMarker: map.removingMarker,
-  removeMarkerError: map.removeMarkerError
+  removingMarker: map.removingMarker
 });
 
 const mappedActions = {
@@ -37,19 +34,16 @@ const mappedActions = {
 export default class WorldPage extends Component {
   static propTypes = {
     mapMarkers: PropTypes.array.isRequired,
-    loadMapMarkersError: PropTypes.string,
     markersLoaded: PropTypes.bool.isRequired,
     loadingMarkers: PropTypes.bool.isRequired,
     addingMarker: PropTypes.bool.isRequired,
     markerAdded: PropTypes.bool.isRequired,
     removingMarker: PropTypes.number,
-    addMarkerError: PropTypes.string,
     loadMarkers: PropTypes.func.isRequired,
     addMarker: PropTypes.func.isRequired,
     removeMarker: PropTypes.func.isRequired,
     clearLoadMapMarkersError: PropTypes.func.isRequired,
     clearAddMapMarkerError: PropTypes.func.isRequired,
-    removeMarkerError: PropTypes.string,
     clearRemoveMarkerError: PropTypes.func.isRequired
   }
 
@@ -105,10 +99,7 @@ export default class WorldPage extends Component {
   }
 
   render() {
-    const {
-      mapMarkers, loadMapMarkersError, loadingMarkers, addingMarker,
-      markerAdded, addMarkerError, removingMarker, removeMarkerError
-    } = this.props;
+    const { mapMarkers, loadingMarkers, addingMarker, markerAdded, removingMarker } = this.props;
     const { showAddLocationDialog, mapCenterCoord, mapZoomLevel } = this.state;
     const styles = require('./WorldPage.scss');
 
@@ -138,18 +129,6 @@ export default class WorldPage extends Component {
             addMarker={this.addMarker}
             addingMarker={addingMarker}
             markerAdded={markerAdded}
-            errorMessage={addMarkerError}
-            clearError={this.props.clearAddMapMarkerError}
-          />
-          <ErrorSnackbar
-            open={loadMapMarkersError !== null}
-            message={loadMapMarkersError}
-            onRequestClose={this.props.clearLoadMapMarkersError}
-          />
-          <ErrorSnackbar
-            open={removeMarkerError !== null}
-            message={removeMarkerError}
-            onRequestClose={this.props.clearRemoveMarkerError}
           />
         </div>
       </LoadingScreen>

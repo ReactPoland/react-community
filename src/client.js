@@ -24,7 +24,7 @@ injectTapEventPlugin();
 
 const client = new ApiClient();
 const _browserHistory = useScroll(() => browserHistory)();
-const dest = document.getElementById('content');
+const dest = document.getElementById('root');
 const store = createStore(_browserHistory, client, window.__data);
 const history = syncHistoryWithStore(_browserHistory, store);
 

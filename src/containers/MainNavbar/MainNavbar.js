@@ -1,15 +1,19 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { IndexLink } from 'react-router';
+import { openDialog } from 'redux/modules/dialogModule';
 import { LinkContainer } from 'react-router-bootstrap';
+import LoginLogoutButton from 'containers/LoginLogoutButton';
 import Navbar from 'react-bootstrap/lib/Navbar';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
-import gitConf from '../../../api/utils/github/config';
 
+@connect(() => ({}), { openDialog })
 class MainNavbar extends Component {
   static propTypes = {
     user: PropTypes.object,
-    config: PropTypes.object.isRequired
+    config: PropTypes.object.isRequired,
+    openDialog: PropTypes.func.isRequired
   }
 
   render() {
@@ -17,7 +21,7 @@ class MainNavbar extends Component {
     const styles = require('./MainNavbar.scss');
 
     return (
-      <Navbar fixedTop>
+      <Navbar fixedTop className={styles.MainNavbar}>
         <Navbar.Header>
           <Navbar.Brand>
             <IndexLink to="/" activeStyle={{ color: '#33e0ff' }}>
@@ -29,36 +33,27 @@ class MainNavbar extends Component {
         </Navbar.Header>
 
         <Navbar.Collapse>
-          <Nav navbar>
-            {user && <LinkContainer to="/chat">
-              <NavItem>Chat</NavItem>
-            </LinkContainer>}
-
-            <LinkContainer to="/world">
-              <NavItem>World Map</NavItem>
+          <Nav navbar pullRight>
+            <LinkContainer to="/best-practices">
+              <NavItem>Best Practices</NavItem>
             </LinkContainer>
 
-            <LinkContainer to="/articles" onlyActiveOnIndex>
+            <LinkContainer to="/tutorials">
+              <NavItem>Tutorials</NavItem>
+            </LinkContainer>
+
+            <LinkContainer to="/articles">
               <NavItem>Articles</NavItem>
             </LinkContainer>
 
-            <a href={gitConf.getAuthLink()}>Git Login</a>
-
-            {!user &&
-            <LinkContainer to="/login">
-              <NavItem>Login</NavItem>
+            {user && <LinkContainer to="/profile">
+              <NavItem>Profile</NavItem>
             </LinkContainer>}
 
-            {user &&
-            <LinkContainer to="/logout">
-              <NavItem className="logout-link" onClick={this.handleLogout}>
-                Logout
-              </NavItem>
-            </LinkContainer>}
+            <LoginLogoutButton />
           </Nav>
 
-          { user &&
-          <p className="navbar-text">Logged in as <strong>{user.name}</strong>.</p>}
+          {user && <p className="navbar-text">Logged in as <strong>{user.firstName}</strong>.</p>}
         </Navbar.Collapse>
       </Navbar>
     );

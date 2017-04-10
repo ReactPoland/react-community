@@ -57,12 +57,17 @@ const loginGitRequest = async (req) => {
   // 3. Write to session
   session.user = user;
 
-  // 4. Redirect to profile or main page
-  throw {
-    redirect: '/',
-    name: 'successRedirect',
-    message: 'Here is a redirect'
-  };
+  // fix bug related with SSR request and old session
+  return await new Promise((resolve, reject) => {
+    req.session.save(() => {
+      // 4. Redirect to profile or main page
+      reject({
+        redirect: '/',
+        name: 'successRedirect',
+        message: 'Here is a redirect'
+      });
+    });
+  });
 };
 
 const loginGit = (req) => loginGitRequest(req);
