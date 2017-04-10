@@ -28,7 +28,7 @@ app.use(session({
     db: sequelize
   }),
   saveUninitialized: false,
-  cookie: { maxAge: 60000 }
+  cookie: { maxAge: 2 * 60 * 60 * 1000 }
 }));
 app.use(bodyParser.json());
 app.use(permMiddleware());

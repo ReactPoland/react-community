@@ -32,7 +32,19 @@ import * as ArticleValidation from '../../utils/validation/article';
  */
 
 const updateArticleRequest = async ({title, content, id, previewSize}) => {
-  const articleBody = ArticleValidation.checkArticleBody({title, content, previewSize});
+  const currArticle = await ArticleModel.findOne({
+    where: {
+      id
+    }
+  })
+  .catch(() => null);
+  if (!currArticle) throw resp.error(currArticle);
+
+  const articleBody = ArticleValidation.checkArticleBody({
+    title: title || currArticle.title,
+    content: content || currArticle.title,
+    previewSize: previewSize || currArticle.previewSize
+  });
 
   return await ArticleModel.update({
     ...articleBody

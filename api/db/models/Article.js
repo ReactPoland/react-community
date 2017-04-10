@@ -13,13 +13,18 @@ module.exports = {
       allowNull: false
     },
     content: {
-      type: Sequelize.STRING(1234),
+      type: Sequelize.TEXT,
       allowNull: false
     },
     previewSize: {
       type: Sequelize.ARRAY(Sequelize.DECIMAL),
       allowNull: false,
       defaultValue: [1, 1]
+    },
+    plainText: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+      defaultValue: ''
     }
   }
 };
