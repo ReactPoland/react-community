@@ -8,21 +8,22 @@ const loadArticlesRequest = async () => {
 };
 
 const loadArticleRequest = async (id) => {
-  return await ArticleModel.findOne({
+  const articleResponse = await ArticleModel.findOne({
     where: {
       id
     }
   }).then(data => {
-    if (!data) throw resp.error('article not found');
+    if (!data) return resp.error('article not found');
     return resp.success(data);
   })
-  .catch(err => {
-    throw resp.error(err.message);
-  });
+  .catch(err => resp.error(err.message));
+  if (articleResponse.type === 'error') throw articleResponse;
+  return articleResponse;
 };
 
 const loadArticles = (req, params) => {
   if (params.length) return loadArticleRequest(params[0]);
+  console.log(req.params, req.props);
 
   return loadArticlesRequest();
 };
