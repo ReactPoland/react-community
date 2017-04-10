@@ -41,7 +41,7 @@ class Conversation extends Component {
         <div>
           <CommentsList
             comments={this.props.comments}
-            showReloadList={this.props.loadConversationError !== null}
+            showReloadList={this.props.loadConversationError}
             onReloadList={this.loadComments}
           />
         </div>
