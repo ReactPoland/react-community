@@ -6,7 +6,7 @@ module.exports = {
       {
         type: Sequelize.STRING,
         allowNull: false,
-        defaultValue: [1, 1]
+        defaultValue: ''
       }
     )
     /*
