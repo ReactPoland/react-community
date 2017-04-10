@@ -10,10 +10,12 @@ const Div = styled.div`
   // SIZE
   width: ${props => {
     if (props.square) return `${props.square}px`;
+    if (props.fullWidth) return '100%';
     return 'auto';
   }};
   height: ${props => {
     if (props.square) return `${props.square}px`;
+    if (props.fullHeight) return '100%';
     return 'auto';
   }};
   // DISPLAY
@@ -37,7 +39,11 @@ const Div = styled.div`
   align-items: ${props => props.alignItems || 'stretch'};
   align-content: ${props => props.alignContent || 'stretch'};
   // FLEX ITEM
-  flex: ${props => props.flexVal};
+  flex: ${props => {
+    if (props.noFlex) return 'none';
+    if (props.flexVal) return props.flexVal;
+    return '0 1 auto';
+  }};
   align-self: ${props => props.alignItems || 'auto'};
   // LAYER
   position: ${props => props.layer ? 'absolute' : 'static'};
