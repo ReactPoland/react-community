@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { LoadingScreen as StyledLoadingScreen } from 'components/styled';
 import CircularProgress from 'material-ui/CircularProgress';
 
 export default class LoadingScreen extends Component {
@@ -14,15 +15,14 @@ export default class LoadingScreen extends Component {
 
   render() {
     const { loading, style, children } = this.props;
-    const styles = require('./LoadingScreen.scss');
 
     // This will throw if there are many children
     if (!__SERVER__ && !loading) return React.Children.only(children);
 
     return (
-      <div className={styles.LoadingScreen} style={style}>
+      <StyledLoadingScreen style={style}>
         <CircularProgress size={60} thickness={7} />
-      </div>
+      </StyledLoadingScreen>
     );
   }
 }

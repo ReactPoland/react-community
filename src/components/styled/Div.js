@@ -40,7 +40,7 @@ const Div = styled.div`
   align-content: ${props => props.alignContent || 'stretch'};
   // FLEX ITEM
   flex: ${props => {
-    if (props.noFlex) return 'none';
+    if (props.flexNone) return 'none';
     if (props.flexVal) return props.flexVal;
     return '0 1 auto';
   }};
