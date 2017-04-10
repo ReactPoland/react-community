@@ -21,6 +21,11 @@ module.exports = {
     lng: {
       type: Sequelize.FLOAT,
       allowNull: false
+    },
+    googleLocationId: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: [1, 1]
     }
   }
 };
