@@ -12,6 +12,7 @@ import * as ArticleValidation from '../../utils/validation/article';
 
   @apiParam {String} title Article title.
   @apiParam {String} content Article body.
+  @apiParam {Array} previewSize Article desktop thumbnail size.
   @apiParam {Number} id Unique article id, which using for find an article in the database.
 
   @apiExample Example request:
@@ -20,7 +21,8 @@ import * as ArticleValidation from '../../utils/validation/article';
   {
     "id" : 7,
     "title": "updated test title",
-    "content": "updated test content"
+    "content": "updated test content",
+    "previewSize": [1, 2]
   }
   @apiSuccessExample Example data on success:
   {

@@ -12,19 +12,22 @@ import * as ArticleValidation from '../../utils/validation/article';
 
   @apiParam {String} title Article title.
   @apiParam {String} content Article body.
+  @apiParam {Array} previewSize Article desktop thumbnail size.
 
   @apiExample Example request:
   POST /api/article/addArticle HTTP/1.1
 
   {
       "title": "Alan Turing",
-      "content": "test content"
+      "content": "test content",
+      "previewSize": [1, 2]
   }
   @apiSuccessExample Example data on success:
   {
     "message": {
       "id": 30,
       "title": "Alan Turing",
+      "previewSize": [1, 2],
       "content": "test content",
       "updatedAt": "2017-04-05T12:22:46.389Z",
       "createdAt": "2017-04-05T12:22:46.389Z"
