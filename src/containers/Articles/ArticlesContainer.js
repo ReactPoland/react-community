@@ -3,11 +3,12 @@ import { connect } from 'react-redux';
 // STORE
 import { loadArticles } from 'redux/modules/articlesModule';
 // COMPONENTS
-import { LoadingScreen } from 'components';
+import { LoadingScreen, RefreshButton } from 'components';
 
 const mappedState = ({ articles }) => ({
   loadingArticles: articles.loadingArticles,
   articlesLoaded: articles.articlesLoaded,
+  loadArticlesError: articles.loadArticlesError
 });
 
 const mappedActions = { loadArticles };
@@ -17,9 +18,10 @@ class ArticlesContainer extends Component {
   static propTypes = {
     children: PropTypes.element.isRequired,
     params: PropTypes.object.isRequired,
-    loadArticles: PropTypes.func.isRequired,
     loadingArticles: PropTypes.bool.isRequired,
-    articlesLoaded: PropTypes.bool.isRequired
+    articlesLoaded: PropTypes.bool.isRequired,
+    loadArticlesError: PropTypes.bool.isRequired,
+    loadArticles: PropTypes.func.isRequired,
   }
 
   componentWillMount() {
@@ -28,6 +30,15 @@ class ArticlesContainer extends Component {
 
   render() {
     const styles = require('./ArticlesContainer.scss');
+
+    if (this.props.loadArticlesError) {
+      return (
+        <RefreshButton
+          label="Reload articles"
+          onClick={this.props.loadArticles}
+        />
+      );
+    }
 
     return (
       <LoadingScreen loading={this.props.loadingArticles}>

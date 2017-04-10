@@ -1,12 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 // COMPONENTS
 import Comment from './Comment';
+import { RefreshButton } from 'components';
 // LAYOUT
 import List from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
-import FlatButton from 'material-ui/FlatButton';
-import RefreshIcon from 'material-ui/svg-icons/navigation/refresh';
 
 class CommentsList extends Component {
   static propTypes = {
@@ -18,11 +17,8 @@ class CommentsList extends Component {
   render() {
     if (this.props.showReloadList) {
       return (
-        <FlatButton
+        <RefreshButton
           label="Reload comments"
-          labelPosition="before"
-          icon={<RefreshIcon />}
-          secondary
           onClick={this.props.onReloadList}
         />
       );
