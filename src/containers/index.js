@@ -17,6 +17,7 @@ export BestPracticesPage from './BestPracticesPage/BestPracticesPage';
 export Chat from './Chat/Chat';
 export Conversation from './Conversation/Conversation';
 export DialogsContainer from './DialogsContainer/DialogsContainer';
+export EventsPage from './EventsPage/EventsPage';
 export HomePage from './HomePage/HomePage';
 export NewArticlePage from './NewArticlePage/NewArticlePage';
 export TutorialsPage from './TutorialsPage/TutorialsPage';
