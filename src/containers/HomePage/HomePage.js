@@ -14,7 +14,7 @@ import styles from './HomePage.scss';
 import LocationMap from 'containers/WorldPage/LocationMap';
 import Poll from './Poll';
 import ArticlesGrid from './ArticlesGrid';
-import Calendar from './Calendar';
+import { Calendar } from 'components';
 
 export default class HomePage extends Component {
   render() {
