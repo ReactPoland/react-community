@@ -3,6 +3,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import _isEmpty from 'lodash/isEmpty';
 import _startsWith from 'lodash/startsWith';
+import _isNumber from 'lodash/isNumber';
 import AddEventForm from './AddEventForm';
 
 const getInitialState = () => ({
@@ -10,12 +11,16 @@ const getInitialState = () => ({
     title: '',
     link: 'http://',
     description: '',
+    date: new Date(),
+    price: '',
     location: {}
   },
   validationErrors: {
     title: '',
     link: '',
     description: '',
+    price: '',
+    date: '',
     location: ''
   }
 });
@@ -39,6 +44,7 @@ class AddEventDialog extends Component {
   }
 
   updateForm = (property, value) => {
+    console.warn('property, value', property, value);
     const newState = { ...this.state };
 
     newState.formData[property] = value;
@@ -65,14 +71,17 @@ class AddEventDialog extends Component {
   }
 
   validateForm = () => {
-    const { title, link, description, location } = this.state.formData;
+    const { title, link, description, location, date, price } = this.state.formData;
     const validationErrors = {};
+    console.warn('price', price);
 
     if (!title) validationErrors.title = 'Title is required';
     if (!link || link === 'http://') validationErrors.link = 'Link is required';
     if (!(_startsWith(link, 'http://') || _startsWith(link, 'https://'))) validationErrors.link = 'Link must start with "http://"';
     if (!description) validationErrors.description = 'Description is required';
     if (!location.description) validationErrors.location = 'Location is required';
+    if (price && !_isNumber(parseFloat(price))) validationErrors.price = 'Price must be a number';
+    if (!date) validationErrors.date = 'Date is required';
 
     this.setState({ validationErrors });
 

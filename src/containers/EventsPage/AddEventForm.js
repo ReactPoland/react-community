@@ -1,6 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import TextField from 'material-ui/TextField';
+// COMPONENTS
 import { LocationInput } from 'components';
+// LAYOUT
+import TextField from 'material-ui/TextField';
+import DatePicker from 'material-ui/DatePicker';
+import TimePicker from 'material-ui/TimePicker';
 
 class AddEventForm extends Component {
   static propTypes = {
@@ -20,7 +24,7 @@ class AddEventForm extends Component {
 
   render() {
     const {
-      formData: { title, link, description },
+      formData: { title, link, date, description, price },
       validationErrors,
       onChange
     } = this.props;
@@ -34,6 +38,24 @@ class AddEventForm extends Component {
           onChange={ev => { onChange('title', ev.target.value); }}
           fullWidth
           autoFocus
+        />
+        <DatePicker
+          floatingLabelText="Date"
+          errorText={validationErrors.date}
+          value={date}
+          onChange={(ev, dt) => { onChange('date', dt); }}
+        />
+        <TimePicker
+          floatingLabelText="Time"
+          format="24hr"
+          value={date}
+          onChange={(ev, dt) => { onChange('date', dt); }}
+        />
+        <TextField
+          floatingLabelText="Price"
+          errorText={validationErrors.price}
+          value={price}
+          onChange={ev => { onChange('price', ev.target.value); }}
         />
         <TextField
           floatingLabelText="Link"

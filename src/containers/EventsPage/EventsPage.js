@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import moment from 'moment';
+import _get from 'lodash/get';
 import { loadEvents, addEvent } from 'redux/modules/eventsModule';
 import { ascendingBy } from 'utils';
 // COMPONENTS
@@ -62,19 +63,21 @@ export default class EventsPage extends Component {
     this.setState({ showAddEventDialog: false });
   }
 
-  addEvent = eventData => {
+  addEvent = (eventData) => {
     if (!this.props.loggedIn) return;
 
     const newEvent = {
       title: eventData.title,
+      organizedById: '',
+      price: eventData.price,
       link: eventData.link,
       description: eventData.description,
-      lat: eventData.location.geometry.location.lat(),
-      lng: eventData.location.geometry.location.lng(),
+      date: eventData.date,
+      lat: _get(eventData, 'location.geometry.location', {}).lat(),
+      lng: _get(eventData, 'location.geometry.location', {}).lng(),
       googleLocationId: eventData.location.place_id
     };
 
-    console.info('New event:', newEvent);
     this.props.addEvent(newEvent);
   }
 
@@ -112,7 +115,7 @@ export default class EventsPage extends Component {
                   type="events"
                   style={{ height: '100%' }}
                   centerCoords={centerCoords}
-                  events={this.props.events}
+                  markers={this.props.events}
                 />
               </Div>
               <EventsCalendar />
