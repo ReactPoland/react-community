@@ -9,6 +9,7 @@ export ErrorHandler from './ErrorHandler';
 export ErrorSnackbar from './ErrorSnackbar';
 export EventsCalendar from './EventsCalendar';
 export LoadingScreen from './LoadingScreen';
+export LocationInput from './LocationInput';
 export RefreshButton from './RefreshButton';
 export Spinner from './Spinner';
 export SuccessHandler from './SuccessHandler';
