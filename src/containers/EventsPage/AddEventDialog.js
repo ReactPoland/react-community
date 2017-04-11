@@ -3,7 +3,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import _isEmpty from 'lodash/isEmpty';
 import _startsWith from 'lodash/startsWith';
-// import AddLocationForm from './AddLocationForm';
+import AddEventForm from './AddEventForm';
 
 const getInitialState = () => ({
   formData: {
@@ -68,7 +68,7 @@ class AddEventDialog extends Component {
     const { title, link, description, location } = this.state.formData;
     const validationErrors = {};
 
-    if (!title) validationErrors.title = 'Name is required';
+    if (!title) validationErrors.title = 'Title is required';
     if (!link || link === 'http://') validationErrors.link = 'Link is required';
     if (!(_startsWith(link, 'http://') || _startsWith(link, 'https://'))) validationErrors.link = 'Link must start with "http://"';
     if (!description) validationErrors.description = 'Description is required';
@@ -81,7 +81,7 @@ class AddEventDialog extends Component {
 
   render() {
     const { popupVisible, addingEvent } = this.props;
-    // const { formData, validationErrors } = this.state;
+    const { formData, validationErrors } = this.state;
     const actions = [
       <FlatButton
         label="Cancel"
@@ -106,11 +106,11 @@ class AddEventDialog extends Component {
         open={popupVisible}
         onRequestClose={this.closePopup}
       >
-        {/* <AddLocationForm
+        <AddEventForm
           formData={formData}
           validationErrors={validationErrors}
           onChange={this.updateForm}
-        /> */}
+        />
       </Dialog>
     );
   }

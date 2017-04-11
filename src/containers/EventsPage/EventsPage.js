@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import moment from 'moment';
-import { loadEvents } from 'redux/modules/eventsModule';
+import { loadEvents, addEvent } from 'redux/modules/eventsModule';
 import { ascendingBy } from 'utils';
 // COMPONENTS
 import { Map } from 'components';
@@ -29,7 +29,7 @@ const mappedState = ({ events, auth }) => ({
   loggedIn: auth.loggedIn
 });
 
-const mappedActions = { loadEvents };
+const mappedActions = { loadEvents, addEvent };
 
 @connect(mappedState, mappedActions)
 export default class EventsPage extends Component {
@@ -42,6 +42,7 @@ export default class EventsPage extends Component {
     // Adding a new event
     addingEvent: PropTypes.bool.isRequired,
     eventAdded: PropTypes.number,
+    addEvent: PropTypes.func.isRequired,
     // Authorization
     loggedIn: PropTypes.bool.isRequired
   }
@@ -63,8 +64,9 @@ export default class EventsPage extends Component {
 
   addEvent = eventData => {
     if (!this.props.loggedIn) return;
+
     const newEvent = {
-      name: eventData.name,
+      title: eventData.title,
       link: eventData.link,
       description: eventData.description,
       lat: eventData.location.geometry.location.lat(),
@@ -73,6 +75,7 @@ export default class EventsPage extends Component {
     };
 
     console.info('New event:', newEvent);
+    this.props.addEvent(newEvent);
   }
 
   render() {
