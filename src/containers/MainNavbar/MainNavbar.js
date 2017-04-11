@@ -1,24 +1,32 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { IndexLink } from 'react-router';
-import { openDialog } from 'redux/modules/dialogModule';
 import { LinkContainer } from 'react-router-bootstrap';
+import config from '../../config';
+// STORE
+import { openDialog } from 'redux/modules/dialogModule';
+// COMPONENTS
 import LoginLogoutButton from 'containers/LoginLogoutButton';
+// LAYOUT
 import Navbar from 'react-bootstrap/lib/Navbar';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
+import Avatar from 'material-ui/Avatar';
+import styles from './MainNavbar.scss';
 
-@connect(() => ({}), { openDialog })
-class MainNavbar extends Component {
+const mappedState = ({ auth }) => ({
+  user: auth.user
+});
+
+@connect(mappedState, { openDialog })
+export default class MainNavbar extends Component {
   static propTypes = {
     user: PropTypes.object,
-    config: PropTypes.object.isRequired,
     openDialog: PropTypes.func.isRequired
   }
 
   render() {
-    const { user, config } = this.props;
-    const styles = require('./MainNavbar.scss');
+    const { user } = this.props;
 
     return (
       <Navbar fixedTop className={styles.MainNavbar}>
@@ -54,18 +62,14 @@ class MainNavbar extends Component {
               <NavItem>Users</NavItem>
             </LinkContainer>
 
-            {user && <LinkContainer to="/profile">
-              <NavItem>Profile</NavItem>
-            </LinkContainer>}
-
             <LoginLogoutButton />
-          </Nav>
 
-          {user && <p className="navbar-text">Logged in as <strong>{user.firstName}</strong>.</p>}
+            {user && <LinkContainer to="/profile">
+              <NavItem><Avatar size={20} src={user.pictureURL} /></NavItem>
+            </LinkContainer>}
+          </Nav>
         </Navbar.Collapse>
       </Navbar>
     );
   }
 }
-
-export default MainNavbar;

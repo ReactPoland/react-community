@@ -82,7 +82,7 @@ export default class App extends Component {
       <LoadingScreen loading={!this.state.showPage}>
         <div className={styles.appContainer}>
           <Helmet {...config.app.head}/>
-          <MainNavbar user={this.props.user} config={config} />
+          <MainNavbar />
           <div className={styles.appContent}>
             {this.props.children}
           </div>
