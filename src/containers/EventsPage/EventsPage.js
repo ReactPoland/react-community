@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 import moment from 'moment';
 import { loadEvents } from 'redux/modules/eventsModule';
 // COMPONENTS
-import LocationMap from 'containers/WorldPage/LocationMap';
+import { Map } from 'components';
 // LAYOUT
 import Grid from 'react-bootstrap/lib/Grid';
 import Paper from 'material-ui/Paper';
@@ -35,8 +35,7 @@ export default class EventsPage extends Component {
   }
 
   render() {
-    const markers = this.props.events.map(({ id, lat, lng }) => ({ id, lat, lng }));
-    const firstEvent = markers[0];
+    const firstEvent = this.props.events[0];
     const centerCoords = firstEvent && [firstEvent.lat, firstEvent.lng];
 
     return (
@@ -50,10 +49,11 @@ export default class EventsPage extends Component {
           <Paper style={{ overflow: 'hidden', marginBottom: 24 }}>
             <Div flex wrap>
               <Div flexVal={1} style={{ height: 200, minWidth: 200 }}>
-                <LocationMap
+                <Map
+                  type="events"
                   style={{ height: '100%' }}
                   centerCoords={centerCoords}
-                  markers={markers}
+                  markers={this.props.events}
                 />
               </Div>
               <Calendar />

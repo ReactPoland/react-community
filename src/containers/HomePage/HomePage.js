@@ -11,10 +11,9 @@ import { MockCard } from 'components/mocked';
 import { Div } from 'components/styled';
 import styles from './HomePage.scss';
 // COMPONENTS
-import LocationMap from 'containers/WorldPage/LocationMap';
 import Poll from './Poll';
 import ArticlesGrid from './ArticlesGrid';
-import { Calendar } from 'components';
+import { Calendar, Map } from 'components';
 
 export default class HomePage extends Component {
   render() {
@@ -34,7 +33,7 @@ export default class HomePage extends Component {
                 <Paper style={{ position: 'absolute', margin: 'auto', padding: 16, zIndex: 500 }} zDepth={3}>
                   Pin yourself
                 </Paper>
-                <LocationMap static style={{ height: 300, marginBottom: 24 }} />
+                <Map static style={{ height: 300, marginBottom: 24 }} />
               </Div>
             </Link>
             <Calendar />

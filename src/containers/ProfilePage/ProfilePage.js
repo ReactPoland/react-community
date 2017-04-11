@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import _find from 'lodash/find';
 // COMPONENTS
-import LocationMap from 'containers/WorldPage/LocationMap';
+import { Map } from 'components';
 // LAYOUT
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
@@ -45,7 +45,7 @@ export default class ProfilePage extends Component {
               }}
             />
             <Div flexVal={1} style={{ height: 200, minWidth: 200 }}>
-              <LocationMap style={{ height: '100%' }} />
+              <Map style={{ height: '100%' }} />
             </Div>
           </Div>
         </Paper>

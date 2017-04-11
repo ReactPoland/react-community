@@ -4,9 +4,8 @@ import _last from 'lodash/last';
 // STORE
 import { loadMarkers, removeMarker, addMarker } from 'redux/modules/mapModule';
 // COMPONENTS
-import { LoadingScreen } from 'components';
+import { LoadingScreen, Map } from 'components';
 import AddLocationDialog from './AddLocationDialog';
-import LocationMap from './LocationMap';
 // LAYOUT
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
@@ -112,7 +111,8 @@ export default class WorldPage extends Component {
       <LoadingScreen loading={loadingMarkers}>
         <div className={styles.WorldPage}>
           {loggedIn && AddMarkerButton}
-          <LocationMap
+          <Map
+            type="users"
             centerCoords={mapCenterCoord}
             zoomLevel={mapZoomLevel}
             markers={mapMarkers}
