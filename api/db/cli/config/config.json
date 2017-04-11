@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "dyloqmqg",
+    "password": "g0hB7xF4XtxkipC_uHWSCFUi94nXwchB",
+    "database": "dyloqmqg",
+    "host": "stampy.db.elephantsql.com",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "dyloqmqg",
+    "password": "g0hB7xF4XtxkipC_uHWSCFUi94nXwchB",
+    "database": "dyloqmqg",
+    "host": "stampy.db.elephantsql.com",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "dyloqmqg",
+    "password": "g0hB7xF4XtxkipC_uHWSCFUi94nXwchB",
+    "database": "dyloqmqg",
+    "host": "stampy.db.elephantsql.com",
+    "dialect": "postgres"
+  }
+}

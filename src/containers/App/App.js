@@ -1,23 +1,19 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { asyncConnect } from 'redux-async-connect';
-import { push } from 'react-router-redux';
 import Helmet from 'react-helmet';
-
-import { isLoaded as isInfoLoaded, load as loadInfo } from 'redux/modules/info';
-import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
 import config from '../../config';
-
-import { MainNavbar } from 'containers';
-import { SuccessHandler, ErrorHandler } from 'components';
+// STORE
+import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
+// COMPONENTS
+import { MainNavbar, MainFooter, DialogsContainer } from 'containers';
+import { SuccessHandler, ErrorHandler, LoadingScreen } from 'components';
+import styles from './App.scss';
 
 @asyncConnect([{
-  promise: ({store: {dispatch, getState}}) => {
+  promise: ({ store: { dispatch, getState } }) => {
     const promises = [];
-
-    if (!isInfoLoaded(getState())) {
-      promises.push(dispatch(loadInfo()));
-    }
+    // Get user's data
     if (!isAuthLoaded(getState())) {
       promises.push(dispatch(loadAuth()));
     }
@@ -27,47 +23,57 @@ import { SuccessHandler, ErrorHandler } from 'components';
 }])
 @connect(
   state => ({ user: state.auth.user }),
-  { logout, pushState: push })
+  { logout, loadAuth })
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
     user: PropTypes.object,
     logout: PropTypes.func.isRequired,
-    pushState: PropTypes.func.isRequired
+    loadAuth: PropTypes.func.isRequired,
+    routes: PropTypes.array
   };
 
   static contextTypes = {
     store: PropTypes.object.isRequired
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.user && nextProps.user) {
-      // login
-      this.props.pushState('/loginSuccess');
-    } else if (this.props.user && !nextProps.user) {
-      // logout
-      this.props.pushState('/');
+  state = { showPage: false }
+
+  componentDidMount() {
+    // TODO: change that to a proper solution for SSR errors in the console
+    if (__CLIENT__) {
+      setTimeout(() => this.setState({ showPage: true }), 300);
     }
   }
 
   handleLogout = (event) => {
     event.preventDefault();
     this.props.logout();
-  };
+  }
+
+  renderFooter = () => {
+    const noFooter = this.props.routes && this.props.routes.find(route => route.noFooter);
+
+    if (noFooter) return null;
+
+    return <MainFooter />;
+  }
 
   render() {
-    const styles = require('./App.scss');
-
     return (
-      <div className={styles.appContainer}>
-        <Helmet {...config.app.head}/>
-        <MainNavbar user={this.props.user} config={config} />
-        <div className={styles.appContent}>
-          {this.props.children}
+      <LoadingScreen loading={!this.state.showPage}>
+        <div className={styles.appContainer}>
+          <Helmet {...config.app.head}/>
+          <MainNavbar user={this.props.user} config={config} />
+          <div className={styles.appContent}>
+            {this.props.children}
+          </div>
+          {this.renderFooter()}
+          <SuccessHandler />
+          <ErrorHandler />
+          <DialogsContainer />
         </div>
-        <SuccessHandler />
-        <ErrorHandler />
-      </div>
+      </LoadingScreen>
     );
   }
 }

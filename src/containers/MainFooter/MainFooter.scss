@@ -1,0 +1,16 @@
+.MainFooter {
+  flex: none;
+  padding: 24px;
+  > ul {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    > li a{
+      padding: 8px;
+    }
+  }
+  > p {
+    margin: 24px 0 0;
+  }
+}
