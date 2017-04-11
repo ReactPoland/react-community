@@ -1,28 +1,44 @@
-// TODO: Mocked - replace wth real code
-import _random from 'lodash/random';
-import _times from 'lodash/times';
-import _sample from 'lodash/sample';
-import loremIpsum from 'lorem-ipsum';
+const resp = require('../../utils/serverResp');
+const EventModel = require('../../db').events;
+const UserModel = require('../../db').users;
 
-const firstNames = ['John', 'Jack', 'Peter', 'Mary', 'Suzy', 'Anne'];
-const lastNames = ['Johnson', 'Jackson', 'Peterson', 'Smith', 'Brown', 'Gomez'];
+const loadEventsRequest = async () => {
+  const eventsResp = await EventModel.findAll({
+    attributes: ['id', 'price', 'date', 'title', 'link', 'description', 'lat', 'lng', 'googleLocationId', 'createdAt', 'updatedAt'],
+    include: [{
+      model: UserModel,
+      as: 'organizedBy',
+      id: 'id',
+      attributes: ['id', 'firstName', 'lastName', 'pictureURL']
+    }]
+  })
+    .then(items => resp.success(items))
+    .catch(err => err);
 
-const event = (id) => ({
-  id,
-  title: loremIpsum({ count: _random(3, 6), units: 'words' }),
-  link: 'http://link.com',
-  googleLocalId: 'asd78sad678',
-  lat: _random(-20, 20),
-  lng: _random(-50, 50),
-  price: `$${_random(0, 100)}`,
-  date: _random(1491865500675, 1510000000000),
-  organizedBy: `${_sample(firstNames)} ${_sample(lastNames)}`,
-  pictureUrl: `https://placebear.com/${_random(70, 100)}/${_random(70, 100)}`,
-  description: loremIpsum({ count: _random(1, 2), units: 'sentences' })
-});
+  if (! (eventsResp.type === 'success') ) throw resp.error(eventsResp.message);
 
-export default () => new Promise((resolve) => {
-  setTimeout(() => {
-    resolve({ message: _times(20, event) });
-  }, 500);
-});
+  // const comments = await conversResp.item.getEvents({
+  //   attributes: ['id', 'body', 'conversationId', 'createdAt', 'updatedAt', 'depth'],
+  //   include: [{
+  //     model: UserModel,
+  //     attributes: ['id', 'firstName', 'lastName', 'pictureURL']
+  //   }],
+  //   order: [
+  //     [ 'createdAt', 'DESC']
+  //   ]
+  // })
+  // .then(commentsResponse => resp.success(commentsResponse))
+  // .catch(err => resp.error(err.message));
+
+  // const authorsId = comments.map(commentItem => commentItem.userId);
+  // UserModel.findAll({ where: {
+    // id:
+  // }})
+  // console.log();
+
+  return eventsResp;
+};
+
+const loadEvents = (req) => loadEventsRequest(req);
+
+export default loadEvents;
