@@ -44,7 +44,6 @@ class AddEventDialog extends Component {
   }
 
   updateForm = (property, value) => {
-    console.warn('property, value', property, value);
     const newState = { ...this.state };
 
     newState.formData[property] = value;
@@ -73,7 +72,6 @@ class AddEventDialog extends Component {
   validateForm = () => {
     const { title, link, description, location, date, price } = this.state.formData;
     const validationErrors = {};
-    console.warn('price', price);
 
     if (!title) validationErrors.title = 'Title is required';
     if (!link || link === 'http://') validationErrors.link = 'Link is required';

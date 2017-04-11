@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import moment from 'moment';
 import _get from 'lodash/get';
-import { loadEvents, addEvent } from 'redux/modules/eventsModule';
+import _partition from 'lodash/partition';
+import { loadEvents, addEvent, removeEvent } from 'redux/modules/eventsModule';
 import { ascendingBy } from 'utils';
 // COMPONENTS
 import { Map } from 'components';
@@ -17,6 +18,19 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import { EventsCalendar, LoadingScreen } from 'components';
 import { MockCard } from 'components/mocked';
 import { Div } from 'components/styled';
+import IconButton from 'material-ui/IconButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+
+const iconButtonElement = (
+  <IconButton
+    touch
+    tooltipPosition="bottom-left"
+  >
+    <MoreVertIcon />
+  </IconButton>
+);
 
 const mappedState = ({ events, auth }) => ({
   events: events.all,
@@ -27,10 +41,11 @@ const mappedState = ({ events, auth }) => ({
   addingEvent: events.addingEvent,
   eventAdded: events.eventAdded,
   // Authorization
-  loggedIn: auth.loggedIn
+  loggedIn: auth.loggedIn,
+  user: auth.user
 });
 
-const mappedActions = { loadEvents, addEvent };
+const mappedActions = { loadEvents, addEvent, removeEvent };
 
 @connect(mappedState, mappedActions)
 export default class EventsPage extends Component {
@@ -44,14 +59,21 @@ export default class EventsPage extends Component {
     addingEvent: PropTypes.bool.isRequired,
     eventAdded: PropTypes.number,
     addEvent: PropTypes.func.isRequired,
+    // Removing an event
+    removeEvent: PropTypes.func.isRequired,
     // Authorization
-    loggedIn: PropTypes.bool.isRequired
+    loggedIn: PropTypes.bool.isRequired,
+    user: PropTypes.object
   }
 
   state = { showAddEventDialog: false }
 
   componentWillMount() {
     if (!this.props.eventsLoaded && !this.props.loadingEvents) this.props.loadEvents();
+  }
+
+  handleEventClick = (eventId) => {
+    console.log('handleEventClick', eventId);
   }
 
   openAddEventDialog = () => {
@@ -68,7 +90,7 @@ export default class EventsPage extends Component {
 
     const newEvent = {
       title: eventData.title,
-      organizedById: '',
+      organizedById: this.props.user.id,
       price: eventData.price,
       link: eventData.link,
       description: eventData.description,
@@ -81,9 +103,30 @@ export default class EventsPage extends Component {
     this.props.addEvent(newEvent);
   }
 
+  editEvent = (aa) => {
+    console.log('edit event', aa);
+  }
+
+  deleteEvent = (eventId) => {
+    this.props.removeEvent(eventId);
+  }
+
   render() {
-    const firstEvent = this.props.events[0];
+    const allEvents = this.props.events;
+    const firstEvent = allEvents[0];
     const centerCoords = firstEvent && [firstEvent.lat, firstEvent.lng];
+
+    let userEvents = [];
+    let otherEvents = [];
+
+    if (this.props.user) {
+      [userEvents, otherEvents] = _partition(allEvents, event => {
+        return event.organizedById === this.props.user.id || event.organizedBy.id === this.props.user.id;
+      });
+    }
+
+    const userHasEvents = userEvents.length > 0;
+    const thereAreOtherEvents = otherEvents.length > 0;
 
     const addEventButton = (
       <FloatingActionButton
@@ -97,6 +140,75 @@ export default class EventsPage extends Component {
       >
         <ContentAdd />
       </FloatingActionButton>
+    );
+
+    const userEventsList = (
+      <Paper style={{ padding: 16, marginBottom: 24 }}>
+        <h3>Your events</h3>
+        <List>
+          {
+            userEvents.sort(ascendingBy('date')).map((event) => {
+              const date = moment(event.date).format('MMMM Do YYYY');
+              return (
+                <ListItem
+                  key={event.id}
+                  primaryText={event.title}
+                  secondaryText={date}
+                  rightIconButton={
+                    <IconMenu iconButtonElement={iconButtonElement}>
+                      <MenuItem onTouchTap={() => this.editEvent(event.id)}>Edit</MenuItem>
+                      <MenuItem onTouchTap={() => this.deleteEvent(event.id)}>Delete</MenuItem>
+                    </IconMenu>
+                  }
+                  // onClick={() => this.handleEventClick(event.id)}
+                />
+              );
+            })
+          }
+        </List>
+      </Paper>
+    );
+
+    const otherEventsList = (
+      <Paper style={{ padding: 16 }}>
+        <h3>Other events</h3>
+        <List>
+          {
+            otherEvents.sort(ascendingBy('date')).map((event) => {
+              const date = moment(event.date).format('MMMM Do YYYY');
+              return (
+                <ListItem
+                  key={event.id}
+                  primaryText={event.title}
+                  secondaryText={date}
+                  onClick={() => this.handleEventClick(event.id)}
+                />
+              );
+            })
+          }
+        </List>
+      </Paper>
+    );
+
+    const allEventsList = (
+      <Paper style={{ padding: 16 }}>
+        <h3>All events</h3>
+        <List>
+          {
+            allEvents.sort(ascendingBy('date')).map((event) => {
+              const date = moment(event.date).format('MMMM Do YYYY');
+              return (
+                <ListItem
+                  key={event.id}
+                  primaryText={event.title}
+                  secondaryText={date}
+                  onClick={() => this.handleEventClick(event.id)}
+                />
+              );
+            })
+          }
+        </List>
+      </Paper>
     );
 
     return (
@@ -121,23 +233,9 @@ export default class EventsPage extends Component {
               <EventsCalendar />
             </Div>
           </Paper>
-          <Paper style={{ padding: '0 16px' }}>
-            <List>
-              {
-                this.props.events.sort(ascendingBy('date')).map((event) => {
-                  const date = moment(event.date).format('MMMM Do YYYY');
-                  return (
-                    <ListItem
-                      key={event.id}
-                      primaryText={event.title}
-                      secondaryText={date}
-                      onClick={() => this.handleEventClick(event.id)}
-                    />
-                  );
-                })
-              }
-            </List>
-          </Paper>
+          {userHasEvents && userEventsList}
+          {userHasEvents && thereAreOtherEvents && otherEventsList}
+          {!userHasEvents && allEventsList}
           {this.props.loggedIn && <AddEventDialog
             popupVisible={this.state.showAddEventDialog}
             closePopup={this.closeAddEventDialog}

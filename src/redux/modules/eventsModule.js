@@ -38,42 +38,34 @@ const initialState = {
 
 // --- ACTIONS ---
 // LOAD
-export function loadEvents() {
-  return {
-    requestName: 'Load events',
-    types: [LOAD_EVENTS_REQUEST, LOAD_EVENTS_SUCCESS, LOAD_EVENTS_FAIL],
-    promise: client => client.get('/event/loadEvents')
-  };
-}
+export const loadEvents = () => ({
+  requestName: 'Load events',
+  types: [LOAD_EVENTS_REQUEST, LOAD_EVENTS_SUCCESS, LOAD_EVENTS_FAIL],
+  promise: client => client.get('/event/loadEvents')
+});
 
 // ADD
-export function addEvent(event) {
-  return {
-    requestName: 'Add event',
-    types: [ADD_EVENT_REQUEST, ADD_EVENT_SUCCESS, ADD_EVENT_FAIL],
-    promise: client => client.post('/event/addEvent', { data: event })
-  };
-}
+export const addEvent = (event) => ({
+  requestName: 'Add event',
+  types: [ADD_EVENT_REQUEST, ADD_EVENT_SUCCESS, ADD_EVENT_FAIL],
+  promise: client => client.post('/event/addEvent', { data: event })
+});
 
 // EDIT
-export function editEvent(event) {
-  return {
-    requestName: 'Edit event',
-    types: [EDIT_EVENT_REQUEST, EDIT_EVENT_SUCCESS, EDIT_EVENT_FAIL],
-    payload: { eventId: event.id, event },
-    promise: client => client.post('/event/updateEvent', { data: event })
-  };
-}
+export const editEvent = (event) => ({
+  requestName: 'Edit event',
+  types: [EDIT_EVENT_REQUEST, EDIT_EVENT_SUCCESS, EDIT_EVENT_FAIL],
+  payload: { eventId: event.id, event },
+  promise: client => client.post('/event/updateEvent', { data: event })
+});
 
 // REMOVE
-export function removeEvent(eventId) {
-  return {
-    requestName: 'Remove event',
-    types: [REMOVE_EVENT_REQUEST, REMOVE_EVENT_SUCCESS, REMOVE_EVENT_FAIL],
-    payload: { eventId },
-    promise: client => client.post('/event/removeEvent', { data: { id: eventId } })
-  };
-}
+export const removeEvent = (eventId) => ({
+  requestName: 'Remove event',
+  types: [REMOVE_EVENT_REQUEST, REMOVE_EVENT_SUCCESS, REMOVE_EVENT_FAIL],
+  payload: { eventId },
+  promise: client => client.post('/event/removeEvent', { data: { id: eventId } })
+});
 
 // --- REDUCER ---
 export default (state = initialState, action = {}) => {
