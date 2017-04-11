@@ -13,7 +13,7 @@ import styles from './HomePage.scss';
 // COMPONENTS
 import Poll from './Poll';
 import ArticlesGrid from './ArticlesGrid';
-import { Calendar, Map } from 'components';
+import { EventsCalendar, Map } from 'components';
 
 export default class HomePage extends Component {
   render() {
@@ -36,7 +36,7 @@ export default class HomePage extends Component {
                 <Map static style={{ height: 300, marginBottom: 24 }} />
               </Div>
             </Link>
-            <Calendar />
+            <EventsCalendar />
           </Col>
         </Row>
         <Row>

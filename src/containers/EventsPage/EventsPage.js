@@ -3,13 +3,14 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import moment from 'moment';
 import { loadEvents } from 'redux/modules/eventsModule';
+import { ascendingBy } from 'utils';
 // COMPONENTS
 import { Map } from 'components';
 // LAYOUT
 import Grid from 'react-bootstrap/lib/Grid';
 import Paper from 'material-ui/Paper';
 import { List, ListItem } from 'material-ui/List';
-import { Calendar, LoadingScreen } from 'components';
+import { EventsCalendar, LoadingScreen } from 'components';
 import { MockCard } from 'components/mocked';
 import { Div } from 'components/styled';
 
@@ -31,7 +32,7 @@ export default class EventsPage extends Component {
   }
 
   componentWillMount() {
-    if (!this.props.eventsLoaded) this.props.loadEvents();
+    if (!this.props.eventsLoaded && !this.props.loadingEvents) this.props.loadEvents();
   }
 
   render() {
@@ -56,13 +57,13 @@ export default class EventsPage extends Component {
                   markers={this.props.events}
                 />
               </Div>
-              <Calendar />
+              <EventsCalendar />
             </Div>
           </Paper>
           <Paper style={{ padding: '0 16px' }}>
             <List>
               {
-                this.props.events.map((event) => {
+                this.props.events.sort(ascendingBy('date')).map((event) => {
                   const date = moment(event.date).format('MMMM Do YYYY');
                   return (
                     <ListItem

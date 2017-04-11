@@ -4,6 +4,10 @@
   #root {
     height: 100%;
   }
+
+  .DayPicker-Day--hasEvent:not(.DayPicker-Day--outside) {
+    background: red;
+  }
 }
 
 .appContainer {

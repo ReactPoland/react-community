@@ -7,6 +7,7 @@ export Map from './map/Map';
 export Calendar from './Calendar';
 export ErrorHandler from './ErrorHandler';
 export ErrorSnackbar from './ErrorSnackbar';
+export EventsCalendar from './EventsCalendar';
 export LoadingScreen from './LoadingScreen';
 export RefreshButton from './RefreshButton';
 export Spinner from './Spinner';
