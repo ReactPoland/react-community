@@ -9,14 +9,11 @@ import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import styles from './ArticlesPage.scss';
 
-const mappedState = ({ articles }) => ({
-  articles: articles.all,
-});
+const mappedState = ({ articles }) => ({ articles: articles.all });
 
-const mappedActions = {
-  pushState: push
-};
+const mappedActions = { pushState: push };
 
 @connect(mappedState, mappedActions)
 export default class ArticlesPage extends Component {
@@ -31,7 +28,6 @@ export default class ArticlesPage extends Component {
 
   render() {
     const { articles } = this.props;
-    const styles = require('./ArticlesPage.scss');
 
     const AddArticleButton = (
       <FloatingActionButton

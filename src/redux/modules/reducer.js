@@ -10,6 +10,7 @@ import articlesModule from './articlesModule';
 import conversationModule from './conversationModule';
 import dialogModule from './dialogModule';
 import usersModule from './usersModule';
+import errorsModule from './errorsModule';
 
 export default combineReducers({
   routing: routerReducer,
@@ -21,5 +22,6 @@ export default combineReducers({
   articles: articlesModule,
   conversation: conversationModule,
   dialog: dialogModule,
-  users: usersModule
+  users: usersModule,
+  errors: errorsModule
 });

@@ -1,33 +1,31 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import _last from 'lodash/last';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import {
-  loadMarkers, removeMarker, addMarker, clearLoadMapMarkersError,
-  clearAddMapMarkerError, clearRemoveMarkerError
-} from 'redux/modules/mapModule';
+// STORE
+import { loadMarkers, removeMarker, addMarker } from 'redux/modules/mapModule';
+// COMPONENTS
 import { LoadingScreen } from 'components';
-
 import AddLocationDialog from './AddLocationDialog';
 import LocationMap from './LocationMap';
+// LAYOUT
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+import styles from './WorldPage.scss';
 
-const mappedState = ({ map }) => ({
+const mappedState = ({ map, auth }) => ({
   mapMarkers: map.markers,
   markersLoaded: map.markersLoaded,
   loadingMarkers: map.loadingMarkers,
   addingMarker: map.addingMarker,
   markerAdded: map.markerAdded,
-  removingMarker: map.removingMarker
+  removingMarker: map.removingMarker,
+  loggedIn: auth.loggedIn
 });
 
 const mappedActions = {
   loadMarkers,
   addMarker,
-  removeMarker,
-  clearLoadMapMarkersError,
-  clearAddMapMarkerError,
-  clearRemoveMarkerError
+  removeMarker
 };
 
 @connect(mappedState, mappedActions)
@@ -42,9 +40,7 @@ export default class WorldPage extends Component {
     loadMarkers: PropTypes.func.isRequired,
     addMarker: PropTypes.func.isRequired,
     removeMarker: PropTypes.func.isRequired,
-    clearLoadMapMarkersError: PropTypes.func.isRequired,
-    clearAddMapMarkerError: PropTypes.func.isRequired,
-    clearRemoveMarkerError: PropTypes.func.isRequired
+    loggedIn: PropTypes.bool.isRequired
   }
 
   state = {
@@ -71,6 +67,7 @@ export default class WorldPage extends Component {
   }
 
   openAddLocationDialog = () => {
+    if (!this.props.loggedIn) return;
     this.setState({ showAddLocationDialog: true });
   }
 
@@ -80,28 +77,27 @@ export default class WorldPage extends Component {
 
   // Adds new marker to the map and centers the view on it
   addMarker = markerData => {
-    const lat = markerData.location.geometry.location.lat();
-    const lng = markerData.location.geometry.location.lng();
-
+    if (!this.props.loggedIn) return;
     const newMarker = {
       name: markerData.name,
       link: markerData.link,
       description: markerData.description,
-      lat,
-      lng
+      lat: markerData.location.geometry.location.lat(),
+      lng: markerData.location.geometry.location.lng(),
+      googleLocationId: markerData.location.place_id
     };
 
     this.props.addMarker(newMarker);
   }
 
   removeMarker = markerId => {
+    if (!this.props.loggedIn) return;
     this.props.removeMarker(markerId);
   }
 
   render() {
-    const { mapMarkers, loadingMarkers, addingMarker, markerAdded, removingMarker } = this.props;
+    const { mapMarkers, loadingMarkers, addingMarker, markerAdded, removingMarker, loggedIn } = this.props;
     const { showAddLocationDialog, mapCenterCoord, mapZoomLevel } = this.state;
-    const styles = require('./WorldPage.scss');
 
     const AddMarkerButton = (
       <FloatingActionButton
@@ -115,21 +111,22 @@ export default class WorldPage extends Component {
     return (
       <LoadingScreen loading={loadingMarkers}>
         <div className={styles.WorldPage}>
-          {AddMarkerButton}
+          {loggedIn && AddMarkerButton}
           <LocationMap
             centerCoords={mapCenterCoord}
             zoomLevel={mapZoomLevel}
             markers={mapMarkers}
             removeMarker={this.removeMarker}
             removingMarker={removingMarker}
+            loggedIn={loggedIn}
           />
-          <AddLocationDialog
+          {loggedIn && <AddLocationDialog
             popupVisible={showAddLocationDialog}
             closePopup={this.closeAddLocationDialog}
             addMarker={this.addMarker}
             addingMarker={addingMarker}
             markerAdded={markerAdded}
-          />
+          />}
         </div>
       </LoadingScreen>
     );

@@ -46,6 +46,10 @@ class MainNavbar extends Component {
               <NavItem>Articles</NavItem>
             </LinkContainer>
 
+            <LinkContainer to="/users">
+              <NavItem>Users</NavItem>
+            </LinkContainer>
+
             {user && <LinkContainer to="/profile">
               <NavItem>Profile</NavItem>
             </LinkContainer>}

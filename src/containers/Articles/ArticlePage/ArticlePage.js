@@ -13,14 +13,13 @@ import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import FlatButton from 'material-ui/FlatButton';
-import { ArticleHeader, List, Flex } from 'components/styled';
+import { ArticleHeader, List, Div } from 'components/styled';
 
 const mappedState = ({ articles }, props) => ({
   article: _find(articles.all, art => props.params.id === `${art.id}`),
   editingArticle: articles.editingArticle,
   articleEdited: articles.articleEdited,
-  removingArticle: articles.removingArticle,
-  editArticleError: articles.editArticleError
+  removingArticle: articles.removingArticle
 });
 
 const mappedActions = {
@@ -37,7 +36,6 @@ export default class ArticlePage extends Component {
     editingArticle: PropTypes.bool.isRequired,
     articleEdited: PropTypes.bool.isRequired,
     removingArticle: PropTypes.number,
-    editArticleError: PropTypes.string,
     editArticle: PropTypes.func.isRequired,
     removeArticle: PropTypes.func.isRequired,
     pushState: PropTypes.func.isRequired
@@ -183,31 +181,29 @@ export default class ArticlePage extends Component {
     if (!article) return null;
 
     return (
-      <Grid>
-        <Row>
-          <Col xs={12}>
-            <Flex column>
-              <ArticleHeader>
-                {this.renderTitle()}
-                <List right>
-                  {this.renderSaveButton()}
-                  {this.renderEditButton()}
-                </List>
-              </ArticleHeader>
-              {this.renderEditor()}
+      <Grid style={{ height: '100%' }}>
+        <Div flex column fullHeight>
+          <Div flexNone>
+            <ArticleHeader>
+              {this.renderTitle()}
               <List right>
-                {this.renderDeleteButton()}
+                {this.renderSaveButton()}
+                {this.renderEditButton()}
               </List>
-              <Row>
-                <Col sm={12} md={8}>
-                  <h3>Add a comment:</h3>
-                  <CommentEditor />
-                </Col>
-              </Row>
-              <Conversation articleId={article.id} />
-            </Flex>
-          </Col>
-        </Row>
+            </ArticleHeader>
+            {this.renderEditor()}
+            <List right>
+              {this.renderDeleteButton()}
+            </List>
+            <Row>
+              <Col sm={12} md={8}>
+                <h3>Add a comment:</h3>
+                <CommentEditor />
+              </Col>
+            </Row>
+          </Div>
+          <Conversation articleId={article.id} />
+        </Div>
       </Grid>
     );
   }

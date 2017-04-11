@@ -1,12 +1,11 @@
 .MainFooter {
-  flex: none;
   padding: 24px;
   > ul {
     display: flex;
     padding: 0;
     margin: 0;
     list-style: none;
-    > li a{
+    > li a {
       padding: 8px;
     }
   }

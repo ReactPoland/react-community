@@ -28,14 +28,10 @@ const conversation = (id) => ({
 const conversations = _times(200, conversation);
 
 function loadConversationRequest(body) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     // Make async call to database
     setTimeout(() => {
-      if (Math.random() < 0.1) {
-        reject({ message: 'RANDOM TEST ERROR 😡' });
-      } else {
-        resolve({ message: _find(conversations, { id: body.id }) });
-      }
+      resolve({ message: _find(conversations, { id: body.id }) });
     }, 500);
   });
 }

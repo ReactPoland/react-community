@@ -1,10 +1,22 @@
 import styled from 'styled-components';
 
 const Div = styled.div`
+  // POSITION
   position: ${props => {
     if (props.absolute) return 'absolute';
     if (props.relative) return 'relative';
     return 'static';
+  }};
+  // SIZE
+  width: ${props => {
+    if (props.square) return `${props.square}px`;
+    if (props.fullWidth) return '100%';
+    return 'auto';
+  }};
+  height: ${props => {
+    if (props.square) return `${props.square}px`;
+    if (props.fullHeight) return '100%';
+    return 'auto';
   }};
   // DISPLAY
   display: ${props => {
@@ -22,12 +34,16 @@ const Div = styled.div`
     if (props.columnReverse) return 'columnReverse';
     return 'row';
   }};
-  flex-wrap: ${props => props.wrap || 'nowrap'};
+  flex-wrap: ${props => props.wrap ? 'wrap' : 'nowrap'};
   justify-content: ${props => props.justifyContent || 'flex-start'};
   align-items: ${props => props.alignItems || 'stretch'};
   align-content: ${props => props.alignContent || 'stretch'};
   // FLEX ITEM
-  flex: ${props => props.flexVal};
+  flex: ${props => {
+    if (props.flexNone) return 'none';
+    if (props.flexVal) return props.flexVal;
+    return '0 1 auto';
+  }};
   align-self: ${props => props.alignItems || 'auto'};
   // LAYER
   position: ${props => props.layer ? 'absolute' : 'static'};

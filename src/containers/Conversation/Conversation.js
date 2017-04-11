@@ -13,9 +13,7 @@ const mappedState = ({ conversation }) => ({
   loadConversationError: conversation.loadConversationError
 });
 
-const mappedActions = {
-  loadConversation
-};
+const mappedActions = { loadConversation };
 
 @connect(mappedState, mappedActions)
 class Conversation extends Component {
@@ -25,7 +23,7 @@ class Conversation extends Component {
     comments: PropTypes.array.isRequired,
     loadingConversation: PropTypes.bool.isRequired,
     conversationLoaded: PropTypes.bool.isRequired,
-    loadConversationError: PropTypes.string,
+    loadConversationError: PropTypes.bool.isRequired,
     loadConversation: PropTypes.func.isRequired
   }
 
@@ -43,7 +41,7 @@ class Conversation extends Component {
         <div>
           <CommentsList
             comments={this.props.comments}
-            showReloadList={this.props.loadConversationError !== null}
+            showReloadList={this.props.loadConversationError}
             onReloadList={this.loadComments}
           />
         </div>

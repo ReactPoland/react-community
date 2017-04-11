@@ -1,20 +1,26 @@
-// --- LOAD ---
-const LOAD_CONVERSATION_REQUEST = 'LOAD_CONVERSATION_REQUEST';
-const LOAD_CONVERSATION_SUCCESS = 'LOAD_CONVERSATION_SUCCESS';
-const LOAD_CONVERSATION_FAIL = 'LOAD_CONVERSATION_FAIL';
-const CLEAR_LOAD_CONVERSATION_ERROR = 'CLEAR_LOAD_CONVERSATION_ERROR';
+// --- ACTION TYPES ---
+export const LOAD_CONVERSATION_REQUEST = 'LOAD_CONVERSATION_REQUEST';
+export const LOAD_CONVERSATION_SUCCESS = 'LOAD_CONVERSATION_SUCCESS';
+export const LOAD_CONVERSATION_FAIL = 'LOAD_CONVERSATION_FAIL';
 
 const initialState = {
   id: null,
   comments: [],
   conversationLoaded: false,
   loadingConversation: false,
-  loadConversationError: null
+  loadConversationError: false
 };
 
-export default function articlesModule(state = initialState, action = {}) {
+// --- ACTIONS ---
+export const loadConversation = (articleId) => ({
+  requestName: 'Load conversation',
+  types: [LOAD_CONVERSATION_REQUEST, LOAD_CONVERSATION_SUCCESS, LOAD_CONVERSATION_FAIL],
+  promise: (client) => client.post('/conversation/loadConversation', { data: { id: articleId } })
+});
+
+// -- REDUCER --
+export default (state = initialState, action = {}) => {
   switch (action.type) {
-    // --- LOAD ---
     case LOAD_CONVERSATION_REQUEST:
       return {
         ...state,
@@ -22,7 +28,7 @@ export default function articlesModule(state = initialState, action = {}) {
         comments: [],
         conversationLoaded: false,
         loadingConversation: true,
-        loadConversationError: null
+        loadConversationError: false
       };
     case LOAD_CONVERSATION_SUCCESS:
       const conversation = action.result.message;
@@ -39,24 +45,9 @@ export default function articlesModule(state = initialState, action = {}) {
         ...state,
         loadingConversation: false,
         conversationLoaded: false,
-        loadConversationError: `Load conversation error: ${action.error.message}`
-      };
-    case CLEAR_LOAD_CONVERSATION_ERROR:
-      return {
-        ...state,
-        loadConversationError: null
+        loadConversationError: true
       };
     default:
       return state;
   }
-}
-
-// --- LOAD ---
-export function loadConversation(articleId) {
-  return {
-    types: [LOAD_CONVERSATION_REQUEST, LOAD_CONVERSATION_SUCCESS, LOAD_CONVERSATION_FAIL],
-    promise: (client) => client.post('/conversation/loadConversation', { data: { id: articleId } })
-  };
-}
-
-export const clearLoadConversationError = () => ({ type: CLEAR_LOAD_CONVERSATION_ERROR });
+};
