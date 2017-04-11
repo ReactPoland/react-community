@@ -15,7 +15,8 @@ import { Div } from 'components/styled';
 
 const mappedState = ({ events }) => ({
   events: events.all,
-  loadingEvents: events.loadingEvents
+  loadingEvents: events.loadingEvents,
+  eventsLoaded: events.eventsLoaded
 });
 
 const mappedActions = { loadEvents };
@@ -25,11 +26,12 @@ export default class EventsPage extends Component {
   static propTypes = {
     events: PropTypes.array.isRequired,
     loadingEvents: PropTypes.bool.isRequired,
+    eventsLoaded: PropTypes.bool.isRequired,
     loadEvents: PropTypes.func.isRequired
   }
 
   componentWillMount() {
-    this.props.loadEvents();
+    if (!this.props.eventsLoaded) this.props.loadEvents();
   }
 
   render() {
