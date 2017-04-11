@@ -27,7 +27,7 @@ export default (store) => {
       <Route onEnter={requireLogin}>
         <Route path="loginSuccess" component={ct.LoginSuccess}/>
         <Route path="chat" component={ct.Chat} />
-        <Route path="profile" component={ct.ProfilePage} />
+        <Route path="profile" name="ProfilePage" component={ct.ProfilePage} />
       </Route>
 
       { /* Routes */ }
@@ -39,7 +39,7 @@ export default (store) => {
 
       <Route path="users">
         <IndexRoute component={ct.UsersPage} />
-        <Route path="/user/:id" component={ct.ProfilePage} />
+        <Route path="/user/:id" name="UserPage" component={ct.ProfilePage} />
       </Route>
 
       <Route path="articles" component={ct.ArticlesContainer}>
