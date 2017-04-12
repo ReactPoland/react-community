@@ -10,8 +10,8 @@ const Spinner = styled.div`
   height: 100%;
 `;
 
-export default () => (
-  <Spinner>
+export default ({ style = {} }) => (
+  <Spinner style={style}>
     <CircularProgress size={60} thickness={7} />
   </Spinner>
 );

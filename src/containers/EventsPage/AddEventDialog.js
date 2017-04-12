@@ -1,19 +1,30 @@
-import React, { Component, PropTypes } from 'react';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import axios from 'axios';
+import _get from 'lodash/get';
 import _isEmpty from 'lodash/isEmpty';
 import _startsWith from 'lodash/startsWith';
 import _isNumber from 'lodash/isNumber';
+import config from '../../config';
+// STORE
+import { showError } from 'redux/modules/errorsModule';
+// COMPONENTS
+import { Spinner } from 'components';
 import AddEventForm from './AddEventForm';
+// LAYOUT
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 
 const getInitialState = () => ({
+  fetchingEventData: false,
   formData: {
     title: '',
     link: 'http://',
     description: '',
     date: new Date(),
     price: '',
-    location: {}
+    location: null
   },
   validationErrors: {
     title: '',
@@ -25,6 +36,9 @@ const getInitialState = () => ({
   }
 });
 
+const mappedActions = { showError };
+
+@connect(() => ({}), mappedActions)
 export default class AddEventDialog extends Component {
   static propTypes = {
     popupVisible: PropTypes.bool.isRequired,
@@ -36,7 +50,8 @@ export default class AddEventDialog extends Component {
     eventAdded: PropTypes.number,
     editMode: PropTypes.bool,
     dataToEdit: PropTypes.object,
-    eventEdited: PropTypes.bool.isRequired
+    eventEdited: PropTypes.bool.isRequired,
+    showError: PropTypes.func.isRequired
   }
 
   static defaultProps = {
@@ -47,14 +62,11 @@ export default class AddEventDialog extends Component {
   state = getInitialState()
 
   componentWillReceiveProps(nextProps) {
-    // When modal is goind to be opened...
+    // When modal is going to be opened...
     if (!this.props.popupVisible && nextProps.popupVisible) {
       // If it's edit mode...
       if (nextProps.editMode && nextProps.dataToEdit) {
-        // Display event's data in the form
-
-        // TODO: check if it is enough to copy event's data
-        this.setState({ formData: { ...nextProps.dataToEdit } });
+        this.prepareEditForm(nextProps);
       }
     }
 
@@ -69,6 +81,24 @@ export default class AddEventDialog extends Component {
     }
   }
 
+  prepareEditForm = (props) => {
+    // Show spinner
+    this.setState({ fetchingEventData: true });
+    // Fetch event's location based on its "place_id"
+    const { googleLocationId } = props.dataToEdit;
+    axios.get(`https://maps.googleapis.com/maps/api/geocode/json?place_id=${googleLocationId}&key=${config.googleMapsKey}`)
+      .then((response) => {
+        // Display event's data in the form
+        const formData = { ...this.state.formData, ...props.dataToEdit };
+        formData.location = _get(response, 'data.results[0]', {});
+        this.setState({ fetchingEventData: false, formData });
+      })
+      .catch((error) => {
+        // Catch any errors
+        this.props.showError({ requestName: 'Load localization', error });
+      });
+  }
+
   updateForm = (property, value) => {
     const newState = { ...this.state };
 
@@ -79,6 +109,23 @@ export default class AddEventDialog extends Component {
     }
 
     this.setState(newState);
+  }
+
+  validateForm = () => {
+    const { title, link, description, location, date, price } = this.state.formData;
+    const validationErrors = {};
+
+    if (!title) validationErrors.title = 'Title is required';
+    if (!link || link === 'http://') validationErrors.link = 'Link is required';
+    if (!(_startsWith(link, 'http://') || _startsWith(link, 'https://'))) validationErrors.link = 'Link must start with "http://"';
+    if (!description) validationErrors.description = 'Description is required';
+    if (!location) validationErrors.location = 'Location is required';
+    if (price && !_isNumber(parseFloat(price))) validationErrors.price = 'Price must be a number';
+    if (!date) validationErrors.date = 'Date is required';
+
+    this.setState({ validationErrors });
+
+    return _isEmpty(validationErrors);
   }
 
   // Passes event data to parent component if form is valid
@@ -101,28 +148,10 @@ export default class AddEventDialog extends Component {
     this.props.closePopup();
   }
 
-  validateForm = () => {
-    const { title, link, description, location, date, price } = this.state.formData;
-    const validationErrors = {};
-
-    if (!title) validationErrors.title = 'Title is required';
-    if (!link || link === 'http://') validationErrors.link = 'Link is required';
-    if (!(_startsWith(link, 'http://') || _startsWith(link, 'https://'))) validationErrors.link = 'Link must start with "http://"';
-    if (!description) validationErrors.description = 'Description is required';
-    // TODO: cannot ready description od undefined
-    if (!location.description) validationErrors.location = 'Location is required';
-    if (price && !_isNumber(parseFloat(price))) validationErrors.price = 'Price must be a number';
-    if (!date) validationErrors.date = 'Date is required';
-
-    this.setState({ validationErrors });
-
-    return _isEmpty(validationErrors);
-  }
-
   render() {
-    console.warn('this.props.eventEdited', this.props.eventEdited, this.props);
     const { popupVisible, addingEvent, editingEvent, editMode } = this.props;
-    const { formData, validationErrors } = this.state;
+    const { formData, validationErrors, fetchingEventData } = this.state;
+
     const actions = [
       <FlatButton
         label="Cancel"
@@ -155,6 +184,9 @@ export default class AddEventDialog extends Component {
         open={popupVisible}
         onRequestClose={this.closePopup}
       >
+        {fetchingEventData && <Spinner
+          style={{ position: 'absolute', top: 0, left: 0, background: 'rgba(255, 255, 255, 0.8)', zIndex: 10 }}
+        />}
         <AddEventForm
           formData={formData}
           validationErrors={validationErrors}

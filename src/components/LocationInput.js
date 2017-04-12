@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import AutoComplete from 'material-ui/AutoComplete';
 
 class LocationInput extends Component {
@@ -6,11 +7,11 @@ class LocationInput extends Component {
     floatingLabelText: PropTypes.string.isRequired,
     onChooseLocation: PropTypes.func.isRequired,
     errorText: PropTypes.string,
-    fullWidth: PropTypes.bool
+    fullWidth: PropTypes.bool,
+    location: PropTypes.object
   }
 
   state = {
-    searchText: '', // Input's value
     predictions: [] // Predicted locations
   };
 
@@ -22,24 +23,23 @@ class LocationInput extends Component {
   }
 
   // Gets localtion predictions based on input text
-  getPredictions = searchText => {
+  getPredictions = (searchText) => {
     this.places.getQueryPredictions({ input: searchText }, predictions => {
       this.setState({ predictions: predictions || [] });
     });
   }
 
   // Updated input field and gets prediction if input is not empty
-  handleUpdateInput = searchText => {
+  handleUpdateInput = (searchText) => {
     if (searchText) this.getPredictions(searchText);
     this.setState({
-      searchText,
       // Clear predictions if there's no input text
       predictions: searchText ? this.state.predictions : []
     });
   };
 
   // Passes chosen location to the parent component
-  handleNewRequest = location => {
+  handleNewRequest = (location) => {
     this.geocoder.geocode({ placeId: location.place_id }, results => {
       this.props.onChooseLocation({ ...location, ...results[0] });
       this.setState({ predictions: [] });
@@ -47,14 +47,14 @@ class LocationInput extends Component {
   };
 
   render() {
-    const { floatingLabelText, errorText, fullWidth } = this.props;
-    const { searchText, predictions } = this.state;
+    const { floatingLabelText, errorText, fullWidth, location } = this.props;
+    const { predictions } = this.state;
 
     return (
       <AutoComplete
         floatingLabelText={floatingLabelText}
         errorText={errorText}
-        searchText={searchText}
+        searchText={location && location.formatted_address || ''}
         onUpdateInput={this.handleUpdateInput}
         onNewRequest={this.handleNewRequest}
         dataSource={predictions}

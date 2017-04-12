@@ -14,6 +14,7 @@ module.exports = Object.assign({
   port: process.env.PORT,
   apiHost: process.env.APIHOST || 'localhost',
   apiPort: process.env.APIPORT,
+  googleMapsKey: 'AIzaSyCD3X-Lrhc7YL0WlC6LceHVH9LzshluPd0',
   app: {
     title: 'React Community',
     description: 'All the modern best practices in one example.',

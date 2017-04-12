@@ -1,8 +1,8 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import moment from 'moment';
-import _get from 'lodash/get';
 import _partition from 'lodash/partition';
 import { loadEvents, addEvent, editEvent, removeEvent } from 'redux/modules/eventsModule';
 import { ascendingBy } from 'utils';
@@ -106,12 +106,12 @@ export default class EventsPage extends Component {
     const newEvent = {
       title: eventData.title,
       organizedById: this.props.user.id,
-      price: eventData.price,
+      price: `${eventData.price}`,
       link: eventData.link,
       description: eventData.description,
       date: eventData.date,
-      lat: _get(eventData, 'location.geometry.location', {}).lat(),
-      lng: _get(eventData, 'location.geometry.location', {}).lng(),
+      lat: eventData.location.geometry.location.lat(),
+      lng: eventData.location.geometry.location.lng(),
       googleLocationId: eventData.location.place_id
     };
 
@@ -119,7 +119,22 @@ export default class EventsPage extends Component {
   }
 
   editEvent = (eventData) => {
-    this.props.editEvent(eventData);
+    if (!this.props.loggedIn) return;
+
+    const editedEvent = {
+      id: eventData.id,
+      title: eventData.title,
+      price: eventData.price,
+      link: eventData.link,
+      description: eventData.description,
+      date: eventData.date,
+      organizedBy: eventData.organizedBy,
+      lat: eventData.location.geometry.location.lat(),
+      lng: eventData.location.geometry.location.lng(),
+      googleLocationId: eventData.location.place_id
+    };
+
+    this.props.editEvent(editedEvent);
   }
 
   startEditingEvent = (eventId) => {

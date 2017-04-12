@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 // COMPONENTS
 import { LocationInput } from 'components';
@@ -14,18 +15,18 @@ class AddEventForm extends Component {
     validationErrors: PropTypes.object.isRequired
   }
 
-  onLinkFieldFocus = ev => {
+  onLinkFieldFocus = (event) => {
     // Move cursor to the end of the input if it contains
     // default value on focus
     if (this.props.formData.link === 'http://') {
-      ev.target.value = '';
-      ev.target.value = this.props.formData.link;
+      event.target.value = '';
+      event.target.value = this.props.formData.link;
     }
   }
 
   render() {
     const {
-      formData: { title, link, date, description, price },
+      formData: { title, link, date, description, price, location },
       validationErrors,
       onChange
     } = this.props;
@@ -75,9 +76,10 @@ class AddEventForm extends Component {
           fullWidth
         />
         <LocationInput
+          location={location}
           floatingLabelText="Location"
           errorText={validationErrors.location}
-          onChooseLocation={location => { onChange('location', location); }}
+          onChooseLocation={loc => { onChange('location', loc); }}
           fullWidth
         />
       </div>
