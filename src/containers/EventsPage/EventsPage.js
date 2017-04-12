@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 import moment from 'moment';
 import _get from 'lodash/get';
 import _partition from 'lodash/partition';
-import { loadEvents, addEvent, removeEvent } from 'redux/modules/eventsModule';
+import { loadEvents, addEvent, editEvent, removeEvent } from 'redux/modules/eventsModule';
 import { ascendingBy } from 'utils';
 // COMPONENTS
 import { Map } from 'components';
@@ -40,12 +40,15 @@ const mappedState = ({ events, auth }) => ({
   // Adding a new event
   addingEvent: events.addingEvent,
   eventAdded: events.eventAdded,
+  // Editing an event
+  editingEvent: events.editingEvent,
+  eventEdited: events.eventEdited,
   // Authorization
   loggedIn: auth.loggedIn,
   user: auth.user
 });
 
-const mappedActions = { loadEvents, addEvent, removeEvent };
+const mappedActions = { loadEvents, addEvent, editEvent, removeEvent };
 
 @connect(mappedState, mappedActions)
 export default class EventsPage extends Component {
@@ -59,6 +62,10 @@ export default class EventsPage extends Component {
     addingEvent: PropTypes.bool.isRequired,
     eventAdded: PropTypes.number,
     addEvent: PropTypes.func.isRequired,
+    // Editinging an event
+    editingEvent: PropTypes.bool.isRequired,
+    eventEdited: PropTypes.bool.isRequired,
+    editEvent: PropTypes.func.isRequired,
     // Removing an event
     removeEvent: PropTypes.func.isRequired,
     // Authorization
@@ -66,7 +73,11 @@ export default class EventsPage extends Component {
     user: PropTypes.object
   }
 
-  state = { showAddEventDialog: false }
+  state = {
+    showAddEventDialog: false,
+    showEditEventDialog: false,
+    eventToEdit: null
+  }
 
   componentWillMount() {
     if (!this.props.eventsLoaded && !this.props.loadingEvents) this.props.loadEvents();
@@ -82,7 +93,11 @@ export default class EventsPage extends Component {
   }
 
   closeAddEventDialog = () => {
-    this.setState({ showAddEventDialog: false });
+    this.setState({
+      showAddEventDialog: false,
+      showEditEventDialog: false,
+      eventToEdit: null
+    });
   }
 
   addEvent = (eventData) => {
@@ -103,11 +118,20 @@ export default class EventsPage extends Component {
     this.props.addEvent(newEvent);
   }
 
-  editEvent = (aa) => {
-    console.log('edit event', aa);
+  editEvent = (eventData) => {
+    this.props.editEvent(eventData);
+  }
+
+  startEditingEvent = (eventId) => {
+    if (!this.props.loggedIn) return;
+    this.setState({
+      showEditEventDialog: true,
+      eventToEdit: this.props.events.find(event => event.id === eventId)
+    });
   }
 
   deleteEvent = (eventId) => {
+    if (!this.props.loggedIn) return;
     this.props.removeEvent(eventId);
   }
 
@@ -156,7 +180,7 @@ export default class EventsPage extends Component {
                   secondaryText={date}
                   rightIconButton={
                     <IconMenu iconButtonElement={iconButtonElement}>
-                      <MenuItem onTouchTap={() => this.editEvent(event.id)}>Edit</MenuItem>
+                      <MenuItem onTouchTap={() => this.startEditingEvent(event.id)}>Edit</MenuItem>
                       <MenuItem onTouchTap={() => this.deleteEvent(event.id)}>Delete</MenuItem>
                     </IconMenu>
                   }
@@ -237,11 +261,16 @@ export default class EventsPage extends Component {
           {userHasEvents && thereAreOtherEvents && otherEventsList}
           {!userHasEvents && allEventsList}
           {this.props.loggedIn && <AddEventDialog
-            popupVisible={this.state.showAddEventDialog}
+            popupVisible={this.state.showAddEventDialog || this.state.showEditEventDialog}
             closePopup={this.closeAddEventDialog}
             addEvent={this.addEvent}
+            editEvent={this.editEvent}
             addingEvent={this.props.addingEvent}
+            editingEvent={this.props.editingEvent}
             eventAdded={this.props.eventAdded}
+            editMode={this.state.showEditEventDialog}
+            dataToEdit={this.state.eventToEdit}
+            eventEdited={this.props.eventEdited}
           />}
         </Grid>
       </LoadingScreen>

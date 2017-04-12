@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import moment from 'moment';
 // COMPONENTS
 import { LocationInput } from 'components';
 // LAYOUT
@@ -42,19 +43,19 @@ class AddEventForm extends Component {
         <DatePicker
           floatingLabelText="Date"
           errorText={validationErrors.date}
-          value={date}
+          value={moment(date).toDate()}
           onChange={(ev, dt) => { onChange('date', dt); }}
         />
         <TimePicker
           floatingLabelText="Time"
           format="24hr"
-          value={date}
+          value={moment(date).toDate()}
           onChange={(ev, dt) => { onChange('date', dt); }}
         />
         <TextField
           floatingLabelText="Price"
           errorText={validationErrors.price}
-          value={price}
+          value={price || 0}
           onChange={ev => { onChange('price', ev.target.value); }}
         />
         <TextField
