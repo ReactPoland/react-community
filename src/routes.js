@@ -31,7 +31,6 @@ export default (store) => {
       </Route>
 
       { /* Routes */ }
-      <Route path="login" component={ct.Login} />
       <Route path="world" component={ct.WorldPage} noFooter />
       <Route path="tutorials" component={ct.TutorialsPage} />
       <Route path="events" component={ct.EventsPage} />

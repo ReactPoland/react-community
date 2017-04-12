@@ -3,16 +3,11 @@ export NotFound from './NotFound/NotFound';
 // LAYOUT
 export MainFooter from './MainFooter/MainFooter';
 export MainNavbar from './MainNavbar/MainNavbar';
-// ARTCILES
+// ARTICLES
 export ArticlesContainer from './Articles/ArticlesContainer';
 export ArticlesPage from './Articles/ArticlesPage/ArticlesPage';
 export ArticlePage from './Articles/ArticlePage/ArticlePage';
-// LOGIN
-// TODO: this needs to be cleaned-up
-export Login from './Login/Login';
-export LoginDialog from './LoginDialog/LoginDialog';
-export LoginSuccess from './LoginSuccess/LoginSuccess';
-
+// OTHER
 export BestPracticesPage from './BestPracticesPage/BestPracticesPage';
 export Chat from './Chat/Chat';
 export Conversation from './Conversation/Conversation';

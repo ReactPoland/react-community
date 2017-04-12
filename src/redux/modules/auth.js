@@ -72,8 +72,7 @@ export default (state = initialState, action = {}) => {
         loggingIn: true
       };
     case LOGIN_SUCCESS:
-      // NOTE: this action handler is not used at the moment
-      // Logging in is being done through GitHub
+      // NOTE: this action handler is not used at the moment - logging in is being done through GitHub
       return {
         ...state,
         loggingIn: false,
