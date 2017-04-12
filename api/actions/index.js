@@ -11,3 +11,4 @@ export * as self from './self/index';
 export * as article from './article/index';
 export * as event from './event/index';
 export * as conversation from './conversation';
+export * as quiz from './quiz';
