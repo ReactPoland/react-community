@@ -3,8 +3,6 @@ const LOAD_REQUEST = 'LOAD_REQUEST';
 const LOAD_SUCCESS = 'LOAD_SUCCESS';
 const LOAD_FAIL = 'LOAD_FAIL';
 const LOGIN_REQUEST = 'LOGIN_REQUEST';
-const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
-const LOGIN_FAIL = 'LOGIN_FAIL';
 const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
 const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 const LOGOUT_FAIL = 'LOGOUT_FAIL';
@@ -56,7 +54,7 @@ export default (state = initialState, action = {}) => {
         ...state,
         loading: false,
         loaded: true,
-        loggedIn: true,
+        loggedIn: action.result ? true : false,
         user: action.result
       };
     case LOAD_FAIL:
@@ -65,26 +63,6 @@ export default (state = initialState, action = {}) => {
         loading: false,
         loaded: false,
         loadError: true
-      };
-    case LOGIN_REQUEST:
-      return {
-        ...state,
-        loggingIn: true
-      };
-    case LOGIN_SUCCESS:
-      // NOTE: this action handler is not used at the moment - logging in is being done through GitHub
-      return {
-        ...state,
-        loggingIn: false,
-        loggedIn: true,
-        user: action.result
-      };
-    case LOGIN_FAIL:
-      return {
-        ...state,
-        loggingIn: false,
-        user: null,
-        loginError: true
       };
     case LOGOUT_REQUEST:
       return {

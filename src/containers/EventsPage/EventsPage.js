@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import _partition from 'lodash/partition';
-import _isFunction from 'lodash/isFunction';
 import { loadEvents, addEvent, editEvent, removeEvent } from 'redux/modules/eventsModule';
 // COMPONENTS
 import { Map } from 'components';
@@ -61,6 +60,21 @@ export default class EventsPage extends Component {
     if (!this.props.eventsLoaded && !this.props.loadingEvents) this.props.loadEvents();
   }
 
+  prepareEvent = (eventData) => {
+    return {
+      id: eventData.id,
+      title: eventData.title,
+      organizedById: this.props.user.id,
+      price: eventData.price,
+      link: eventData.link,
+      description: eventData.description,
+      date: eventData.date,
+      lat: eventData.location.geometry.location.lat(),
+      lng: eventData.location.geometry.location.lng(),
+      googleLocationId: eventData.location.place_id
+    };
+  }
+
   // DIALOG WINDOW (MODAL) HANDLING
 
   openAddEventDialog = () => {
@@ -88,40 +102,11 @@ export default class EventsPage extends Component {
   // REDUX/API CALLS
 
   addEvent = (eventData) => {
-    const { lat, lng } = eventData.location.geometry.location;
-
-    const newEvent = {
-      title: eventData.title,
-      organizedById: this.props.user.id,
-      price: `${eventData.price}`,
-      link: eventData.link,
-      description: eventData.description,
-      date: eventData.date,
-      lat: _isFunction(lat) ? lat() : lat,
-      lng: _isFunction(lng) ? lng() : lat,
-      googleLocationId: eventData.location.place_id
-    };
-
-    this.props.addEvent(newEvent);
+    this.props.addEvent(this.prepareEvent(eventData));
   }
 
   editEvent = (eventData) => {
-    const { lat, lng } = eventData.location.geometry.location;
-
-    const editedEvent = {
-      id: eventData.id,
-      title: eventData.title,
-      price: eventData.price,
-      link: eventData.link,
-      description: eventData.description,
-      date: eventData.date,
-      organizedBy: eventData.organizedBy,
-      lat: _isFunction(lat) ? lat() : lat,
-      lng: _isFunction(lng) ? lng() : lat,
-      googleLocationId: eventData.location.place_id
-    };
-
-    this.props.editEvent(editedEvent);
+    this.props.editEvent(this.prepareEvent(eventData));
   }
 
   deleteEvent = (eventId) => {
@@ -129,9 +114,6 @@ export default class EventsPage extends Component {
   }
 
   // RENDER
-
-  // TODO: add and then immedetially edit event
-  // TODO: better price handling
 
   render() {
     // Prepare events' lists

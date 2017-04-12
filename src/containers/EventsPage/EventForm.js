@@ -56,7 +56,7 @@ export default class EventForm extends Component {
         <TextField
           floatingLabelText="Price"
           errorText={validationErrors.price}
-          value={price || 0}
+          value={price}
           onChange={ev => { onChange('price', ev.target.value); }}
         />
         <TextField

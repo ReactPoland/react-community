@@ -54,7 +54,7 @@ class LocationInput extends Component {
       <AutoComplete
         floatingLabelText={floatingLabelText}
         errorText={errorText}
-        searchText={location && location.formatted_address || ''}
+        searchText={location && (location.description || location.formatted_address) || ''}
         onUpdateInput={this.handleUpdateInput}
         onNewRequest={this.handleNewRequest}
         dataSource={predictions}

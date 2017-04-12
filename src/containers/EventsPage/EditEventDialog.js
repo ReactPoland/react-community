@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import axios from 'axios';
-import _get from 'lodash/get';
-import _isEmpty from 'lodash/isEmpty';
-import _startsWith from 'lodash/startsWith';
-import _isNumber from 'lodash/isNumber';
-import config from '../../config';
+import { eventFormValidator } from 'utils';
 // STORE
 import { showError } from 'redux/modules/errorsModule';
 // COMPONENTS
@@ -23,7 +18,7 @@ const getInitialState = () => ({
     link: 'http://',
     description: '',
     date: new Date(),
-    price: '',
+    price: '0.00',
     location: null
   },
   validationErrors: {
@@ -63,6 +58,12 @@ export default class EditEventDialog extends Component {
 
   state = getInitialState()
 
+  componentDidMount() {
+    // Initializes Google Maps code
+    const { google } = window;
+    this.geocoder = new google.maps.Geocoder;
+  }
+
   componentWillReceiveProps(nextProps) {
     // When modal is going to be opened...
     if (!this.props.popupVisible && nextProps.popupVisible) {
@@ -78,19 +79,14 @@ export default class EditEventDialog extends Component {
   prepareEditForm = (props) => {
     // Show spinner
     this.setState({ fetchingEventData: true });
-    // Fetch event's location based on its "place_id"
     const { googleLocationId } = props.eventToEdit;
-    axios.get(`https://maps.googleapis.com/maps/api/geocode/json?place_id=${googleLocationId}&key=${config.googleMapsKey}`)
-      .then((response) => {
-        // Display event's data in the form
-        const formData = { ...this.state.formData, ...props.eventToEdit };
-        formData.location = _get(response, 'data.results[0]', {});
-        this.setState({ fetchingEventData: false, formData });
-      })
-      .catch((error) => {
-        // Catch any errors
-        this.props.showError({ requestName: 'Load localization', error });
-      });
+    // Fetch event's location based on its "place_id"
+    this.geocoder.geocode({ placeId: googleLocationId }, results => {
+      // Display event's data in the form
+      const formData = { ...this.state.formData, ...props.eventToEdit };
+      formData.location = results[0];
+      this.setState({ fetchingEventData: false, formData });
+    });
   }
 
   updateForm = (property, value) => {
@@ -105,27 +101,13 @@ export default class EditEventDialog extends Component {
     this.setState(newState);
   }
 
-  validateForm = () => {
-    const { title, link, description, location, date, price } = this.state.formData;
-    const validationErrors = {};
-
-    if (!title) validationErrors.title = 'Title is required';
-    if (!link || link === 'http://') validationErrors.link = 'Link is required';
-    if (!(_startsWith(link, 'http://') || _startsWith(link, 'https://'))) validationErrors.link = 'Link must start with "http://"';
-    if (!description) validationErrors.description = 'Description is required';
-    if (!location) validationErrors.location = 'Location is required';
-    if (price && !_isNumber(parseFloat(price))) validationErrors.price = 'Price must be a number';
-    if (!date) validationErrors.date = 'Date is required';
-
-    this.setState({ validationErrors });
-
-    return _isEmpty(validationErrors);
-  }
-
   // Passes edited event back to parent component
   editEvent = () => {
-    if (this.validateForm() && !this.props.editingEvent) {
+    const { isValid, errors } = eventFormValidator(this.state.formData);
+    if (isValid && !this.props.editingEvent) {
       this.props.editEvent(this.state.formData);
+    } else {
+      this.setState({ validationErrors: errors });
     }
   }
 

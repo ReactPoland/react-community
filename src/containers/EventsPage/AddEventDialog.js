@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import _isEmpty from 'lodash/isEmpty';
-import _startsWith from 'lodash/startsWith';
-import _isNumber from 'lodash/isNumber';
+import { eventFormValidator } from 'utils';
 // STORE
 import { showError } from 'redux/modules/errorsModule';
 // COMPONENTS
@@ -18,7 +16,7 @@ const getInitialState = () => ({
     link: 'http://',
     description: '',
     date: new Date(),
-    price: '',
+    price: '0.00',
     location: null
   },
   validationErrors: {
@@ -70,27 +68,13 @@ export default class AddEventDialog extends Component {
     this.setState(newState);
   }
 
-  validateForm = () => {
-    const { title, link, description, location, date, price } = this.state.formData;
-    const validationErrors = {};
-
-    if (!title) validationErrors.title = 'Title is required';
-    if (!link || link === 'http://') validationErrors.link = 'Link is required';
-    if (!(_startsWith(link, 'http://') || _startsWith(link, 'https://'))) validationErrors.link = 'Link must start with "http://"';
-    if (!description) validationErrors.description = 'Description is required';
-    if (!location) validationErrors.location = 'Location is required';
-    if (price && !_isNumber(parseFloat(price))) validationErrors.price = 'Price must be a number';
-    if (!date) validationErrors.date = 'Date is required';
-
-    this.setState({ validationErrors });
-
-    return _isEmpty(validationErrors);
-  }
-
   // Passes new event's data back to parent component
   addEvent = () => {
-    if (this.validateForm() && !this.props.addingEvent) {
+    const { isValid, errors } = eventFormValidator(this.state.formData);
+    if (isValid && !this.props.addingEvent) {
       this.props.addEvent(this.state.formData);
+    } else {
+      this.setState({ validationErrors: errors });
     }
   }
 
