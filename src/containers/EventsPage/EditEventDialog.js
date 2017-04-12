@@ -1,18 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import axios from 'axios';
+import _get from 'lodash/get';
 import _isEmpty from 'lodash/isEmpty';
 import _startsWith from 'lodash/startsWith';
 import _isNumber from 'lodash/isNumber';
+import config from '../../config';
 // STORE
 import { showError } from 'redux/modules/errorsModule';
 // COMPONENTS
+import { Spinner } from 'components';
 import EventForm from './EventForm';
 // LAYOUT
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
 const getInitialState = () => ({
+  fetchingEventData: false,
   formData: {
     title: '',
     link: 'http://',
@@ -31,31 +36,61 @@ const getInitialState = () => ({
   }
 });
 
-const mappedState = ({ events }) => ({
-  addingEvent: events.addingEvent,
-  eventAdded: events.eventAdded
+const mappedState = ({ events }, props) => ({
+  eventToEdit: events.all.find(event => event.id === props.eventId),
+  editingEvent: events.editingEvent,
+  eventEdited: events.eventEdited
 });
 
 const mappedActions = { showError };
 
 @connect(mappedState, mappedActions)
-export default class AddEventDialog extends Component {
+export default class EditEventDialog extends Component {
   static propTypes = {
+    eventId: PropTypes.number,
+    eventToEdit: PropTypes.object,
+    editEvent: PropTypes.func.isRequired,
+    editingEvent: PropTypes.bool.isRequired,
+    eventEdited: PropTypes.bool.isRequired,
     popupVisible: PropTypes.bool.isRequired,
     closePopup: PropTypes.func.isRequired,
-    addEvent: PropTypes.func.isRequired,
-    addingEvent: PropTypes.bool.isRequired,
-    eventAdded: PropTypes.number,
     showError: PropTypes.func.isRequired
+  }
+
+  static defaultProps = {
+    eventToEdit: {}
   }
 
   state = getInitialState()
 
   componentWillReceiveProps(nextProps) {
-    // If we successfully got a new event, close the dialog window
-    if (!this.props.eventAdded && nextProps.eventAdded) {
+    // When modal is going to be opened...
+    if (!this.props.popupVisible && nextProps.popupVisible) {
+      this.prepareEditForm(nextProps);
+    }
+
+    // If we successfully edited an event, close the dialog window
+    if (!this.props.eventEdited && nextProps.eventEdited) {
       this.closePopup();
     }
+  }
+
+  prepareEditForm = (props) => {
+    // Show spinner
+    this.setState({ fetchingEventData: true });
+    // Fetch event's location based on its "place_id"
+    const { googleLocationId } = props.eventToEdit;
+    axios.get(`https://maps.googleapis.com/maps/api/geocode/json?place_id=${googleLocationId}&key=${config.googleMapsKey}`)
+      .then((response) => {
+        // Display event's data in the form
+        const formData = { ...this.state.formData, ...props.eventToEdit };
+        formData.location = _get(response, 'data.results[0]', {});
+        this.setState({ fetchingEventData: false, formData });
+      })
+      .catch((error) => {
+        // Catch any errors
+        this.props.showError({ requestName: 'Load localization', error });
+      });
   }
 
   updateForm = (property, value) => {
@@ -87,10 +122,10 @@ export default class AddEventDialog extends Component {
     return _isEmpty(validationErrors);
   }
 
-  // Passes new event's data back to parent component
-  addEvent = () => {
-    if (this.validateForm() && !this.props.addingEvent) {
-      this.props.addEvent(this.state.formData);
+  // Passes edited event back to parent component
+  editEvent = () => {
+    if (this.validateForm() && !this.props.editingEvent) {
+      this.props.editEvent(this.state.formData);
     }
   }
 
@@ -101,8 +136,8 @@ export default class AddEventDialog extends Component {
   }
 
   render() {
-    const { popupVisible, addingEvent } = this.props;
-    const { formData, validationErrors } = this.state;
+    const { popupVisible, editingEvent } = this.props;
+    const { formData, validationErrors, fetchingEventData } = this.state;
 
     const actions = [
       <FlatButton
@@ -111,11 +146,11 @@ export default class AddEventDialog extends Component {
         onTouchTap={this.closePopup}
       />,
       <FlatButton
-        label={addingEvent ? 'Adding...' : 'Add'}
+        label={editingEvent ? 'Editing...' : 'Edit'}
         style={{ marginLeft: 8 }}
         primary
-        onTouchTap={this.addEvent}
-        disabled={addingEvent}
+        onTouchTap={this.editEvent}
+        disabled={editingEvent}
       />
     ];
 
@@ -123,11 +158,14 @@ export default class AddEventDialog extends Component {
       <Dialog
         contentStyle={{ maxWidth: 500 }}
         titleStyle={{ paddingBottom: 0 }}
-        title="Add new event"
+        title="Editing event"
         actions={actions}
         open={popupVisible}
         onRequestClose={this.closePopup}
       >
+        {fetchingEventData && <Spinner
+          style={{ position: 'absolute', top: 0, left: 0, background: 'rgba(255, 255, 255, 0.8)', zIndex: 10 }}
+        />}
         <EventForm
           formData={formData}
           validationErrors={validationErrors}

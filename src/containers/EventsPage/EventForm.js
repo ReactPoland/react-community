@@ -8,7 +8,7 @@ import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 
-class AddEventForm extends Component {
+export default class EventForm extends Component {
   static propTypes = {
     formData: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
@@ -86,5 +86,3 @@ class AddEventForm extends Component {
     );
   }
 }
-
-export default AddEventForm;

@@ -2,47 +2,28 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
-import moment from 'moment';
 import _partition from 'lodash/partition';
+import _isFunction from 'lodash/isFunction';
 import { loadEvents, addEvent, editEvent, removeEvent } from 'redux/modules/eventsModule';
-import { ascendingBy } from 'utils';
 // COMPONENTS
 import { Map } from 'components';
 import AddEventDialog from './AddEventDialog';
+import EditEventDialog from './EditEventDialog';
+import EventsList from './EventsList';
 // LAYOUT
 import Grid from 'react-bootstrap/lib/Grid';
 import Paper from 'material-ui/Paper';
-import { List, ListItem } from 'material-ui/List';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { EventsCalendar, LoadingScreen } from 'components';
 import { MockCard } from 'components/mocked';
 import { Div } from 'components/styled';
-import IconButton from 'material-ui/IconButton';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-
-const iconButtonElement = (
-  <IconButton
-    touch
-    tooltipPosition="bottom-left"
-  >
-    <MoreVertIcon />
-  </IconButton>
-);
 
 const mappedState = ({ events, auth }) => ({
   events: events.all,
   // Loading events
   loadingEvents: events.loadingEvents,
   eventsLoaded: events.eventsLoaded,
-  // Adding a new event
-  addingEvent: events.addingEvent,
-  eventAdded: events.eventAdded,
-  // Editing an event
-  editingEvent: events.editingEvent,
-  eventEdited: events.eventEdited,
   // Authorization
   loggedIn: auth.loggedIn,
   user: auth.user
@@ -59,12 +40,8 @@ export default class EventsPage extends Component {
     eventsLoaded: PropTypes.bool.isRequired,
     loadEvents: PropTypes.func.isRequired,
     // Adding a new event
-    addingEvent: PropTypes.bool.isRequired,
-    eventAdded: PropTypes.number,
     addEvent: PropTypes.func.isRequired,
-    // Editinging an event
-    editingEvent: PropTypes.bool.isRequired,
-    eventEdited: PropTypes.bool.isRequired,
+    // Editing an event
     editEvent: PropTypes.func.isRequired,
     // Removing an event
     removeEvent: PropTypes.func.isRequired,
@@ -76,32 +53,42 @@ export default class EventsPage extends Component {
   state = {
     showAddEventDialog: false,
     showEditEventDialog: false,
-    eventToEdit: null
+    eventToEditId: null
   }
 
   componentWillMount() {
+    // Load events, if they're not ready
     if (!this.props.eventsLoaded && !this.props.loadingEvents) this.props.loadEvents();
   }
 
-  handleEventClick = (eventId) => {
-    console.log('handleEventClick', eventId);
-  }
+  // DIALOG WINDOW (MODAL) HANDLING
 
   openAddEventDialog = () => {
-    if (!this.props.loggedIn) return;
     this.setState({ showAddEventDialog: true });
   }
 
   closeAddEventDialog = () => {
+    this.setState({ showAddEventDialog: false });
+  }
+
+  openEditEventDialog = (eventId) => {
     this.setState({
-      showAddEventDialog: false,
-      showEditEventDialog: false,
-      eventToEdit: null
+      showEditEventDialog: true,
+      eventToEditId: eventId
     });
   }
 
+  closeEditEventDialog = () => {
+    this.setState({
+      showEditEventDialog: false,
+      eventToEditId: null
+    });
+  }
+
+  // REDUX/API CALLS
+
   addEvent = (eventData) => {
-    if (!this.props.loggedIn) return;
+    const { lat, lng } = eventData.location.geometry.location;
 
     const newEvent = {
       title: eventData.title,
@@ -110,8 +97,8 @@ export default class EventsPage extends Component {
       link: eventData.link,
       description: eventData.description,
       date: eventData.date,
-      lat: eventData.location.geometry.location.lat(),
-      lng: eventData.location.geometry.location.lng(),
+      lat: _isFunction(lat) ? lat() : lat,
+      lng: _isFunction(lng) ? lng() : lat,
       googleLocationId: eventData.location.place_id
     };
 
@@ -119,7 +106,7 @@ export default class EventsPage extends Component {
   }
 
   editEvent = (eventData) => {
-    if (!this.props.loggedIn) return;
+    const { lat, lng } = eventData.location.geometry.location;
 
     const editedEvent = {
       id: eventData.id,
@@ -129,31 +116,27 @@ export default class EventsPage extends Component {
       description: eventData.description,
       date: eventData.date,
       organizedBy: eventData.organizedBy,
-      lat: eventData.location.geometry.location.lat(),
-      lng: eventData.location.geometry.location.lng(),
+      lat: _isFunction(lat) ? lat() : lat,
+      lng: _isFunction(lng) ? lng() : lat,
       googleLocationId: eventData.location.place_id
     };
 
     this.props.editEvent(editedEvent);
   }
 
-  startEditingEvent = (eventId) => {
-    if (!this.props.loggedIn) return;
-    this.setState({
-      showEditEventDialog: true,
-      eventToEdit: this.props.events.find(event => event.id === eventId)
-    });
-  }
-
   deleteEvent = (eventId) => {
-    if (!this.props.loggedIn) return;
     this.props.removeEvent(eventId);
   }
 
+  // RENDER
+
+  // TODO: add and then immedetially edit event
+  // TODO: better price handling
+
   render() {
+    // Prepare events' lists
     const allEvents = this.props.events;
     const firstEvent = allEvents[0];
-    const centerCoords = firstEvent && [firstEvent.lat, firstEvent.lng];
 
     let userEvents = [];
     let otherEvents = [];
@@ -166,6 +149,25 @@ export default class EventsPage extends Component {
 
     const userHasEvents = userEvents.length > 0;
     const thereAreOtherEvents = otherEvents.length > 0;
+
+    // Events lists components
+
+    const userEventsList = (
+      <EventsList
+        title="Your events"
+        events={userEvents}
+        onEdit={this.openEditEventDialog}
+        onDelete={this.deleteEvent}
+      />
+    );
+
+    const otherEventsList = <EventsList title="Other events" events={otherEvents} />;
+
+    const allEventsList = <EventsList title="All events" events={allEvents} />;
+
+    // Other components
+
+    const centerCoords = firstEvent && [firstEvent.lat, firstEvent.lng];
 
     const addEventButton = (
       <FloatingActionButton
@@ -181,72 +183,19 @@ export default class EventsPage extends Component {
       </FloatingActionButton>
     );
 
-    const userEventsList = (
-      <Paper style={{ padding: 16, marginBottom: 24 }}>
-        <h3>Your events</h3>
-        <List>
-          {
-            userEvents.sort(ascendingBy('date')).map((event) => {
-              const date = moment(event.date).format('MMMM Do YYYY');
-              return (
-                <ListItem
-                  key={event.id}
-                  primaryText={event.title}
-                  secondaryText={date}
-                  rightIconButton={
-                    <IconMenu iconButtonElement={iconButtonElement}>
-                      <MenuItem onTouchTap={() => this.startEditingEvent(event.id)}>Edit</MenuItem>
-                      <MenuItem onTouchTap={() => this.deleteEvent(event.id)}>Delete</MenuItem>
-                    </IconMenu>
-                  }
-                  // onClick={() => this.handleEventClick(event.id)}
-                />
-              );
-            })
-          }
-        </List>
-      </Paper>
-    );
-
-    const otherEventsList = (
-      <Paper style={{ padding: 16 }}>
-        <h3>Other events</h3>
-        <List>
-          {
-            otherEvents.sort(ascendingBy('date')).map((event) => {
-              const date = moment(event.date).format('MMMM Do YYYY');
-              return (
-                <ListItem
-                  key={event.id}
-                  primaryText={event.title}
-                  secondaryText={date}
-                  onClick={() => this.handleEventClick(event.id)}
-                />
-              );
-            })
-          }
-        </List>
-      </Paper>
-    );
-
-    const allEventsList = (
-      <Paper style={{ padding: 16 }}>
-        <h3>All events</h3>
-        <List>
-          {
-            allEvents.sort(ascendingBy('date')).map((event) => {
-              const date = moment(event.date).format('MMMM Do YYYY');
-              return (
-                <ListItem
-                  key={event.id}
-                  primaryText={event.title}
-                  secondaryText={date}
-                  onClick={() => this.handleEventClick(event.id)}
-                />
-              );
-            })
-          }
-        </List>
+    const mapAndCalendar = (
+      <Paper style={{ overflow: 'hidden', marginBottom: 24 }}>
+        <Div flex wrap>
+          <Div flexVal={1} style={{ height: 200, minWidth: 200 }}>
+            <Map
+              type="events"
+              style={{ height: '100%' }}
+              centerCoords={centerCoords}
+              markers={this.props.events}
+            />
+          </Div>
+          <EventsCalendar />
+        </Div>
       </Paper>
     );
 
@@ -255,38 +204,24 @@ export default class EventsPage extends Component {
         <Grid style={{ paddingTop: 24 }}>
           {this.props.loggedIn && addEventButton}
           <Helmet title="Events" />
-          <MockCard
-            title="React Events"
-            content
-          />
-          <Paper style={{ overflow: 'hidden', marginBottom: 24 }}>
-            <Div flex wrap>
-              <Div flexVal={1} style={{ height: 200, minWidth: 200 }}>
-                <Map
-                  type="events"
-                  style={{ height: '100%' }}
-                  centerCoords={centerCoords}
-                  markers={this.props.events}
-                />
-              </Div>
-              <EventsCalendar />
-            </Div>
-          </Paper>
+          <MockCard title="React Events" content />
+          {mapAndCalendar}
+          {/* Events lists */}
           {userHasEvents && userEventsList}
           {userHasEvents && thereAreOtherEvents && otherEventsList}
           {!userHasEvents && allEventsList}
-          {this.props.loggedIn && <AddEventDialog
-            popupVisible={this.state.showAddEventDialog || this.state.showEditEventDialog}
+          {/* Event modals with forms */}
+          <AddEventDialog
+            popupVisible={this.state.showAddEventDialog}
             closePopup={this.closeAddEventDialog}
             addEvent={this.addEvent}
+          />
+          <EditEventDialog
+            eventId={this.state.eventToEditId}
+            popupVisible={this.state.showEditEventDialog}
+            closePopup={this.closeEditEventDialog}
             editEvent={this.editEvent}
-            addingEvent={this.props.addingEvent}
-            editingEvent={this.props.editingEvent}
-            eventAdded={this.props.eventAdded}
-            editMode={this.state.showEditEventDialog}
-            dataToEdit={this.state.eventToEdit}
-            eventEdited={this.props.eventEdited}
-          />}
+          />
         </Grid>
       </LoadingScreen>
     );
