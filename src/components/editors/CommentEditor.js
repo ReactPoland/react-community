@@ -1,37 +1,78 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
-import createHashtagPlugin from 'draft-js-hashtag-plugin';
+import FlatButton from 'material-ui/FlatButton';
 import editorStyles from './CommentEditor.scss';
-// import 'draft-js-hashtag-plugin/lib/plugin.css';
+import { submitComment, loadConversation } from 'redux/modules/conversationModule';
+import { Spinner } from 'components';
 
-const hashtagPlugin = createHashtagPlugin();
-const plugins = [hashtagPlugin];
-const text = `#TIL: This editor can have all sorts of #hashtags. Pretty #cool :)
-Try it yourself by starting a word with a # (hash character) …
-`;
+// --- Example plugin usage ---
+// import createHashtagPlugin from 'draft-js-hashtag-plugin';
+// const hashtagPlugin = createHashtagPlugin();
+// const plugins = [hashtagPlugin];
 
+const mappedState = ({ conversation }) => ({
+  addingComment: conversation.addingComment,
+  commentAdded: conversation.commentAdded,
+  addCommentError: conversation.addCommentError
+});
+
+const mappedActions = { submitComment, loadConversation };
+
+@connect(mappedState, mappedActions)
 export default class CommentEditor extends Component {
-
-  state = {
-    editorState: createEditorStateWithText(text)
+  static propTypes = {
+    articleId: PropTypes.number.isRequired,
+    addingComment: PropTypes.bool.isRequired,
+    commentAdded: PropTypes.bool.isRequired,
+    addCommentError: PropTypes.bool.isRequired,
+    submitComment: PropTypes.func.isRequired,
+    loadConversation: PropTypes.func.isRequired
   }
 
-  onChange = (editorState) => {
+  state = {
+    editorState: createEditorStateWithText('')
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // If we successfully added a new comment...
+    if (!this.props.commentAdded && nextProps.commentAdded) {
+      // Clear state
+      this.setState({ editorState: createEditorStateWithText('') });
+      // Refresh comments list
+      // NOTE: instead of refreshing whole list, we could append new comments to the list in the store
+      this.props.loadConversation(this.props.articleId);
+    }
+  }
+
+  update = (editorState) => {
     this.setState({ editorState });
   }
 
-  focus = () => {
-    this.editor.focus();
+  submit = () => {
+    const comment = this.state.editorState.getCurrentContent().getPlainText();
+
+    if (!comment) return;
+
+    this.props.submitComment({ articleId: this.props.articleId, body: comment });
   }
 
   render() {
     return (
-      <div className={editorStyles.editor} onClick={this.focus}>
+      <div className={editorStyles.editor}>
+        {this.props.addingComment && <Spinner
+          style={{ position: 'absolute', top: 0, left: 0, background: 'rgba(255, 255, 255, 0.8)', zIndex: 10 }}
+        />}
         <Editor
           editorState={this.state.editorState}
-          onChange={this.onChange}
-          plugins={plugins}
-          ref={(element) => { this.editor = element; }}
+          onChange={this.update}
+          // plugins={plugins}
+        />
+        <FlatButton
+          label="Add comment"
+          primary
+          onTouchTap={this.submit}
         />
       </div>
     );
