@@ -40,6 +40,7 @@ class Conversation extends Component {
     return (
       <LoadingScreen loading={this.props.loadingConversation}>
         <CommentsList
+          articleId={this.props.articleId}
           comments={this.props.comments}
           showReloadList={this.props.loadConversationError}
           onReloadList={this.loadComments}
