@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 // COMPONENTS
 import Comment from './Comment';
 import { RefreshButton } from 'components';

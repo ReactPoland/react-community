@@ -1,6 +1,7 @@
 /* eslint-disable */
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Editor, Raw } from 'slate';
 import defaultState from './state.json';
 

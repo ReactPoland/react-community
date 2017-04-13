@@ -70,7 +70,6 @@ export function editUser(user) {
   return {
     requestName: 'Edit user',
     types: [EDIT_USER_REQUEST, EDIT_USER_SUCCESS, EDIT_USER_FAIL],
-    // TODO: remove "user" below when API starts returning edited user
     payload: { userId: user.id, user },
     promise: client => client.post('/user/updateUser', { data })
   };
@@ -150,8 +149,6 @@ export default (state = initialState, action = {}) => {
     case EDIT_USER_SUCCESS:
       return {
         ...state,
-        // TODO: uncomment this line when API starts returning edited user
-        // all: state.all.map(user => user.id === action.payload.userId ? action.result.message : user),
         all: state.all.map(user => user.id === action.payload.userId ? action.payload.user : user),
         editingUser: false,
         userEdited: true

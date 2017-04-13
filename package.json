@@ -89,6 +89,7 @@
     }
   },
   "dependencies": {
+    "axios": "^0.16.1",
     "babel-core": "^6.5.2",
     "babel-loader": "^6.2.1",
     "babel-plugin-add-module-exports": "^0.1.2",
@@ -127,6 +128,7 @@
     "pg": "^6.1.5",
     "piping": "^0.3.0",
     "pretty-error": "^1.2.0",
+    "prop-types": "^15.5.7",
     "react": "^15.4.2",
     "react-bootstrap": "^0.30.8",
     "react-day-picker": "^5.2.0",

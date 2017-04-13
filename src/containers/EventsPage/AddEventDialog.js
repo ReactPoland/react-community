@@ -1,40 +1,57 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { eventFormValidator } from 'utils';
+// STORE
+import { showError } from 'redux/modules/errorsModule';
+// COMPONENTS
+import EventForm from './EventForm';
+// LAYOUT
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import _isEmpty from 'lodash/isEmpty';
-import _startsWith from 'lodash/startsWith';
-import AddLocationForm from './AddLocationForm';
 
 const getInitialState = () => ({
   formData: {
-    name: '',
+    title: '',
     link: 'http://',
     description: '',
-    location: {}
+    date: new Date(),
+    price: '0.00',
+    location: null
   },
   validationErrors: {
-    name: '',
+    title: '',
     link: '',
     description: '',
+    price: '',
+    date: '',
     location: ''
   }
 });
 
-class AddLocationDialog extends Component {
+const mappedState = ({ events }) => ({
+  addingEvent: events.addingEvent,
+  eventAdded: events.eventAdded
+});
+
+const mappedActions = { showError };
+
+@connect(mappedState, mappedActions)
+export default class AddEventDialog extends Component {
   static propTypes = {
     popupVisible: PropTypes.bool.isRequired,
-    addMarker: PropTypes.func.isRequired,
     closePopup: PropTypes.func.isRequired,
-    addingMarker: PropTypes.bool.isRequired,
-    markerAdded: PropTypes.bool.isRequired
+    addEvent: PropTypes.func.isRequired,
+    addingEvent: PropTypes.bool.isRequired,
+    eventAdded: PropTypes.number,
+    showError: PropTypes.func.isRequired
   }
 
   state = getInitialState()
 
   componentWillReceiveProps(nextProps) {
-    // If we successfully got a new marker, close the dialog window
-    if (!this.props.markerAdded && nextProps.markerAdded) {
+    // If we successfully got a new event, close the dialog window
+    if (!this.props.eventAdded && nextProps.eventAdded) {
       this.closePopup();
     }
   }
@@ -51,11 +68,13 @@ class AddLocationDialog extends Component {
     this.setState(newState);
   }
 
-  // Passes marker data to parent component if form is valid
-  // and no request is pending
-  addMarker = () => {
-    if (this.validateForm() && !this.props.addingMarker) {
-      this.props.addMarker(this.state.formData);
+  // Passes new event's data back to parent component
+  addEvent = () => {
+    const { isValid, errors } = eventFormValidator(this.state.formData);
+    if (isValid && !this.props.addingEvent) {
+      this.props.addEvent(this.state.formData);
+    } else {
+      this.setState({ validationErrors: errors });
     }
   }
 
@@ -65,24 +84,10 @@ class AddLocationDialog extends Component {
     this.props.closePopup();
   }
 
-  validateForm = () => {
-    const { name, link, description, location } = this.state.formData;
-    const validationErrors = {};
-
-    if (!name) validationErrors.name = 'Name is required';
-    if (!link || link === 'http://') validationErrors.link = 'Link is required';
-    if (!(_startsWith(link, 'http://') || _startsWith(link, 'https://'))) validationErrors.link = 'Link must start with "http://"';
-    if (!description) validationErrors.description = 'Description is required';
-    if (!location.description) validationErrors.location = 'Location is required';
-
-    this.setState({ validationErrors });
-
-    return _isEmpty(validationErrors);
-  }
-
   render() {
-    const { popupVisible, addingMarker } = this.props;
+    const { popupVisible, addingEvent } = this.props;
     const { formData, validationErrors } = this.state;
+
     const actions = [
       <FlatButton
         label="Cancel"
@@ -90,11 +95,11 @@ class AddLocationDialog extends Component {
         onTouchTap={this.closePopup}
       />,
       <FlatButton
-        label={addingMarker ? 'Adding...' : 'Add'}
+        label={addingEvent ? 'Adding...' : 'Add'}
         style={{ marginLeft: 8 }}
         primary
-        onTouchTap={this.addMarker}
-        disabled={addingMarker}
+        onTouchTap={this.addEvent}
+        disabled={addingEvent}
       />
     ];
 
@@ -102,12 +107,12 @@ class AddLocationDialog extends Component {
       <Dialog
         contentStyle={{ maxWidth: 500 }}
         titleStyle={{ paddingBottom: 0 }}
-        title="Add your location"
+        title="Add new event"
         actions={actions}
         open={popupVisible}
         onRequestClose={this.closePopup}
       >
-        <AddLocationForm
+        <EventForm
           formData={formData}
           validationErrors={validationErrors}
           onChange={this.updateForm}
@@ -116,5 +121,3 @@ class AddLocationDialog extends Component {
     );
   }
 }
-
-export default AddLocationDialog;

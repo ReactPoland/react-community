@@ -1,27 +1,32 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import TextField from 'material-ui/TextField';
+import moment from 'moment';
+// COMPONENTS
 import { LocationInput } from 'components';
+// LAYOUT
+import TextField from 'material-ui/TextField';
+import DatePicker from 'material-ui/DatePicker';
+import TimePicker from 'material-ui/TimePicker';
 
-class AddLocationForm extends Component {
+export default class EventForm extends Component {
   static propTypes = {
     formData: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
     validationErrors: PropTypes.object.isRequired
   }
 
-  onLinkFieldFocus = ev => {
+  onLinkFieldFocus = (event) => {
     // Move cursor to the end of the input if it contains
     // default value on focus
     if (this.props.formData.link === 'http://') {
-      ev.target.value = '';
-      ev.target.value = this.props.formData.link;
+      event.target.value = '';
+      event.target.value = this.props.formData.link;
     }
   }
 
   render() {
     const {
-      formData: { name, link, description },
+      formData: { title, link, date, description, price, location },
       validationErrors,
       onChange
     } = this.props;
@@ -29,12 +34,30 @@ class AddLocationForm extends Component {
     return (
       <div>
         <TextField
-          floatingLabelText="Name"
-          errorText={validationErrors.name}
-          value={name}
-          onChange={ev => { onChange('name', ev.target.value); }}
+          floatingLabelText="Title"
+          errorText={validationErrors.title}
+          value={title}
+          onChange={ev => { onChange('title', ev.target.value); }}
           fullWidth
           autoFocus
+        />
+        <DatePicker
+          floatingLabelText="Date"
+          errorText={validationErrors.date}
+          value={moment(date).toDate()}
+          onChange={(ev, dt) => { onChange('date', dt); }}
+        />
+        <TimePicker
+          floatingLabelText="Time"
+          format="24hr"
+          value={moment(date).toDate()}
+          onChange={(ev, dt) => { onChange('date', dt); }}
+        />
+        <TextField
+          floatingLabelText="Price"
+          errorText={validationErrors.price}
+          value={price}
+          onChange={ev => { onChange('price', ev.target.value); }}
         />
         <TextField
           floatingLabelText="Link"
@@ -53,14 +76,13 @@ class AddLocationForm extends Component {
           fullWidth
         />
         <LocationInput
+          location={location}
           floatingLabelText="Location"
           errorText={validationErrors.location}
-          onChooseLocation={location => { onChange('location', location); }}
+          onChooseLocation={loc => { onChange('location', loc); }}
           fullWidth
         />
       </div>
     );
   }
 }
-
-export default AddLocationForm;
