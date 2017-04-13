@@ -13,7 +13,6 @@ import { Spinner } from 'components';
 // const plugins = [hashtagPlugin];
 
 const mappedState = ({ conversation }) => ({
-  addingComment: conversation.addingComment,
   commentAdded: conversation.commentAdded,
   addCommentError: conversation.addCommentError
 });
@@ -25,7 +24,6 @@ export default class CommentEditor extends Component {
   static propTypes = {
     articleId: PropTypes.number.isRequired, // Used for commenting the articles
     parentCommentId: PropTypes.number, // Used for replying to comments
-    addingComment: PropTypes.bool.isRequired,
     commentAdded: PropTypes.bool.isRequired,
     addCommentError: PropTypes.bool.isRequired,
     submitComment: PropTypes.func.isRequired,
@@ -34,6 +32,7 @@ export default class CommentEditor extends Component {
   }
 
   state = {
+    addingComment: false,
     editorState: createEditorStateWithText('')
   }
 
@@ -41,7 +40,10 @@ export default class CommentEditor extends Component {
     // If we successfully added a new comment...
     if (!this.props.commentAdded && nextProps.commentAdded) {
       // Clear state
-      this.setState({ editorState: createEditorStateWithText('') });
+      this.setState({
+        addingComment: false,
+        editorState: createEditorStateWithText('')
+      });
       // Refresh comments list
       // NOTE: instead of refreshing whole list, we could append new comments to the list in the store
       this.props.loadConversation(this.props.articleId);
@@ -61,11 +63,9 @@ export default class CommentEditor extends Component {
     const comment = this.state.editorState.getCurrentContent().getPlainText();
 
     if (!comment) return;
-    console.log({
-      articleId: this.props.articleId,
-      parentCommentId: this.props.parentCommentId,
-      body: comment
-    });
+
+    this.setState({ addingComment: true });
+
     this.props.submitComment({
       articleId: this.props.articleId,
       parentCommentId: this.props.parentCommentId,
@@ -78,7 +78,7 @@ export default class CommentEditor extends Component {
 
     return (
       <div className={editorStyles.editor}>
-        {this.props.addingComment &&
+        {this.state.addingComment &&
           <Spinner
             style={{
               position: 'absolute',

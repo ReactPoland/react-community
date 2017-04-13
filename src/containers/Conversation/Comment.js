@@ -32,9 +32,8 @@ class Comment extends Component {
     this.setState({ replyInputVisible: false });
   }
 
-  renderContent = ({ id, user, depth, body, createdAt }) => (
+  renderContent = ({ id, user, body, createdAt }) => (
     <div key={`content_${id}`}>
-      <p><strong>{depth}</strong></p>
       <p><strong>{user.firstName} {user.lastName}</strong></p>
       <p>{body}</p>
       <p title={moment(createdAt).format('dddd, MMMM Do YYYY, h:mm:ss a')}>
@@ -59,18 +58,7 @@ class Comment extends Component {
     return (
       <ListItem
         leftAvatar={<Avatar src={comment.user.pictureURL} />}
-        // secondaryText={comment.replies && comment.replies.length > 0 && <p>{comment.replies.length} Replies</p>}
         children={this.renderContent(comment)}
-        // disabled={!comment.replies.length}
-        // primaryTogglesNestedList
-        // nestedItems={(comment.replies || []).map((reply) => (
-        //   <ListItem
-        //     key={reply.id}
-        //     leftAvatar={<Avatar src={reply.pictureUrl} />}
-        //     children={this.renderContent('reply', reply)}
-        //     disabled
-        //   />
-        // ))}
       />
     );
   }
