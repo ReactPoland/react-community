@@ -1,12 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { renderIntoDocument } from 'react-dom/test-utils';
-import { expect } from 'chai';
 import Login from 'containers/Login/Login';
 import { Provider } from 'react-redux';
 import { browserHistory } from 'react-router';
 import createStore from 'redux/create';
 import ApiClient from 'helpers/ApiClient';
+import { shallow, render, mount } from 'enzyme';
 const client = new ApiClient();
 
 describe('Login', () => {
@@ -17,24 +15,22 @@ describe('Login', () => {
     }
   };
   const store = createStore(browserHistory, client, mockStore);
-  const renderer = renderIntoDocument(
+  const renderer = mount(
     <Provider store={store} key="provider">
       <Login />
     </Provider>
   );
-  const dom = ReactDOM.findDOMNode(renderer);
 
   it('should render correctly', () => {
     return expect(renderer).to.be.ok;
   });
 
-  it('should render with input', () => {
-    const input = dom.getElementsByTagName('input')[0];
-    expect(input).to.exist
+  it('should render an input to log in`', () => {
+    expect(renderer.find('input')).to.have.length(1);
   });
 
-  it('should render with a log in button', () => {
-    const text = dom.getElementsByTagName('button')[0].textContent;
-    expect(text).to.equal(' Log In');
+  it('should render an button to log in`', () => {
+    expect(renderer.find('button')).to.have.length(1);
+    expect(renderer.find('button')).to.have.text().match(/ Log In/);
   });
 });
