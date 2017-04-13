@@ -5,6 +5,9 @@ const UserModel = require('./models/User');
 const ConversationModel = require('./models/Conversation');
 const CommentModel = require('./models/Comment');
 const EventModel = require('./models/Event');
+const QuizModel = require('./models/Quiz');
+const QuizQuestionModel = require('./models/QuizQuestion');
+const QuizAnswerModel = require('./models/QuizAnswer');
 
 const models = {};
 
@@ -14,11 +17,37 @@ const models = {};
   UserModel,
   ConversationModel,
   EventModel,
-  CommentModel
+  CommentModel,
+  QuizModel,
+  QuizQuestionModel,
+  QuizAnswerModel
 ].map(modelItem => {
   models[modelItem.name] = sequelize.define(modelItem.name, {
     ...modelItem.model
   });
+});
+
+models.quizAnswers.belongsTo(models.quizQuestions, {
+  foreignKey: { allowNull: false },
+  as: 'question',
+  onDelete: 'cascade',
+});
+
+models.quizQuestions.belongsTo(models.quizzes, {
+  foreignKey: { allowNull: false },
+  as: 'quiz',
+  onDelete: 'cascade',
+});
+models.quizQuestions.hasMany(models.quizAnswers, {
+  onDelete: 'cascade',
+  as: 'answers',
+  foreignKey: 'questionId'
+});
+
+models.quizzes.hasMany(models.quizQuestions, {
+  onDelete: 'cascade',
+  as: 'questions',
+  foreignKey: 'quizId'
 });
 
 
