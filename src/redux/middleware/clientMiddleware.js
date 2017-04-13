@@ -28,7 +28,15 @@ export default client => store => next => action => {
   // -----------
 
   actionPromise.then(
-    (result) => next({ ...rest, result, type: SUCCESS }),
+    (result) => {
+      if (result && result.type === 'error') {
+        next({ ...rest, result, type: FAILURE });
+        // Catch error and save it in the store
+        dispatch(showError({ requestName, error: result }));
+      } else {
+        next({ ...rest, result, type: SUCCESS });
+      }
+    },
     (error) => {
       next({ ...rest, error, type: FAILURE });
       // Catch error and save it in the store
