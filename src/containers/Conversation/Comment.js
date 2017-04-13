@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { ListItem } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 
@@ -8,10 +9,13 @@ class Comment extends Component {
     comment: PropTypes.object.isRequired
   }
 
-  renderContent = (type, { id, author, message }) => (
-    <div key={`${type}_${id}`}>
-      <p><strong>{author}</strong></p>
-      <p>{message}</p>
+  renderContent = ({ id, user, body, createdAt }) => (
+    <div key={`content_${id}`}>
+      <p><strong>{user.firstName} {user.lastName}</strong></p>
+      <p>{body}</p>
+      <p title={moment(createdAt).format('dddd, MMMM Do YYYY, h:mm:ss a')}>
+        <small>{moment(createdAt).fromNow()}</small>
+      </p>
     </div>
   )
 
@@ -20,19 +24,19 @@ class Comment extends Component {
 
     return (
       <ListItem
-        leftAvatar={<Avatar src={comment.pictureUrl} />}
-        secondaryText={comment.replies && comment.replies.length > 0 && <p>{comment.replies.length} Replies</p>}
-        children={this.renderContent('comment', comment)}
-        disabled={!comment.replies.length}
-        primaryTogglesNestedList
-        nestedItems={(comment.replies || []).map((reply) => (
-          <ListItem
-            key={reply.id}
-            leftAvatar={<Avatar src={reply.pictureUrl} />}
-            children={this.renderContent('reply', reply)}
-            disabled
-          />
-        ))}
+        leftAvatar={<Avatar src={comment.user.pictureURL} />}
+        // secondaryText={comment.replies && comment.replies.length > 0 && <p>{comment.replies.length} Replies</p>}
+        children={this.renderContent(comment)}
+        // disabled={!comment.replies.length}
+        // primaryTogglesNestedList
+        // nestedItems={(comment.replies || []).map((reply) => (
+        //   <ListItem
+        //     key={reply.id}
+        //     leftAvatar={<Avatar src={reply.pictureUrl} />}
+        //     children={this.renderContent('reply', reply)}
+        //     disabled
+        //   />
+        // ))}
       />
     );
   }

@@ -26,7 +26,7 @@ class CommentsList extends Component {
     }
 
     return (
-      <List>
+      <List style={{ marginTop: 24 }}>
         <Subheader>{this.props.comments.length} Comments</Subheader>
         {
           this.props.comments.map((comment) => (
