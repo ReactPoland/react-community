@@ -64,6 +64,11 @@ export default (state = initialState, action = {}) => {
         loaded: false,
         loadError: true
       };
+    case LOGIN_REQUEST:
+      return {
+        ...state,
+        loggingIn: true
+      };
     case LOGOUT_REQUEST:
       return {
         ...state,

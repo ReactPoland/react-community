@@ -23,7 +23,7 @@ const loadCommentsRequest = async ({ body }) => {
   if (!conversResp.item) return resp.success([]);
 
   const comments = await conversResp.item.getComments({
-    attributes: ['id', 'body', 'conversationId', 'createdAt', 'updatedAt', 'depth'],
+    attributes: ['id', 'body', 'conversationId', 'createdAt', 'updatedAt', 'depth', 'parentCommentId'],
     include: [{
       model: UserModel,
       attributes: ['id', 'firstName', 'lastName', 'pictureURL']

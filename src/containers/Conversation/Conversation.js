@@ -39,13 +39,12 @@ class Conversation extends Component {
   render() {
     return (
       <LoadingScreen loading={this.props.loadingConversation}>
-        <div>
-          <CommentsList
-            comments={this.props.comments}
-            showReloadList={this.props.loadConversationError}
-            onReloadList={this.loadComments}
-          />
-        </div>
+        <CommentsList
+          articleId={this.props.articleId}
+          comments={this.props.comments}
+          showReloadList={this.props.loadConversationError}
+          onReloadList={this.loadComments}
+        />
       </LoadingScreen>
     );
   }

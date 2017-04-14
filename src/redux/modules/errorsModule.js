@@ -2,7 +2,7 @@ import moment from 'moment';
 import _reject from 'lodash/reject';
 import _startsWith from 'lodash/startsWith';
 
-const debug = false;
+const debug = true;
 
 // --- ACTION TYPES ---
 export const SHOW_ERROR = 'SHOW_ERROR';
@@ -11,7 +11,7 @@ export const HIDE_ALL_ERRORS = 'HIDE_ALL_ERRORS';
 export const HIDE_ERRORS_OF_TYPE = 'HIDE_ERRORS_OF_TYPE';
 
 // --- HELPERS ---
-const composeError = ({ requestName, error }) => {
+const composeError = ({ requestName, error = {} }) => {
   if (debug) console.warn('Request: ', requestName, 'error', error);
   const errorMessage = `${error.status || ''} ${error.message || ''}`;
 
