@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Map as LeafletMap, TileLayer } from 'react-leaflet-universal';
 import UserMarker from './UserMarker';
 import EventMarker from './EventMarker';
