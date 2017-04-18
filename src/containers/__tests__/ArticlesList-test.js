@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { renderIntoDocument } from 'react-dom/test-utils'
 import { expect } from 'chai'
-import ArticlesList from 'containers/ArticlesPage/ArticlesList'
+import ArticlesList from 'containers/Articles/ArticlesPage/ArticlesList'
 import { Provider } from 'react-redux'
 import { browserHistory } from 'react-router'
 import createStore from 'redux/create'
@@ -42,11 +42,11 @@ describe('ArticlesList', () => {
   }
   const store = createStore(browserHistory, client, mockStore)
   const renderer = renderIntoDocument(
-    // <Provider store={store} key="provider">
+    <Provider store={store} key="provider">
       <MuiThemeProvider muiTheme={muiTheme}>
         <ArticlesList onListItemClick={() => {}} articles={mockStore.articles} />
       </MuiThemeProvider>
-    // </Provider>
+    </Provider>
   )
   const dom = ReactDOM.findDOMNode(renderer)
 
