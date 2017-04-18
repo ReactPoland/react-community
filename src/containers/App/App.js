@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { asyncConnect } from 'redux-async-connect';
 import { push } from 'react-router-redux';
@@ -82,7 +83,7 @@ export default class App extends Component {
       <LoadingScreen loading={!this.state.showPage}>
         <div className={styles.appContainer}>
           <Helmet {...config.app.head}/>
-          <MainNavbar user={this.props.user} config={config} />
+          <MainNavbar />
           <div className={styles.appContent}>
             {this.props.children}
           </div>

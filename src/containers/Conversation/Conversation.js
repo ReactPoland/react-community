@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { loadConversation } from 'redux/modules/conversationModule';
 // COMPONENTS
@@ -38,13 +39,12 @@ class Conversation extends Component {
   render() {
     return (
       <LoadingScreen loading={this.props.loadingConversation}>
-        <div>
-          <CommentsList
-            comments={this.props.comments}
-            showReloadList={this.props.loadConversationError}
-            onReloadList={this.loadComments}
-          />
-        </div>
+        <CommentsList
+          articleId={this.props.articleId}
+          comments={this.props.comments}
+          showReloadList={this.props.loadConversationError}
+          onReloadList={this.loadComments}
+        />
       </LoadingScreen>
     );
   }

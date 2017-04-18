@@ -105,7 +105,6 @@ export function editArticle(article) {
   return {
     requestName: 'Edit article',
     types: [EDIT_ARTICLE_REQUEST, EDIT_ARTICLE_SUCCESS, EDIT_ARTICLE_FAIL],
-    // TODO: remove "article" below when API starts returning edited article
     payload: { articleId: article.id, article },
     promise: client => client.post('/article/updateArticle', { data })
   };
@@ -190,8 +189,6 @@ export default function articlesModule(state = initialState, action = {}) {
     case EDIT_ARTICLE_SUCCESS:
       return {
         ...state,
-        // TODO: uncomment this line when API starts returning edited article
-        // all: state.all.map(article => article.id === action.payload.articleId ? action.result.message : article),
         all: state.all.map(article => article.id === action.payload.articleId ? action.payload.article : article),
         editingArticle: false,
         articleEdited: true

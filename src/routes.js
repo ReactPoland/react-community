@@ -1,20 +1,13 @@
 import React from 'react';
 import { IndexRoute, Route } from 'react-router';
 import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
-import {
-  App, HomePage, Chat, Login, LoginSuccess, WorldPage, NotFound,
-  ArticlesContainer, NewArticlePage, ArticlesPage, ArticlePage, TutorialsPage,
-  BestPracticesPage, ProfilePage, UsersPage
-} from 'containers';
+import * as ct from 'containers';
 
 export default (store) => {
   const requireLogin = (nextState, replace, cb) => {
     function checkAuth() {
       const { auth: { user }} = store.getState();
-      if (!user) {
-        // oops, not logged in, so can't be here!
-        replace('/');
-      }
+      if (!user) replace('/');
       cb();
     }
 
@@ -26,36 +19,36 @@ export default (store) => {
   };
 
   return (
-    <Route path="/" component={App}>
+    <Route path="/" component={ct.App}>
       { /* Home (main) route */ }
-      <IndexRoute component={HomePage} />
+      <IndexRoute component={ct.HomePage} />
 
       { /* Routes requiring login */ }
       <Route onEnter={requireLogin}>
-        <Route path="loginSuccess" component={LoginSuccess}/>
-        <Route path="chat" component={Chat} />
-        <Route path="profile" component={ProfilePage} />
+        <Route path="loginSuccess" component={ct.LoginSuccess}/>
+        <Route path="chat" component={ct.Chat} />
+        <Route path="profile" name="ProfilePage" component={ct.ProfilePage} />
       </Route>
 
       { /* Routes */ }
-      <Route path="login" component={Login} />
-      <Route path="world" component={WorldPage} noFooter />
-      <Route path="tutorials" component={TutorialsPage} />
-      <Route path="best-practices" component={BestPracticesPage} />
+      <Route path="world" component={ct.WorldPage} noFooter />
+      <Route path="tutorials" component={ct.TutorialsPage} />
+      <Route path="events" component={ct.EventsPage} />
+      <Route path="best-practices" component={ct.BestPracticesPage} />
 
       <Route path="users">
-        <IndexRoute component={UsersPage} />
-        <Route path="/user/:id" component={ProfilePage} />
+        <IndexRoute component={ct.UsersPage} />
+        <Route path="/user/:id" name="UserPage" component={ct.ProfilePage} />
       </Route>
 
-      <Route path="articles" component={ArticlesContainer}>
-        <IndexRoute component={ArticlesPage} />
-        <Route path="/article/:id" component={ArticlePage} />
-        <Route path="add" component={NewArticlePage} />
+      <Route path="articles" component={ct.ArticlesContainer}>
+        <IndexRoute component={ct.ArticlesPage} />
+        <Route path="/article/:id" component={ct.ArticlePage} />
+        <Route path="add" component={ct.NewArticlePage} />
       </Route>
 
       { /* Catch all route */ }
-      <Route path="*" component={NotFound} status={404} />
+      <Route path="*" component={ct.NotFound} status={404} />
     </Route>
   );
 };

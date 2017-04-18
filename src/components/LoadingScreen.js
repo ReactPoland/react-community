@@ -1,28 +1,21 @@
-import React, { Component, PropTypes } from 'react';
-import { LoadingScreen as StyledLoadingScreen } from 'components/styled';
-import CircularProgress from 'material-ui/CircularProgress';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Spinner } from 'components';
 
-export default class LoadingScreen extends Component {
-  static propTypes = {
-    children: PropTypes.element.isRequired,
-    loading: PropTypes.bool.isRequired,
-    style: PropTypes.object
-  };
+const LoadingScreen = (props) => (
+  !__SERVER__ && !props.loading
+    ? React.Children.only(props.children) // This will throw if there are many children
+    : <Spinner style={props.style} />
+);
 
-  static defaultProps = {
-    styles: {}
-  };
+LoadingScreen.propTypes = {
+  children: PropTypes.element.isRequired,
+  loading: PropTypes.bool.isRequired,
+  style: PropTypes.object
+};
 
-  render() {
-    const { loading, style, children } = this.props;
+LoadingScreen.defaultProps = {
+  style: {}
+};
 
-    // This will throw if there are many children
-    if (!__SERVER__ && !loading) return React.Children.only(children);
-
-    return (
-      <StyledLoadingScreen style={style}>
-        <CircularProgress size={60} thickness={7} />
-      </StyledLoadingScreen>
-    );
-  }
-}
+export default LoadingScreen;

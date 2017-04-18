@@ -1,10 +1,12 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import _find from 'lodash/find';
 import _isEmpty from 'lodash/isEmpty';
 // STORE
 import { editArticle, removeArticle } from 'redux/modules/articlesModule';
+import { submitComment } from 'redux/modules/conversationModule';
 // COMPONENTS
 import { Conversation } from 'containers';
 import { PlainTextEditor, RichTextEditor, CommentEditor } from 'components';
@@ -15,16 +17,18 @@ import Col from 'react-bootstrap/lib/Col';
 import FlatButton from 'material-ui/FlatButton';
 import { ArticleHeader, List, Div } from 'components/styled';
 
-const mappedState = ({ articles }, props) => ({
+const mappedState = ({ articles, auth }, props) => ({
   article: _find(articles.all, art => props.params.id === `${art.id}`),
   editingArticle: articles.editingArticle,
   articleEdited: articles.articleEdited,
-  removingArticle: articles.removingArticle
+  removingArticle: articles.removingArticle,
+  loggedIn: auth.loggedIn
 });
 
 const mappedActions = {
   editArticle,
   removeArticle,
+  submitComment,
   pushState: push
 };
 
@@ -38,7 +42,9 @@ export default class ArticlePage extends Component {
     removingArticle: PropTypes.number,
     editArticle: PropTypes.func.isRequired,
     removeArticle: PropTypes.func.isRequired,
-    pushState: PropTypes.func.isRequired
+    submitComment: PropTypes.func.isRequired,
+    pushState: PropTypes.func.isRequired,
+    loggedIn: PropTypes.bool.isRequired
   }
 
   state = {
@@ -138,6 +144,8 @@ export default class ArticlePage extends Component {
   )
 
   renderEditButton = () => {
+    if (!this.props.loggedIn) return null;
+
     const { editingMode } = this.state;
 
     return (
@@ -151,7 +159,7 @@ export default class ArticlePage extends Component {
   }
 
   renderDeleteButton = () => {
-    if (this.state.editingMode) return null;
+    if (!this.props.loggedIn || this.state.editingMode) return null;
 
     return (
       <FlatButton
@@ -195,12 +203,12 @@ export default class ArticlePage extends Component {
             <List right>
               {this.renderDeleteButton()}
             </List>
-            <Row>
+            {this.props.loggedIn && <Row>
               <Col sm={12} md={8}>
                 <h3>Add a comment:</h3>
-                <CommentEditor />
+                <CommentEditor articleId={article.id} />
               </Col>
-            </Row>
+            </Row>}
           </Div>
           <Conversation articleId={article.id} />
         </Div>

@@ -1,9 +1,9 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Marker, Popup } from 'react-leaflet-universal';
+import styles from './Map.scss';
 
-const MapMarker = ({ marker, removeMarker, removingMarker, loggedIn }) => {
-  const styles = require('./WorldPage.scss');
-
+const UserMarker = ({ marker, removeMarker, removingMarker, loggedIn }) => {
   const onRemoveMarker = () => {
     removeMarker(marker.id);
   };
@@ -29,11 +29,11 @@ const MapMarker = ({ marker, removeMarker, removingMarker, loggedIn }) => {
   );
 };
 
-MapMarker.propTypes = {
+UserMarker.propTypes = {
   marker: PropTypes.object.isRequired,
   removeMarker: PropTypes.func.isRequired,
   removingMarker: PropTypes.number,
   loggedIn: PropTypes.bool
 };
 
-export default MapMarker;
+export default UserMarker;
