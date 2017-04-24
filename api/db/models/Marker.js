@@ -26,6 +26,7 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: false,
       defaultValue: ''
-    }
+    },
+    geog: Sequelize.GEOGRAPHY
   }
 };

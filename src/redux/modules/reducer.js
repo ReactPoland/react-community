@@ -12,6 +12,7 @@ import dialogModule from './dialogModule';
 import usersModule from './usersModule';
 import errorsModule from './errorsModule';
 import eventsModule from './eventsModule';
+import reactDevelopersModule from './reactDevelopersModule';
 
 export default combineReducers({
   routing: routerReducer,
@@ -25,5 +26,6 @@ export default combineReducers({
   dialog: dialogModule,
   users: usersModule,
   errors: errorsModule,
-  events: eventsModule
+  events: eventsModule,
+  reactDevelopers: reactDevelopersModule
 });

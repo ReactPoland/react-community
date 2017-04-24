@@ -6,9 +6,19 @@ const dbconf = {
   port: '5432'
 };
 
+const dbconf_local = {
+  hostname: '127.0.0.1',
+  username: '',
+  password: '',
+  port: '5432',
+  database: 'community'
+};
+
+const { username, password, hostname, port, database } = (process.env.DEV ? dbconf_local : dbconf)
+
 module.exports = {
   database: {
     ...dbconf,
-    url: `postgres://${dbconf.username}:${dbconf.password}@${dbconf.hostname}:${dbconf.port}/${dbconf.database}`
+    url: `postgres://${username}:${password}@${hostname}:${port}/${database}`
   }
 };

@@ -18,3 +18,4 @@ export ProfilePage from './ProfilePage/ProfilePage';
 export TutorialsPage from './TutorialsPage/TutorialsPage';
 export UsersPage from './UsersPage/UsersPage';
 export WorldPage from './WorldPage/WorldPage';
+export ReactDevelopers from './ReactDevelopers/ReactDevelopers';

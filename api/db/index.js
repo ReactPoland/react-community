@@ -5,6 +5,8 @@ const UserModel = require('./models/User');
 const ConversationModel = require('./models/Conversation');
 const CommentModel = require('./models/Comment');
 const EventModel = require('./models/Event');
+const StateModel = require('./models/State');
+const CityModel = require('./models/City');
 
 const models = {};
 
@@ -14,7 +16,9 @@ const models = {};
   UserModel,
   ConversationModel,
   EventModel,
-  CommentModel
+  CommentModel,
+  StateModel,
+  CityModel
 ].map(modelItem => {
   models[modelItem.name] = sequelize.define(modelItem.name, {
     ...modelItem.model

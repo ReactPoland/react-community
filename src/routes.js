@@ -35,6 +35,7 @@ export default (store) => {
       <Route path="tutorials" component={ct.TutorialsPage} />
       <Route path="events" component={ct.EventsPage} />
       <Route path="best-practices" component={ct.BestPracticesPage} />
+      <Route path="react-developers(-:slug)" component={ct.ReactDevelopers} />
 
       <Route path="users">
         <IndexRoute component={ct.UsersPage} />
