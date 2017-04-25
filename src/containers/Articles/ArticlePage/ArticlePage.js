@@ -53,7 +53,14 @@ export default class ArticlePage extends Component {
     editedTitle: ''
   }
 
+  componentDidMount() {
+    const { article = {}, params = {} } = this.props;
+    this.checkSlugAndRedirect(article.slug, params.slug, article.id);
+  }
+
   componentWillReceiveProps(nextProps) {
+    const { article = {}, params = {} } = nextProps;
+    this.checkSlugAndRedirect(article.slug, params.slug, article.id);
     // When article was successfully updated...
     if (nextProps.articleEdited !== this.props.articleEdited) {
       this.setState({
@@ -61,6 +68,12 @@ export default class ArticlePage extends Component {
         editedContent: '',
         editedTitle: ''
       });
+    }
+  }
+
+  checkSlugAndRedirect = (articleSlug, paramsSlug, articleId) => {
+    if ((articleSlug && articleId) && articleSlug !== paramsSlug ) {
+      this.props.pushState(`/article/${articleId}/${articleSlug}`);
     }
   }
 
