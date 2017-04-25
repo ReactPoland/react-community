@@ -4,7 +4,10 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { loadStates, loadCities, loadDevs } from 'redux/modules/reactDevelopersModule';
 import pick from 'lodash/pick';
-import { LoadingScreen, RefreshButton } from 'components';
+import { LoadingScreen, RefreshButton, Map } from 'components';
+import Paper from 'material-ui/Paper';
+import { CardHeader, CardText, Card } from 'material-ui/Card';
+import { threeColumns, flexCenter } from './ReactDevelopers.scss';
 
 const mapStateToProps = ({ reactDevelopers }) => ({ ...reactDevelopers });
 const mapDispatchToProps = { loadStates, loadCities, loadDevs };
@@ -24,13 +27,17 @@ class States extends Component {
     }
     return (
       <LoadingScreen loading={statesLoading}>
-        <div>
-          {
-            states.map(({ name, stateCode }) => (
-              <div key={stateCode}><Link to={`/react-developers-${stateCode}`}>{name}</Link></div>
-            ))
-          }
-        </div>
+        <Paper style={{ margin: '5rem 10rem' }}>
+          <div className={threeColumns}>
+            {
+              states.map(({ name, stateCode }) => (
+                <div key={stateCode} className={flexCenter}>
+                  <Link to={`/react-developers-${stateCode}`}>{name}</Link>
+                </div>
+              ))
+            }
+          </div>
+        </Paper>
       </LoadingScreen>
     );
   }
@@ -49,20 +56,22 @@ class Cities extends Component {
     if (!this.props.citiesLoaded) this.props.loadCities(this.props.params.slug);
   }
   render() {
-    const styles = require('./ReactDevelopers.scss');
     const { cities, citiesLoading } = this.props;
     return citiesLoading
     ? <span>loading...</span>
     : (
-      <div className={styles.cities}>
-        {
-          cities.map(({ name, stateCode, id }) => (
-            <div key={id} className={styles.city}>
-              <Link to={`/react-developers-${stateCode}-${name.replace(' ', '_').toLowerCase()}`}>{name}</Link>
-            </div>
-          ))
-        }
-      </div>
+      <Paper style={{ margin: '5rem 10rem' }}>
+        <div className={threeColumns}>
+          {
+            cities.map(({ name, id, slug }) => (
+                <div key={id} className={flexCenter}>
+                  <Link to={`/react-developers-${slug}`}>{name}</Link>
+                </div>
+            ))
+          }
+        </div>
+      </Paper>
+
     );
   }
 }
@@ -84,16 +93,26 @@ class Devs extends Component {
     return devsLoading
     ? <span>loading...</span>
     : (
-      <div>
-        {
-          devs.map(({ name, link, description, id }) => (
-            <div key={id}>
-              <a href={link}>{name}</a>
-              <p>{description}</p>
-            </div>
-          ))
-        }
-      </div>
+      <Paper style={{ margin: '5rem 10rem' }}>
+        <Map
+          type="users"
+          markers={devs}
+          style={{ height: '50vh' }} />
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          {
+            devs.map(({ name, link, description, id }) => (
+              <Card key={id} style={{ margin: '50px 5vw 0' }}>
+                <CardHeader
+                  title={name}
+                  subtitle={<a href={link}>{link}</a>} />
+                <CardText>
+                  <p>{description}</p>
+                </CardText>
+              </Card>
+            ))
+          }
+        </div>
+      </Paper>
     );
   }
 }
