@@ -49,14 +49,15 @@ class Cities extends Component {
     if (!this.props.citiesLoaded) this.props.loadCities(this.props.params.slug);
   }
   render() {
+    const styles = require('./ReactDevelopers.scss');
     const { cities, citiesLoading } = this.props;
     return citiesLoading
     ? <span>loading...</span>
     : (
-      <div style={{ display: 'flex', flexDirection: 'column', flexWrap: 'wrap' }}>
+      <div className={styles.cities}>
         {
           cities.map(({ name, stateCode, id }) => (
-            <div key={id}>
+            <div key={id} className={styles.city}>
               <Link to={`/react-developers-${stateCode}-${name.replace(' ', '_').toLowerCase()}`}>{name}</Link>
             </div>
           ))
@@ -120,7 +121,7 @@ class ReactDevelopers extends Component {
       case slug.length > 2:
         return <Devs {...devsProps} />;
       default:
-        return <div>kaczka</div>;
+        return null;
     }
   }
 }
