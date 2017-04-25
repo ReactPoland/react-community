@@ -23,8 +23,8 @@ export default class ArticlesPage extends Component {
     pushState: PropTypes.func.isRequired
   }
 
-  redirectToArticle = (articleId) => {
-    this.props.pushState(`/article/${articleId}`);
+  redirectToArticle = ({ id, slug }) => {
+    this.props.pushState(`/article/${id}/${slug}`);
   }
 
   render() {

@@ -44,7 +44,7 @@ export default (store) => {
 
       <Route path="articles" component={ct.ArticlesContainer}>
         <IndexRoute component={ct.ArticlesPage} />
-        <Route path="/article/:id" component={ct.ArticlePage} />
+        <Route path="/article/:id(/:slug)" component={ct.ArticlePage} />
         <Route path="add" component={ct.NewArticlePage} />
       </Route>
 
