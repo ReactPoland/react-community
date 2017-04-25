@@ -25,6 +25,11 @@ module.exports = {
       type: Sequelize.TEXT,
       allowNull: false,
       defaultValue: ''
+    },
+    slug: {
+      type: Sequelize.STRING(255),
+      allowNull: false,
+      defaultValue: ''
     }
   }
 };
