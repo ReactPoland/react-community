@@ -8,8 +8,8 @@ const dbconf = {
 
 const dbconf_local = {
   hostname: '127.0.0.1',
-  username: '',
-  password: '',
+  username: 'postgres',
+  password: 'lala123',
   port: '5432',
   database: 'community'
 };

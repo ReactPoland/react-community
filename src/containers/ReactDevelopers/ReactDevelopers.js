@@ -14,7 +14,7 @@ const mapDispatchToProps = { loadStates, loadCities, loadDevs };
 
 class States extends Component {
   componentWillMount() {
-    if (!this.props.statesLoaded) this.props.loadStates();
+    if (!this.props.statesLoaded) this.props.loadStates('Cieszyn');
   }
   render() {
     const { statesLoading, states, statesLoadingError } = this.props;

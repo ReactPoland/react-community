@@ -7,6 +7,7 @@ const CommentModel = require('./models/Comment');
 const EventModel = require('./models/Event');
 const StateModel = require('./models/State');
 const CityModel = require('./models/City');
+const Locations = require('./models/Locations');
 
 const models = {};
 
@@ -18,11 +19,15 @@ const models = {};
   EventModel,
   CommentModel,
   StateModel,
-  CityModel
+  CityModel,
+  Locations
 ].map(modelItem => {
+
   models[modelItem.name] = sequelize.define(modelItem.name, {
     ...modelItem.model
-  });
+  },
+  modelItem.additional
+  );
 });
 
 

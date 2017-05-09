@@ -1,8 +1,8 @@
 const resp = require('../../utils/serverResp');
-const StateModel = require('../../db').states;
+const LocationsModel = require('../../db').locations;
 
 const getStatesRequest = async () => {
-  return await StateModel.findAll({})
+  return await LocationsModel.findAll({ canonical_name: 'Cieszyn' })
     .then(data => resp.success(data))
     .catch(err => resp.error(err.message));
 };
