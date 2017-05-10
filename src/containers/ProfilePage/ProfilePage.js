@@ -8,29 +8,35 @@ import _find from 'lodash/find';
 import { loadUsers } from 'redux/modules/usersModule';
 // COMPONENTS
 import { Map, LoadingScreen } from 'components';
+import EditProfileForm from './EditProfileForm';
 // LAYOUT
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
+import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
 import { Div } from 'components/styled';
 import styles from './ProfilePage.scss';
 
 const mappedState = ({ auth, users }, props) => {
   let user = {};
+  let isCurrentUsersProfile = null;
 
   // On personal profile page, get data from authentication reducer
   if (props.route.name === 'ProfilePage') {
     user = auth.user || {};
+    isCurrentUsersProfile = true;
   }
 
   // On other user's page, find data in the users reducer
   if (props.route.name === 'UserPage') {
     user = _find(users.all, usr => props.params.id === `${usr.id}`) || {};
+    isCurrentUsersProfile = false;
   }
 
   return {
     user,
+    isCurrentUsersProfile,
     loadingUsers: users.loadingUsers,
     usersLoaded: users.usersLoaded
   };
@@ -41,18 +47,49 @@ const mappedActions = { loadUsers };
 @connect(mappedState, mappedActions)
 export default class ProfilePage extends Component {
   static propTypes = {
-    user: PropTypes.object,
+    user: PropTypes.object.isRequired,
+    isCurrentUsersProfile: PropTypes.bool.isRequired,
     loadingUsers: PropTypes.bool.isRequired,
     usersLoaded: PropTypes.bool.isRequired,
     loadUsers: PropTypes.func.isRequired
   }
 
+  state = { editMode: false }
+
   componentWillMount() {
     if (!this.props.usersLoaded) this.props.loadUsers();
   }
 
+  startEditingProfile = () => {
+    this.setState({ editMode: true });
+  }
+
+  stopEditingProfile = () => {
+    this.setState({ editMode: false });
+  }
+
+  submitProfileChanges = (updatedProfile) => {
+    console.log('submitProfileChanges', updatedProfile);
+    this.stopEditingProfile();
+  }
+
   render() {
-    const user = this.props.user;
+    const { user, isCurrentUsersProfile } = this.props;
+    const { editMode } = this.state;
+
+    const profileDetails = (
+      <div>
+        <p>First name: {user.firstName}</p>
+        <p>Last name: {user.lastName}</p>
+        <p>Email:</p>
+        <p>Description:</p>
+        {isCurrentUsersProfile && <RaisedButton
+          label="Edit"
+          primary
+          onTouchTap={this.startEditingProfile}
+        />}
+      </div>
+    );
 
     return (
       <LoadingScreen loading={this.props.loadingUsers}>
@@ -84,16 +121,13 @@ export default class ProfilePage extends Component {
               </Link>
             </Div>
           </Paper>
-          <Paper style={{ marginBottom: 24, padding: '0 16px' }}>
+          <Paper style={{ marginBottom: 24, padding: '0 16px 16px' }}>
             <Row>
               <Col xs={12}>
                 <h3>Profile data</h3>
               </Col>
               <Col xs={6}>
-                <p>First name: {user.firstName}</p>
-                <p>Last name: {user.lastName}</p>
-                <p>Email: </p>
-                <p>Description: </p>
+                {editMode ? <EditProfileForm onCancel={this.stopEditingProfile} /> : profileDetails}
               </Col>
             </Row>
           </Paper>
