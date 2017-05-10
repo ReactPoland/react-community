@@ -17,6 +17,11 @@ module.exports = {
     },
     ghID: {
       type: Sequelize.INTEGER
+    },
+    filledProfile: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false,
+      allowNull: false
     }
   }
 };

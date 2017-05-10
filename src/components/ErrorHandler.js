@@ -1,87 +1,63 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import _first from 'lodash/first';
+import _last from 'lodash/last';
+import _includes from 'lodash/includes';
+import _startsWith from 'lodash/startsWith';
 // STORE
-import { clearLoadArticlesError, clearAddArticleError, clearEditArticleError, clearRemoveArticleError } from 'redux/modules/articlesModule';
-import { clearLoadMapMarkersError, clearAddMapMarkerError, clearRemoveMarkerError } from 'redux/modules/mapModule';
-import { clearLoadConversationError } from 'redux/modules/conversationModule';
-import { clearLoadUsersError } from 'redux/modules/usersModule';
+import { hideErrorsOfType, hideError, hideAllErrors } from 'redux/modules/errorsModule';
 // COMPONENTS
 import { ErrorSnackbar } from 'components';
 
-const errorsArray = [
-  { name: 'loadArticlesError', callback: 'clearLoadArticlesError' },
-  { name: 'addArticleError', callback: 'clearAddArticleError' },
-  { name: 'editArticleError', callback: 'clearEditArticleError' },
-  { name: 'removeArticleError', callback: 'clearRemoveArticleError' },
-  { name: 'loadConversationError' },
-  { name: 'loadMapMarkersError', callback: 'clearLoadMapMarkersError' },
-  { name: 'addMapMarkerError', callback: 'clearAddMapMarkerError' },
-  { name: 'removeMapMarkerError', callback: 'clearRemoveMarkerError' },
-  { name: 'loadUsersError', callback: 'clearLoadUsersError' }
-];
-
-const mappedState = ({ articles, conversation, map, users }) => ({
-  loadArticlesError: articles.loadArticlesError,
-  addArticleError: articles.addArticleError,
-  editArticleError: articles.editArticleError,
-  removeArticleError: articles.removeArticleError,
-  loadConversationError: conversation.loadConversationError,
-  loadMapMarkersError: map.loadMapMarkersError,
-  addMapMarkerError: map.addMapMarkerError,
-  removeMapMarkerError: map.removeMapMarkerError,
-  loadUsersError: users.loadUsersError
+const mappedState = ({ errors }) => ({
+  allErrors: errors,
+  currentError: _first(errors) || {},
+  anyErrors: errors.length > 0,
+  firstError: _first(errors) || {},
+  lastError: _last(errors) || {}
 });
 
 const mappedActions = {
-  clearLoadArticlesError,
-  clearAddArticleError,
-  clearEditArticleError,
-  clearRemoveArticleError,
-  clearLoadConversationError,
-  clearLoadMapMarkersError,
-  clearAddMapMarkerError,
-  clearRemoveMarkerError,
-  clearLoadUsersError
+  hideErrorsOfType,
+  hideError,
+  hideAllErrors
 };
 
 @connect(mappedState, mappedActions)
 class ErrorHandler extends Component {
-  state = {
-    errorMessage: null,
-    errorCallback: null
+  static propTypes = {
+    allErrors: PropTypes.array,
+    currentError: PropTypes.object,
+    anyErrors: PropTypes.bool,
+    firstError: PropTypes.object,
+    lastError: PropTypes.object,
+    hideErrorsOfType: PropTypes.func,
+    hideError: PropTypes.func,
+    hideAllErrors: PropTypes.func
   }
 
-  componentWillMount() {
-    this.checkErrors(this.props);
+  onSnackbarClose = () => {
+    this.props.hideError();
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.checkErrors(nextProps);
-  }
+  errorsOfType = type => this.props.allErrors.filter(err => _startsWith(err.type, type))
 
-  checkErrors = (props) => {
-    // Show error snackbar if any of the errors from "errorsArray" is thrown
-    errorsArray.forEach(({ name, callback }) => {
-      if (props[name]) {
-        this.setState({
-          errorMessage: props[name],
-          errorCallback: props[callback]
-        });
-      }
-    });
-  }
+  firstErrorOfType = type => this.errorsOfType(type)[0] || {}
 
-  clearErrors = () => {
-    if (this.state.errorCallback) this.state.errorCallback();
-    this.setState({ errorMessage: null, errorCallback: null });
-  }
+  isEmailError = () => _includes(['auth/invalid-email', 'auth/email-already-in-use'], this.props.firstError.type)
+
+  isPasswordError = () => _includes(['auth/wrong-password', 'auth/weak-password'], this.props.firstError.type)
 
   render() {
+    const { message } = this.props.firstError;
+    const open = this.props.allErrors.length > 0;
+
     return (
       <ErrorSnackbar
-        open={this.state.errorMessage !== null}
-        message={this.state.errorMessage}
-        onRequestClose={this.clearErrors}
+        open={open}
+        message={message}
+        onRequestClose={this.onSnackbarClose}
       />
     );
   }

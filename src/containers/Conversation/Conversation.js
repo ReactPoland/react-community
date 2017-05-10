@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { loadConversation } from 'redux/modules/conversationModule';
 // COMPONENTS
@@ -13,9 +14,7 @@ const mappedState = ({ conversation }) => ({
   loadConversationError: conversation.loadConversationError
 });
 
-const mappedActions = {
-  loadConversation
-};
+const mappedActions = { loadConversation };
 
 @connect(mappedState, mappedActions)
 class Conversation extends Component {
@@ -25,7 +24,7 @@ class Conversation extends Component {
     comments: PropTypes.array.isRequired,
     loadingConversation: PropTypes.bool.isRequired,
     conversationLoaded: PropTypes.bool.isRequired,
-    loadConversationError: PropTypes.string,
+    loadConversationError: PropTypes.bool.isRequired,
     loadConversation: PropTypes.func.isRequired
   }
 
@@ -40,13 +39,12 @@ class Conversation extends Component {
   render() {
     return (
       <LoadingScreen loading={this.props.loadingConversation}>
-        <div>
-          <CommentsList
-            comments={this.props.comments}
-            showReloadList={this.props.loadConversationError !== null}
-            onReloadList={this.loadComments}
-          />
-        </div>
+        <CommentsList
+          articleId={this.props.articleId}
+          comments={this.props.comments}
+          showReloadList={this.props.loadConversationError}
+          onReloadList={this.loadComments}
+        />
       </LoadingScreen>
     );
   }

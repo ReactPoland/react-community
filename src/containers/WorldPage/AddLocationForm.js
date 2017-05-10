@@ -1,6 +1,7 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
-import LocationInput from './LocationInput';
+import { LocationInput } from 'components';
 
 class AddLocationForm extends Component {
   static propTypes = {
