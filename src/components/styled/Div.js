@@ -1,59 +1,78 @@
-import styled from 'styled-components';
+/* eslint-disable */
+import styled, { css } from 'styled-components'
 
-const Div = styled.div`
-  // POSITION
-  position: ${props => {
-    if (props.absolute) return 'absolute';
-    if (props.relative) return 'relative';
-    return 'static';
-  }};
-  // SIZE
-  width: ${props => {
-    if (props.square) return `${props.square}px`;
-    if (props.fullWidth) return '100%';
-    return 'auto';
-  }};
-  height: ${props => {
-    if (props.square) return `${props.square}px`;
-    if (props.fullHeight) return '100%';
-    return 'auto';
-  }};
+export default styled.div`
   // DISPLAY
-  display: ${props => {
-    if (props.flex) return 'flex';
-    if (props.flex && props.inline) return 'inline-flex';
-    if (props.block) return 'block';
-    if (props.block && props.inline) return 'inline-block';
-    if (props.inline) return 'inline';
-    return 'block';
-  }};
-  // FLEX
-  flex-direction: ${props => {
-    if (props.rowReverse) return 'rowReverse';
-    if (props.column) return 'column';
-    if (props.columnReverse) return 'columnReverse';
-    return 'row';
-  }};
-  flex-wrap: ${props => props.wrap ? 'wrap' : 'nowrap'};
-  justify-content: ${props => props.justifyContent || 'flex-start'};
-  align-items: ${props => props.alignItems || 'stretch'};
-  align-content: ${props => props.alignContent || 'stretch'};
-  // FLEX ITEM
-  flex: ${props => {
-    if (props.flexNone) return 'none';
-    if (props.flexVal) return props.flexVal;
-    return '0 1 auto';
-  }};
-  align-self: ${props => props.alignItems || 'auto'};
-  // LAYER
-  position: ${props => props.layer ? 'absolute' : 'static'};
-  top: ${props => props.layer ? '0' : 'auto'};
-  right: ${props => props.layer ? '0' : 'auto'};
-  bottom: ${props => props.layer ? '0' : 'auto'};
-  left: ${props => props.layer ? '0' : 'auto'};
-  //MISC
-  z-index: ${props => props.z !== undefined ? props.z : 'auto'};
-  cursor: ${props => props.clickable ? 'pointer' : 'auto'};
-`;
+  ${({ flex, block, inline }) => {
+    if (inline) {
+      if (block) return css`display: inline-block;`
+      else if (flex) return css`display: inline-flex;`
+      else return css`display: inline;`
+    } else {
+      if (flex) return css`display: flex;`
+      if (block) return css`display: block;`
+    }
+  }}
 
-export default Div;
+  // FLEX
+  ${(props) => {
+    if (props.flex) {
+      return css`
+        flex-direction: ${(props) => {
+          if (props.rowReverse) return 'rowReverse'
+          if (props.column) return 'column'
+          if (props.columnReverse) return 'columnReverse'
+          return 'row'
+        }}
+        flex-wrap: ${props => props.wrap ? 'wrap' : 'nowrap'};
+        justify-content: ${props => props.justifyContent || 'flex-start'};
+        align-items: ${props => props.alignItems || 'stretch'};
+        align-content: ${props => props.alignContent || 'stretch'};
+      `
+    }
+  }}
+
+  // FLEX ITEM
+  ${(props) => {
+    if (props.flexNone) return css`flex: none;`
+    if (props.flexVal) return css`flex: ${props.flexVal};`
+  }}
+  ${({ alignSelf }) => alignSelf && css`align-self: ${alignSelf};`}
+
+  // POSITION
+  ${({ absolute, relative }) => {
+    if (absolute) return css`position: absolute;`
+    if (relative) return css`position: relative;`
+  }}
+
+  // LAYER
+  ${(props) => {
+    if (props.layer) {
+      return css`
+        position: absolute;
+        top: 0; right: 0; bottom: 0; left: 0;
+      `
+    }
+  }}
+
+  // SIZE
+  ${(props) => {
+    if (props.square) {
+      return css`
+        width: ${props => props.square};
+        height: ${props => props.square};
+      `
+    } else {
+      if (props.width) return css`width: ${props => props.width};`
+      if (props.height) return css`height: ${props => props.height};`
+    }
+    if (props.margin) return css`margin: ${props => props.margin};`
+    if (props.padding) return css`padding: ${props => props.padding};`
+  }}
+
+  // MISC
+  ${(props) => {
+    if (props.z || props.zIndex) return css`z-index: ${props => props.z || props.zIndex};`
+    if (props.clickable) return css`cursor: pointer;`
+  }}
+`
