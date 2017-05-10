@@ -18,21 +18,13 @@ module.exports = {
     parentCommentId: {
       type: Sequelize.INTEGER,
       references: {
-        model: 'comment',
+        model: 'comments',
         key: 'id'
       }
     },
     depth: {
       type: Sequelize.INTEGER,
       defaultValue: 0,
-      allowNull: false
-    },
-    userId: {
-      type: Sequelize.INTEGER,
-      references: {
-        model: 'users',
-        key: 'id'
-      },
       allowNull: false
     }
   }
