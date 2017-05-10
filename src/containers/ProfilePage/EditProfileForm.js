@@ -76,7 +76,6 @@ export default class EditProfileForm extends Component {
               label={this.props.editingProfile ? 'Updating...' : 'Update'}
               type="submit"
               primary
-              onTouchTap={this.submitChanges}
             />
           </List>
         </form>
