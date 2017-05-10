@@ -50,8 +50,7 @@ export default class EditProfileForm extends Component {
     const fields = [
       { label: 'First name', value: 'firstName' },
       { label: 'Last name', value: 'lastName' },
-      { label: 'Email', value: 'email' },
-      { label: 'Description', value: 'description' }
+      { label: 'Picture URL', value: 'pictureURL' }
     ];
 
     return (

@@ -85,8 +85,6 @@ export default class ProfilePage extends Component {
       <div>
         <p>First name: {user.firstName}</p>
         <p>Last name: {user.lastName}</p>
-        <p>Email:</p>
-        <p>Description:</p>
         {isCurrentUsersProfile && <RaisedButton
           label="Edit"
           primary
