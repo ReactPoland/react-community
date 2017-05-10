@@ -1,4 +1,3 @@
-const resp = require('../../utils/serverResp');
 const ArticleModel = require('../../db').articles;
 
 const loadArticlesRequest = async ({ title, content }) => {
@@ -11,9 +10,7 @@ const loadArticlesRequest = async ({ title, content }) => {
     findFilter.where = where;
   }
 
-  return await ArticleModel.findAll(findFilter)
-    .then(data => resp.success(data))
-    .catch(err => resp.error(err.message));
+  return await ArticleModel.findAll(findFilter);
 };
 
 const loadArticleRequest = async (id) => {
@@ -22,11 +19,9 @@ const loadArticleRequest = async (id) => {
       id
     }
   }).then(data => {
-    if (!data) return resp.error('article not found');
-    return resp.success(data);
-  })
-  .catch(err => resp.error(err.message));
-  if (articleResponse.type === 'error') throw articleResponse;
+    if (!data) throw new Error('article not found');
+  });
+
   return articleResponse;
 };
 

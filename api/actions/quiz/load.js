@@ -1,15 +1,9 @@
-const resp = require('../../utils/serverResp');
 const QuizModel = require('../../db').quizzes;
 const QuestionModel = require('../../db').quizQuestions;
 const AnswerModel = require('../../db').quizAnswers;
 
 const loadQuizzesRequest = async () => {
-  const quizzesResp = await QuizModel.findAll({
-  })
-    .then(items => resp.success(items))
-    .catch(err => err);
-
-  if (! (quizzesResp.type === 'success') ) throw resp.error(quizzesResp.message);
+  const quizzesResp = await QuizModel.findAll({});
 
   return quizzesResp;
 };
@@ -17,7 +11,7 @@ const loadQuizzesRequest = async () => {
 
 const loadQuiz = async (id) => {
   const quizId = parseInt(id, 10);
-  if (isNaN(quizId)) throw resp.error('invalid id');
+  if (isNaN(quizId)) throw new Error('invalid id');
 
   const quizResp = await QuizModel.findOne({
     include: [{
@@ -31,11 +25,7 @@ const loadQuiz = async (id) => {
     where: {
       id: quizId
     }
-  })
-    .then(items => resp.success(items))
-    .catch(err => err);
-
-  if (! (quizResp.type === 'success') ) throw resp.error(quizResp.message);
+  });
 
   return quizResp;
 };
@@ -43,7 +33,7 @@ const loadQuiz = async (id) => {
 
 const loadQuizQuestion = async (id) => {
   const questionId = parseInt(id, 10);
-  if (isNaN(questionId)) throw resp.error('invalid id');
+  if (isNaN(questionId)) throw new Error('invalid id');
 
   const quesionResp = await QuestionModel.findOne({
     include: [{
@@ -53,11 +43,7 @@ const loadQuizQuestion = async (id) => {
     where: {
       id: questionId
     }
-  })
-  .then(items => resp.success(items))
-  .catch(err => err);
-
-  if (! (quesionResp.type === 'success') ) throw resp.error(quesionResp.message);
+  });
 
   return quesionResp;
 };
@@ -70,7 +56,7 @@ const loadQuizzes = (req, params) => {
   if (params.length === 1) return loadQuiz(params[0]);
   if (params.length === 2 && params[0] === 'question') return loadQuizQuestion(params[1]);
 
-  return Promise.reject(resp.error('route not found'));
+  return Promise.reject(new Error('route not found'));
 };
 
 export default loadQuizzes;

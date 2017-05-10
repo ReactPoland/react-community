@@ -1,5 +1,4 @@
 const ArticleModel = require('../../db').articles;
-const resp = require('../../utils/serverResp');
 import * as ArticleValidation from '../../utils/validation/article';
 import { getSlug } from '../../utils/slug';
 
@@ -8,9 +7,7 @@ const updateArticleRequest = async ({title, content, id, previewSize}) => {
     where: {
       id
     }
-  })
-  .catch(() => null);
-  if (!currArticle) throw resp.error(currArticle);
+  });
 
   const articleBody = ArticleValidation.checkArticleBody({
     title: title || currArticle.title,
@@ -20,14 +17,12 @@ const updateArticleRequest = async ({title, content, id, previewSize}) => {
 
   return await ArticleModel.update({
     ...articleBody,
-    slug: getSlut(articleBody.title)
+    slug: getSlug(articleBody.title)
   }, {
     where: {
       id
     }
-  })
-  .then((respMess) => resp.success(respMess))
-  .catch(err => resp.error(err.message));
+  });
 };
 
 function updateArticle(data) {
