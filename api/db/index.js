@@ -74,8 +74,8 @@ models.users.hasMany(models.comments, {
 models.conversations.hasMany(models.comments, { foreignKey: 'conversationId' });
 models.conversations.belongsTo(models.articles);
 
-sequelize.sync({force: true})
-// sequelize.sync({})
+// sequelize.sync({force: true})
+sequelize.sync({})
   .then(() => {
     console.log('sync tables successfull');
   });
