@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import Helmet from 'react-helmet';
 import _find from 'lodash/find';
 // STORE
@@ -12,7 +13,6 @@ import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import Paper from 'material-ui/Paper';
-import { MockCard } from 'components/mocked';
 import { Div } from 'components/styled';
 import styles from './ProfilePage.scss';
 
@@ -58,14 +58,10 @@ export default class ProfilePage extends Component {
       <LoadingScreen loading={this.props.loadingUsers}>
         <Grid className={styles.ProfilePage}>
           <Helmet title="Profile" />
-          <MockCard
-            title={`${user.firstName} ${user.lastName}`}
-            content
-          />
           <Paper style={{ overflow: 'hidden', marginBottom: 24 }}>
             <Div flex wrap>
               <Div
-                square={200}
+                square="200px"
                 flexVal="none"
                 style={{
                   backgroundImage: `url(${user.pictureURL})`,
@@ -73,9 +69,14 @@ export default class ProfilePage extends Component {
                   backgroundRepeat: 'no-repeat'
                 }}
               />
-              <Div flexVal={1} style={{ height: 200, minWidth: 200 }}>
-                <Map style={{ height: '100%' }} />
-              </Div>
+              <Link to="/world" style={{ flex: 1 }}>
+                <Div flex justifyContent="center" alignItems="center" relative style={{ height: 200, minWidth: 200 }}>
+                  <Paper style={{ position: 'absolute', padding: 16, zIndex: 500 }} zDepth={3}>
+                    Pin yourself
+                  </Paper>
+                  <Map static style={{ height: '100%' }} />
+                </Div>
+              </Link>
             </Div>
           </Paper>
           <Paper style={{ marginBottom: 24, padding: '0 16px' }}>
@@ -88,11 +89,6 @@ export default class ProfilePage extends Component {
                 <p>Last name: {user.lastName}</p>
                 <p>Email: </p>
                 <p>Description: </p>
-              </Col>
-              <Col xs={6}>
-                <p>Password</p>
-                <p>Password</p>
-                <p>Password</p>
               </Col>
             </Row>
           </Paper>
