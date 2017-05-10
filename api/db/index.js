@@ -58,10 +58,17 @@ models.events.belongsTo(models.users, {
 });
 
 
-models.comments.belongsTo(models.users);
+models.comments.belongsTo(models.users, {
+  foreignKey: { allowNull: false },
+  as: 'user',
+  allowNull: false
+});
 models.comments.belongsTo(models.conversations);
 
-models.users.hasMany(models.comments);
+models.users.hasMany(models.comments, {
+  foreignKey: 'userId',
+  as: 'comments'
+});
 // models.users.hasMany(models.events, { as });
 
 models.conversations.hasMany(models.comments, { foreignKey: 'conversationId' });

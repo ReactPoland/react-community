@@ -1,6 +1,7 @@
 const ArticleModel = require('../../db').articles;
 const resp = require('../../utils/serverResp');
 import * as ArticleValidation from '../../utils/validation/article';
+import { getSlug } from '../../utils/slug';
 
 /**
   @api {POST} /api/article/updateArticle/ Update article
@@ -47,7 +48,8 @@ const updateArticleRequest = async ({title, content, id, previewSize}) => {
   });
 
   return await ArticleModel.update({
-    ...articleBody
+    ...articleBody,
+    slug: getSlut(articleBody.title)
   }, {
     where: {
       id

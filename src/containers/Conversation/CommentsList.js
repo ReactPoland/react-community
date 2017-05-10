@@ -1,15 +1,16 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 // COMPONENTS
 import Comment from './Comment';
+import { RefreshButton } from 'components';
 // LAYOUT
 import List from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
-import FlatButton from 'material-ui/FlatButton';
-import RefreshIcon from 'material-ui/svg-icons/navigation/refresh';
 
 class CommentsList extends Component {
   static propTypes = {
+    articleId: PropTypes.number.isRequired,
     comments: PropTypes.array.isRequired,
     onReloadList: PropTypes.func,
     showReloadList: PropTypes.bool
@@ -18,23 +19,20 @@ class CommentsList extends Component {
   render() {
     if (this.props.showReloadList) {
       return (
-        <FlatButton
+        <RefreshButton
           label="Reload comments"
-          labelPosition="before"
-          icon={<RefreshIcon />}
-          secondary
           onClick={this.props.onReloadList}
         />
       );
     }
 
     return (
-      <List>
+      <List style={{ marginTop: 24 }}>
         <Subheader>{this.props.comments.length} Comments</Subheader>
         {
           this.props.comments.map((comment) => (
             <div key={comment.id}>
-              <Comment comment={comment} />
+              <Comment articleId={this.props.articleId} comment={comment} />
               <Divider inset />
             </div>
           ))

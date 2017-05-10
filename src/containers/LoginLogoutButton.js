@@ -1,6 +1,7 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { logout, showLoginSpinner } from 'redux/modules/auth';
+import { logout, login } from 'redux/modules/auth';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import gitConf from '../../api/utils/github/config';
 
@@ -10,18 +11,18 @@ const mappedState = ({ auth }) => ({
   loggingOut: auth.loggingOut
 });
 
-@connect(mappedState, { logout, showLoginSpinner })
+@connect(mappedState, { logout, login })
 class LoginLogoutButton extends Component {
   static propTypes = {
     user: PropTypes.object,
     logout: PropTypes.func.isRequired,
     loggingIn: PropTypes.bool.isRequired,
     loggingOut: PropTypes.bool.isRequired,
-    showLoginSpinner: PropTypes.func.isRequired
+    login: PropTypes.func.isRequired
   }
 
   logIn = () => {
-    this.props.showLoginSpinner();
+    this.props.login();
   }
 
   logOut = () => {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Flex } from 'components/styled';
+import { Div } from 'components/styled';
 import { LinkContainer } from 'react-router-bootstrap';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import styles from './MainFooter.scss';
@@ -7,10 +7,12 @@ import styles from './MainFooter.scss';
 class MainFooter extends Component {
   render() {
     return (
-      <Flex
+      <Div
+        flex
         column
         justifyContent="center"
         alignItems="center"
+        flexNone
         className={styles.MainFooter}
       >
         <ul>
@@ -25,7 +27,7 @@ class MainFooter extends Component {
           </LinkContainer>
         </ul>
         <p>React Poland 2017</p>
-      </Flex>
+      </Div>
     );
   }
 }
