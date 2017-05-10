@@ -6,8 +6,8 @@ export default styled.div`
   ${({ flex, block, inline }) => {
     if (inline) {
       if (block) return css`display: inline-block;`
-      else if (flex) return css`display: inline-flex;`
-      else return css`display: inline;`
+      if (flex) return css`display: inline-flex;`
+      return css`display: inline;`
     } else {
       if (flex) return css`display: flex;`
       if (block) return css`display: block;`
@@ -18,16 +18,16 @@ export default styled.div`
   ${(props) => {
     if (props.flex) {
       return css`
-        flex-direction: ${(props) => {
-          if (props.rowReverse) return 'rowReverse'
+        flex-direction: ${() => {
+          if (props.rowReverse) return 'row-reverse'
           if (props.column) return 'column'
-          if (props.columnReverse) return 'columnReverse'
+          if (props.columnReverse) return 'column-reverse'
           return 'row'
-        }}
-        flex-wrap: ${props => props.wrap ? 'wrap' : 'nowrap'};
-        justify-content: ${props => props.justifyContent || 'flex-start'};
-        align-items: ${props => props.alignItems || 'stretch'};
-        align-content: ${props => props.alignContent || 'stretch'};
+        }};
+        flex-wrap: ${() => props.wrap ? 'wrap' : 'nowrap'};
+        justify-content: ${() => props.justifyContent || 'flex-start'};
+        align-items: ${() => props.alignItems || 'stretch'};
+        align-content: ${() => props.alignContent || 'stretch'};
       `
     }
   }}
@@ -59,20 +59,24 @@ export default styled.div`
   ${(props) => {
     if (props.square) {
       return css`
-        width: ${props => props.square};
-        height: ${props => props.square};
+        width: ${props.square};
+        height: ${props.square};
       `
-    } else {
-      if (props.width) return css`width: ${props => props.width};`
-      if (props.height) return css`height: ${props => props.height};`
     }
-    if (props.margin) return css`margin: ${props => props.margin};`
-    if (props.padding) return css`padding: ${props => props.padding};`
+    if (props.width) return css`width: ${props.width};`
+    if (props.height) return css`height: ${props.height};`
+    if (props.margin) return css`margin: ${props.margin};`
+    if (props.padding) return css`padding: ${props.padding};`
   }}
 
   // MISC
   ${(props) => {
-    if (props.z || props.zIndex) return css`z-index: ${props => props.z || props.zIndex};`
+    if (props.z || props.zIndex) return css`z-index: ${props.z || props.zIndex};`
+  }}
+  ${(props) => {
     if (props.clickable) return css`cursor: pointer;`
+  }}
+  ${(props) => {
+    if (props.noPointerEvents) return css`pointer-events: none;`
   }}
 `

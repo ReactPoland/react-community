@@ -1,18 +1,27 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+// STORE
+import { editProfile } from 'redux/modules/auth';
 // LAYOUT
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import { List } from 'components/styled';
+import { Div, List } from 'components/styled';
 
-const mappedState = ({ auth }) => ({ user: auth.user });
+const mappedState = ({ auth }) => ({
+  user: auth.user,
+  editingProfile: auth.editingProfile
+});
 
-@connect(mappedState)
+const mappedActions = { editProfile };
+
+@connect(mappedState, mappedActions)
 export default class EditProfileForm extends Component {
   static propTypes = {
     user: PropTypes.object.isRequired,
-    onCancel: PropTypes.func.isRequired
+    editingProfile: PropTypes.bool.isRequired,
+    onCancel: PropTypes.func.isRequired,
+    editProfile: PropTypes.func.isRequired
   }
 
   state = {
@@ -32,8 +41,9 @@ export default class EditProfileForm extends Component {
     this.props.onCancel();
   }
 
-  submitChanges = () => {
-    console.log('submitChanges', this.state.profile);
+  submitChanges = (ev) => {
+    ev.preventDefault();
+    this.props.editProfile(this.state.profile);
   }
 
   render() {
@@ -45,30 +55,32 @@ export default class EditProfileForm extends Component {
     ];
 
     return (
-      <div>
-        {
-          fields.map((field) => (
+      <Div noPointerEvents={this.props.editingProfile}>
+        <form onSubmit={this.submitChanges}>
+          {fields.map(({ label, value }) =>
             <TextField
-              key={field.value}
-              floatingLabelText={field.label}
-              value={this.state.profile[field.value]}
-              onChange={ev => this.handleChange(field.value, ev.target.value)}
+              key={value}
+              floatingLabelText={label}
+              value={this.state.profile[value]}
+              onChange={ev => this.handleChange(value, ev.target.value)}
             />
-          ))
-        }
-        <List left>
-          <RaisedButton
-            label="Cancel"
-            secondary
-            onTouchTap={this.cancelEditing}
-          />
-          <RaisedButton
-            label="Update"
-            primary
-            onTouchTap={this.submitChanges}
-          />
-        </List>
-      </div>
+          )}
+          <List left>
+            <RaisedButton
+              label="Cancel"
+              type="button"
+              secondary
+              onTouchTap={this.cancelEditing}
+            />
+            <RaisedButton
+              label={this.props.editingProfile ? 'Updating...' : 'Update'}
+              type="submit"
+              primary
+              onTouchTap={this.submitChanges}
+            />
+          </List>
+        </form>
+      </Div>
     );
   }
 }

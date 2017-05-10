@@ -38,7 +38,8 @@ const mappedState = ({ auth, users }, props) => {
     user,
     isCurrentUsersProfile,
     loadingUsers: users.loadingUsers,
-    usersLoaded: users.usersLoaded
+    usersLoaded: users.usersLoaded,
+    profileEdited: auth.profileEdited
   };
 };
 
@@ -51,7 +52,8 @@ export default class ProfilePage extends Component {
     isCurrentUsersProfile: PropTypes.bool.isRequired,
     loadingUsers: PropTypes.bool.isRequired,
     usersLoaded: PropTypes.bool.isRequired,
-    loadUsers: PropTypes.func.isRequired
+    loadUsers: PropTypes.func.isRequired,
+    profileEdited: PropTypes.bool.isRequired
   }
 
   state = { editMode: false }
@@ -60,17 +62,19 @@ export default class ProfilePage extends Component {
     if (!this.props.usersLoaded) this.props.loadUsers();
   }
 
+  componentWillReceiveProps(nextProps) {
+    // Close edit form on successful profile edit
+    if (!this.props.profileEdited && nextProps.profileEdited) {
+      this.stopEditingProfile();
+    }
+  }
+
   startEditingProfile = () => {
     this.setState({ editMode: true });
   }
 
   stopEditingProfile = () => {
     this.setState({ editMode: false });
-  }
-
-  submitProfileChanges = (updatedProfile) => {
-    console.log('submitProfileChanges', updatedProfile);
-    this.stopEditingProfile();
   }
 
   render() {
