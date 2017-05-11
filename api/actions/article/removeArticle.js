@@ -14,7 +14,7 @@ const removeArticleRequest = async (body) => {
 };
 
 const removeArticle = (data) => {
-  return data.permission.shouldAuth().then(() => removeArticleRequest(data.body));
+  return data.permission.onlyStaff().then(() => removeArticleRequest(data.body));
 };
 
 export default removeArticle;

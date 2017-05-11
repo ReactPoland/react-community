@@ -55,7 +55,9 @@ const loginGitRequest = async (req) => {
   if (user && user.error) return errorResponse(user.error, user.error_description);
 
   // 3. Write to session
-  session.user = user;
+  session.user = {
+    id: user.id
+  };
 
   // fix bug related with SSR request and old session
   return await new Promise((resolve, reject) => {

@@ -12,7 +12,7 @@ const addArticleRequest = async ({title, content, previewSize = [1, 1] }) => { /
 };
 
 function addArticle(data) {
-  return data.permission.shouldAuth().then(() => {
+  return data.permission.onlyStaff().then(() => {
     return addArticleRequest(data.body);
   });
 }
