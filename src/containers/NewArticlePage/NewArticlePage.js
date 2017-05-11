@@ -13,6 +13,7 @@ import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import Paper from 'material-ui/Paper';
 import FlatButton from 'material-ui/FlatButton';
+import { Div } from 'components/styled';
 
 const mappedState = ({ articles }) => ({
   addingArticle: articles.addingArticle
@@ -29,7 +30,8 @@ export default class NewArticlePage extends Component {
 
   state = {
     newArticle: {
-      title: 'Title',
+      title: 'Title...',
+      description: 'Description...',
       type: 'own', // TODO: check if name is proper
       content: {
         'nodes': [
@@ -87,36 +89,44 @@ export default class NewArticlePage extends Component {
     if (!this.validateArticle(newArticle)) return;
 
     newArticle.content = JSON.stringify(newArticle.content);
-    this.props.addArticle(newArticle);
+
+    console.warn('newArticle', newArticle);
+
+    // this.props.addArticle(newArticle);
   }
 
   render() {
     const { addingArticle } = this.props;
-    const { newArticle: { title, content, type }, validationErrors } = this.state;
+    const { newArticle: { type, title, description, content }, validationErrors } = this.state;
     const styles = require('./NewArticlePage.scss');
 
     return (
-      <div className={styles.container}>
+      <Div height="100%">
         <Grid>
           <Row>
             <Col xs={12}>
               <TypeSelectButtons
                 type={type}
-                onChange={val => this.onChange('type', val)}
+                onChange={val => { this.onChange('type', val); }}
               />
             </Col>
           </Row>
           <Row>
             <Col xs={12}>
-              <Paper className={styles.editor} zDepth={2}>
-                <h2>
+              <Paper className={styles.articleEditor} zDepth={2}>
+                <h3 className={styles.articleTitle}>
                   <PlainTextEditor
                     initialState={title}
                     onChange={val => { this.onChange('title', val); }}
                   />
-                </h2>
-                {validationErrors.title &&
-                  <p>{validationErrors.title}</p>}
+                </h3>
+                <p className={styles.articleDescription}>
+                  <PlainTextEditor
+                    initialState={description}
+                    onChange={val => { this.onChange('description', val); }}
+                  />
+                </p>
+                {validationErrors.title && <p>{validationErrors.title}</p>}
                 <RichTextEditor
                   initialState={content}
                   style={{
@@ -124,10 +134,9 @@ export default class NewArticlePage extends Component {
                     height: '100vh',
                     maxHeight: '45vh',
                   }}
-                  onChange={serializedState => { this.onChange('content', serializedState); }}
+                  onChange={val => { this.onChange('content', val); }}
                 />
-                {validationErrors.content &&
-                  <p>{validationErrors.content}</p>}
+                {validationErrors.content && <p>{validationErrors.content}</p>}
                 <FlatButton
                   label={addingArticle ? 'Adding...' : 'Add article'}
                   primary
@@ -137,7 +146,7 @@ export default class NewArticlePage extends Component {
             </Col>
           </Row>
         </Grid>
-      </div>
+      </Div>
     );
   }
 }
