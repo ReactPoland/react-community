@@ -12,7 +12,10 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import styles from './ArticlesPage.scss';
 
-const mappedState = ({ articles }) => ({ articles: articles.all });
+const mappedState = ({ auth, articles }) => ({
+  loggedIn: auth.loggedIn,
+  articles: articles.all
+});
 
 const mappedActions = { pushState: push };
 
@@ -20,7 +23,8 @@ const mappedActions = { pushState: push };
 export default class ArticlesPage extends Component {
   static propTypes = {
     articles: PropTypes.array.isRequired,
-    pushState: PropTypes.func.isRequired
+    pushState: PropTypes.func.isRequired,
+    loggedIn: PropTypes.bool.isRequired
   }
 
   redirectToArticle = ({ id, slug }) => {
@@ -28,10 +32,17 @@ export default class ArticlesPage extends Component {
   }
 
   render() {
-    const { articles } = this.props;
+    const { articles, loggedIn } = this.props;
 
+    // TODO: move to a separate component - rk
     const AddArticleButton = (
       <FloatingActionButton
+        style={{
+          position: 'fixed',
+          right: 40,
+          bottom: 40,
+          zIndex: 1000
+        }}
         className={styles.AddArticleButton}
         onClick={() => this.props.pushState('/articles/add')}
       >
@@ -41,6 +52,7 @@ export default class ArticlesPage extends Component {
 
     return (
       <Grid style={{ position: 'relative', height: '100%' }}>
+        {loggedIn && AddArticleButton}
         <Row>
           <Col xs={12}>
             <h1>Articles</h1>
@@ -50,7 +62,6 @@ export default class ArticlesPage extends Component {
             />
           </Col>
         </Row>
-        {AddArticleButton}
       </Grid>
     );
   }

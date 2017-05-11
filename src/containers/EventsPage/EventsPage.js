@@ -151,6 +151,7 @@ export default class EventsPage extends Component {
 
     const centerCoords = firstEvent && [firstEvent.lat, firstEvent.lng];
 
+    // TODO: move to a separate component - rk
     const addEventButton = (
       <FloatingActionButton
         style={{
