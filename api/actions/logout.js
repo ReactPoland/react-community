@@ -1,12 +1,3 @@
-// export default function logout(req) {
-  // return new Promise((resolve) => {
-    // req.session.destroy(() => {
-      // req.session = null;
-      // return resolve(null);
-    // });
-  // });
-// }
-
 const destroySession = async (req) => {
   const sessState = await new Promise((resolve, reject) => {
     req.session.destroy((err) => {
