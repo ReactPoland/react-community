@@ -67,8 +67,8 @@ export default (state = initialState, action = {}) => {
         ...state,
         loading: false,
         loaded: true,
-        loggedIn: action.result ? true : false,
-        user: action.result
+        loggedIn: !!action.result.message,
+        user: action.result.message
       };
     case LOAD_FAIL:
       return {
