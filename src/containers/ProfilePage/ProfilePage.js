@@ -59,7 +59,7 @@ export default class ProfilePage extends Component {
   state = { editMode: false }
 
   componentWillMount() {
-    if (!this.props.usersLoaded) this.props.loadUsers();
+    if (!this.props.usersLoaded && !this.props.isCurrentUsersProfile) this.props.loadUsers();
   }
 
   componentWillReceiveProps(nextProps) {
