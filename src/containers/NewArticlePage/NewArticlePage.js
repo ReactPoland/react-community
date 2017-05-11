@@ -120,12 +120,12 @@ export default class NewArticlePage extends Component {
                     onChange={val => { this.onChange('title', val); }}
                   />
                 </h3>
-                <p className={styles.articleDescription}>
+                <div className={styles.articleDescription}>
                   <PlainTextEditor
                     initialState={description}
                     onChange={val => { this.onChange('description', val); }}
                   />
-                </p>
+                </div>
                 {validationErrors.title && <p>{validationErrors.title}</p>}
                 <RichTextEditor
                   initialState={content}
