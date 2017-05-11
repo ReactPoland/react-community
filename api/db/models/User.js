@@ -5,11 +5,13 @@ module.exports = {
   model: {
     firstName: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
+      defaultValue: ''
     },
     lastName: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
+      defaultValue: ''
     },
     pictureURL: {
       type: Sequelize.STRING,
@@ -22,6 +24,11 @@ module.exports = {
       type: Sequelize.BOOLEAN,
       defaultValue: false,
       allowNull: false
+    },
+    role: {
+      type: Sequelize.ENUM,
+      defaultValue: 'user',
+      values: ['user', 'staff']
     }
   }
 };

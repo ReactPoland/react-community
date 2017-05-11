@@ -30,6 +30,21 @@ module.exports = {
       type: Sequelize.STRING(255),
       allowNull: false,
       defaultValue: ''
+    },
+    type: {
+      type: Sequelize.ENUM,
+      defaultValue: 'own',
+      values: ['external', 'own']
+    },
+    link: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: ''
+    },
+    description: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+      defaultValue: null
     }
   }
 };

@@ -1,5 +1,4 @@
 const AnswerModel = require('../../../db').quizAnswers;
-const resp = require('../../../utils/serverResp');
 
 /**
   @api {POST} /api/quiz/add/answers Create answers
@@ -56,7 +55,7 @@ const resp = require('../../../utils/serverResp');
 
 const addQuizAnswersRequest = async (req) => {
   const { answers } = req.body;
-  if (!answers || !answers.map) throw resp.error('answers are not found');
+  if (!answers || !answers.map) throw new Error('answers are not found');
 
   const answersMap = answers.map(({ answer, correct, questionId }) => ({
     answer, correct,
@@ -64,10 +63,7 @@ const addQuizAnswersRequest = async (req) => {
   }));
 
   const createResp = await AnswerModel.bulkCreate(answersMap, {returning: true})
-  .then((...args) => resp.success(args))
-  .catch(err => err);
-
-  if ( !(createResp.type === 'success') ) throw resp.error(createResp.message);
+  .then((...args) => args);
 
   return createResp;
 };

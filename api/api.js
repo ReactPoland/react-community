@@ -11,6 +11,7 @@ import errorHandler from './utils/errorHandler';
 import permMiddleware from './utils/permMiddleware';
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 import sequelize from './db/init';
+const resp = require('./utils/serverResp');
 
 const pretty = new PrettyError();
 const app = express();
@@ -45,14 +46,14 @@ app.use((req, res) => {
         if (result instanceof Function) {
           result(res);
         } else {
-          res.json(result);
+          res.json(resp.success(result));
         }
       }, (reason) => {
         if (reason && reason.redirect) {
           res.redirect(reason.redirect);
         } else {
           console.error('API ERROR:', pretty.render(reason));
-          res.status(reason.status || 500).json(reason);
+          res.status(reason.status || 500).json(resp.error(reason.message));
         }
       });
   } else {

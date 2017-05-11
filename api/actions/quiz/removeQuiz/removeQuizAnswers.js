@@ -1,5 +1,4 @@
 const AnswerModel = require('../../../db').quizAnswers;
-const resp = require('../../../utils/serverResp');
 
 /**
   @api {POST} /api/quiz/remove/answers Remove answers
@@ -31,7 +30,7 @@ const resp = require('../../../utils/serverResp');
 
 const updateQuizAnswers = async (req) => {
   const { answers } = req.body;
-  if (!answers || !answers.length) throw resp.error('answers not found');
+  if (!answers || !answers.length) throw new Error('answers not found');
 
   const questItems = await AnswerModel.destroy({
     where: {
@@ -40,11 +39,7 @@ const updateQuizAnswers = async (req) => {
       }
     },
     returning: true
-  })
-  .then((response) => resp.success(response)) // first element
-  .catch(err => err);
-
-  if ( questItems.type !== 'success' ) throw resp.error(questItems.message);
+  });
 
   return questItems;
 };

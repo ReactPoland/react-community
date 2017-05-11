@@ -1,11 +1,10 @@
 export default function loadAuth(req) {
-  let resp = null;
-  const { user } = req.session;
-  if (user) {
-    resp = {};
-    ['id', 'pictureURL', 'firstName', 'lastName', 'filledProfile']
-      .map(fieldName => resp[fieldName] = user[fieldName]);
-  }
+  return req.permission.shouldAuth().then(() => {
+    const resp = {};
+    ['id', 'pictureURL', 'firstName', 'lastName', 'filledProfile', 'role']
+      .map(fieldName => resp[fieldName] = req.currentUser[fieldName]);
 
-  return Promise.resolve(resp);
+    return resp;
+  })
+  .catch(() => null);
 }

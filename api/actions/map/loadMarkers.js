@@ -1,4 +1,3 @@
-const resp = require('../../utils/serverResp');
 const MarkerModel = require('../../db').markers;
 
 /**
@@ -41,9 +40,7 @@ const MarkerModel = require('../../db').markers;
  */
 
 const loadMarkersRequest = async () => {
-  return await MarkerModel.findAll({})
-    .then(data => resp.success(data))
-    .catch(err => resp.error(err.message));
+  return await MarkerModel.findAll({});
 };
 
 const loadMarkers = () => loadMarkersRequest();

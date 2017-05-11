@@ -43,7 +43,7 @@ const resp = require('../../../utils/serverResp');
 
 const updateQuizAnswers = async (req) => {
   const { answers } = req.body;
-  if (!answers || !answers.length) throw resp.error('answers not found');
+  if (!answers || !answers.length) throw new Error('answers not found');
 
   const serverAnswer = [];
 
@@ -57,7 +57,7 @@ const updateQuizAnswers = async (req) => {
 
 
   for (const answerInstance of answerItems) {
-    console.log('answer', answerInstance.toJSON());
+    // console.log('answer', answerInstance.toJSON());
     const updatedAns = answers.find(item => String(answerInstance.id) === String(item.id));
     if (!updatedAns) continue;
     answerInstance.answer = updatedAns.answer || answerInstance.answer;

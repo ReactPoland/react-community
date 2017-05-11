@@ -18,8 +18,18 @@ export default (store) => {
     }
   };
 
+  // Redirects new user's to their profile page
+  const checkUserProfileStatus = (nextState, replace, cb) => {
+    const { user } = store.getState().auth;
+    // Check if user has finished registration and we're not on "/profile" already
+    if (user && !user.filledProfile && nextState.location.pathname !== '/profile') {
+      replace('/profile');
+    }
+    cb();
+  };
+
   return (
-    <Route path="/" component={ct.App}>
+    <Route path="/" component={ct.App} onEnter={checkUserProfileStatus}>
       { /* Home (main) route */ }
       <IndexRoute component={ct.HomePage} />
 
