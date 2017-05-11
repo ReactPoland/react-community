@@ -15,7 +15,7 @@ const permMiddleware = () => (req, res, next) => {
 
     if (filter) {
       const { role } = filter;
-      if (role !== undefined) throw genError('Unprivileged user');
+      if (role !== undefined && currentUser.role !== role) throw genError('Unprivileged user');
     }
 
     req.currentUser = currentUser;
