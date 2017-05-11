@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 // LAYOUT
 import { List, ListItem } from 'material-ui/List';
 
-class ArticlesList extends Component {
+export default class ArticlesList extends Component {
   static propTypes = {
     articles: PropTypes.array.isRequired,
     onListItemClick: PropTypes.func.isRequired
@@ -12,19 +12,15 @@ class ArticlesList extends Component {
   render() {
     return (
       <List>
-        {
-          this.props.articles.map(({ id, title, description, slug }) => (
-            <ListItem
-              key={id}
-              primaryText={title}
-              secondaryText={description}
-              onClick={() => { this.props.onListItemClick({ id, slug }); }}
-            />
-          ))
-        }
+        {this.props.articles.map((article) => (
+          <ListItem
+            key={article.id}
+            primaryText={article.title}
+            secondaryText={article.description}
+            onClick={() => { this.props.onListItemClick(article); }}
+          />
+        ))}
       </List>
     );
   }
 }
-
-export default ArticlesList;

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import { descendingBy } from 'utils';
 import { push } from 'react-router-redux';
+import _startsWith from 'lodash/startsWith';
 // LAYOUT
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
@@ -38,8 +39,13 @@ class ArticlesGrid extends Component {
     if (!this.props.articlesLoaded) this.props.loadArticles();
   }
 
-  redirectToArticle = (articleId) => {
-    this.props.pushState(`/article/${articleId}`);
+  redirectToArticle = (article) => {
+    if (article.type === 'external') {
+      const link = _startsWith(article.link, 'http') ? article.link : 'http://' + article.link;
+      window.location = link;
+    } else {
+      this.props.pushState(`/article/${article.id}/${article.slug}`);
+    }
   }
 
   render() {
@@ -47,16 +53,19 @@ class ArticlesGrid extends Component {
       <LoadingScreen loading={this.props.loadingArticles}>
         <Row>
           {this.props.articles.sort(descendingBy('size')).map((article) => {
-            const date = moment(article.createdAt).format('dddd, MMMM Do YYYY, h:mm:ss a');
+            const date = moment(article.createdAt).format('MMMM Do YYYY');
 
             return (
               <Col key={article.id} md={article.size}>
                 <Card
                   style={{ cursor: 'pointer', marginBottom: 16 }}
-                  onClick={() => this.redirectToArticle(article.id)}
+                  onClick={() => this.redirectToArticle(article)}
                 >
                   <CardTitle title={article.title} subtitle={date} />
-                  <CardText>{article.description}</CardText>
+                  <CardText>
+                    <p>{article.description}</p>
+                    {article.link && <p>Go to: {article.link}</p>}
+                  </CardText>
                 </Card>
               </Col>
             );

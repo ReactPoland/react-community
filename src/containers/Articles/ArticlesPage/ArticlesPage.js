@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
+import _startsWith from 'lodash/startsWith';
 // COMPONENTS
 import ArticlesList from './ArticlesList';
 // LAYOUT
@@ -27,8 +28,13 @@ export default class ArticlesPage extends Component {
     loggedIn: PropTypes.bool.isRequired
   }
 
-  redirectToArticle = ({ id, slug }) => {
-    this.props.pushState(`/article/${id}/${slug}`);
+  redirectToArticle = (article) => {
+    if (article.type === 'external') {
+      const link = _startsWith(article.link, 'http') ? article.link : 'http://' + article.link;
+      window.location = link;
+    } else {
+      this.props.pushState(`/article/${article.id}/${article.slug}`);
+    }
   }
 
   render() {

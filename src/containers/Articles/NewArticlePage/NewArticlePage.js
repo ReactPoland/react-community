@@ -30,10 +30,10 @@ export default class NewArticlePage extends Component {
 
   state = {
     newArticle: {
-      type: 'own', // TODO: check if name is proper
+      type: 'own',
       title: 'Title...',
       description: 'Description...',
-      link: 'Link...',
+      link: 'http://',
       content: {
         'nodes': [
           {
@@ -91,9 +91,7 @@ export default class NewArticlePage extends Component {
 
     newArticle.content = JSON.stringify(newArticle.content);
 
-    console.warn('newArticle', newArticle);
-
-    // this.props.addArticle(newArticle);
+    this.props.addArticle(newArticle);
   }
 
   render() {
