@@ -26,7 +26,7 @@ const updateArticleRequest = async ({title, content, id, previewSize}) => {
 };
 
 function updateArticle(data) {
-  return data.permission.shouldAuth().then(() => updateArticleRequest(data.body));
+  return data.permission.onlyStaff().then(() => updateArticleRequest(data.body));
 }
 
 export default updateArticle;
