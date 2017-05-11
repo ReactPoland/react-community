@@ -144,6 +144,7 @@ export default class EditEventDialog extends Component {
         actions={actions}
         open={popupVisible}
         onRequestClose={this.closePopup}
+        autoScrollBodyContent
       >
         {fetchingEventData && <Spinner
           style={{ position: 'absolute', top: 0, left: 0, background: 'rgba(255, 255, 255, 0.8)', zIndex: 10 }}
