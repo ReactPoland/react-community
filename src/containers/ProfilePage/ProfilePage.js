@@ -97,7 +97,7 @@ export default class ProfilePage extends Component {
       <LoadingScreen loading={this.props.loadingUsers}>
         <Grid className={styles.ProfilePage}>
           <Helmet title="Profile" />
-          {!user.filledProfile &&
+          {isCurrentUsersProfile && !user.filledProfile &&
             <Paper style={{ padding: 16, marginBottom: 24 }}>
               <h3>Hello {user.firstName}! Please complete your profile</h3>
             </Paper>
