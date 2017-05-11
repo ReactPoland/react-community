@@ -4,30 +4,12 @@
   @apiName Add article
   @apiGroup Article
 
-  @apiPermission Authorized user from the database See how to authorize(#General:Login).
+  @apiPermission Staff privileges.
 
   @apiParam {String} title Article title.
-  @apiParam {String} content Article body.
-  @apiParam {Array} previewSize Article desktop thumbnail size.
-
-  @apiExample Example request:
-  POST /api/article/addArticle HTTP/1.1
-
-  {
-      "title": "Alan Turing",
-      "content": "test content",
-      "previewSize": [1, 2]
-  }
-  @apiSuccessExample Example data on success:
-  {
-    "message": {
-      "id": 30,
-      "title": "Alan Turing",
-      "previewSize": [1, 2],
-      "content": "test content",
-      "updatedAt": "2017-04-05T12:22:46.389Z",
-      "createdAt": "2017-04-05T12:22:46.389Z"
-    },
-    "type": "success"
-  }
+  @apiParam {String} [content] Article body (will ignore for articles with type:`external`).
+  @apiParam {Array} [previewSize] Article desktop thumbnail size.
+  @apiParam {String} type Type article [`external`, `own`].
+  @apiParam {String} [link] External link on the article (will ignore for articles with type:`own`).
+  @apiParam {String} [description] Type article [`external`, `own`].
  */

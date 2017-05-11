@@ -6,7 +6,4 @@
 
   @apiExample Example usage:
   GET /api/logout/ HTTP/1.1
-
-  @apiSuccessExample Example data on success:
-  null
  */
