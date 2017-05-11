@@ -14,7 +14,8 @@ module.exports = {
     },
     content: {
       type: Sequelize.TEXT,
-      allowNull: false
+      allowNull: false,
+      defaultValue: ''
     },
     previewSize: {
       type: Sequelize.ARRAY(Sequelize.DECIMAL),
