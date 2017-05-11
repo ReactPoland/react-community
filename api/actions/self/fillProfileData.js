@@ -15,14 +15,7 @@ const fillProfileDataReques = async ({ body, session }) => {
     ...userProfileData
   });
 
-  session.user = updatedUser;
-
-  return new Promise((resolve, reject) => {
-    session.save((err) => {
-      if (err) reject(err);
-      resolve(updatedUser);
-    });
-  });
+  return updatedUser;
 };
 
 const fillProfileData = (req) => {
