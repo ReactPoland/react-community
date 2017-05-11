@@ -14,7 +14,8 @@ import { List, ListItem } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import styles from './UsersPage.scss';
 
-const mappedState = ({ users }) => ({
+const mappedState = ({ auth, users }) => ({
+  user: auth.user,
   users: users.all,
   loadingUsers: users.loadingUsers,
   usersLoaded: users.usersLoaded,
@@ -28,6 +29,7 @@ const mappedActions = {
 @connect(mappedState, mappedActions)
 class UsersPage extends Component {
   static propTypes = {
+    user: PropTypes.object,
     users: PropTypes.array.isRequired,
     loadingUsers: PropTypes.bool.isRequired,
     usersLoaded: PropTypes.bool.isRequired,
@@ -40,7 +42,9 @@ class UsersPage extends Component {
   }
 
   handleUserClick(userId) {
-    this.props.pushState(`/user/${userId}`);
+    // If user clicked on himself, redirect him to his profile page. Otherwise show user details.
+    const route = userId === this.props.user.id ? '/profile' : `/user/${userId}`;
+    this.props.pushState(route);
   }
 
   render() {

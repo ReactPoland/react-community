@@ -6,6 +6,9 @@ const LOGIN_REQUEST = 'LOGIN_REQUEST';
 const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
 const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 const LOGOUT_FAIL = 'LOGOUT_FAIL';
+const EDIT_PROFILE_REQUEST = 'EDIT_PROFILE_REQUEST';
+const EDIT_PROFILE_SUCCESS = 'EDIT_PROFILE_SUCCESS';
+const EDIT_PROFILE_FAIL = 'EDIT_PROFILE_FAIL';
 
 // --- HELPERS ---
 export const isLoaded = globalState => globalState.auth && globalState.auth.loaded;
@@ -24,10 +27,16 @@ export const logout = () => ({
   promise: client => client.get('/logout')
 });
 
+export const editProfile = (profile) => ({
+  requestName: 'Edit profile',
+  types: [EDIT_PROFILE_REQUEST, EDIT_PROFILE_SUCCESS, EDIT_PROFILE_FAIL],
+  promise: client => client.post('/self/fillProfileData/', { data: profile })
+});
+
 const initialState = {
   // User
-  user: null, // Contains: id, firstName, lastName, pictureURL
-  // Lodaing user data
+  user: null,
+  // Loading user data
   loading: false,
   loaded: false,
   loadError: false,
@@ -38,7 +47,11 @@ const initialState = {
   // Logging out
   loggingOut: false,
   loggedOut: false,
-  logoutError: false
+  logoutError: false,
+  // Edit profile
+  editingProfile: false,
+  profileEdited: false,
+  editProfileError: false
 };
 
 // --- REDUCER ---
@@ -54,8 +67,8 @@ export default (state = initialState, action = {}) => {
         ...state,
         loading: false,
         loaded: true,
-        loggedIn: action.result ? true : false,
-        user: action.result
+        loggedIn: !!action.result.message,
+        user: action.result.message
       };
     case LOAD_FAIL:
       return {
@@ -87,6 +100,27 @@ export default (state = initialState, action = {}) => {
         ...state,
         loggingOut: false,
         logoutError: true
+      };
+    case EDIT_PROFILE_REQUEST:
+      return {
+        ...state,
+        editingProfile: true,
+        profileEdited: false,
+        editProfileError: false
+      };
+    case EDIT_PROFILE_SUCCESS:
+      return {
+        ...state,
+        editingProfile: false,
+        profileEdited: true,
+        user: action.result.message
+      };
+    case EDIT_PROFILE_FAIL:
+      return {
+        ...state,
+        editingProfile: false,
+        profileEdited: false,
+        editProfileError: true
       };
     default:
       return state;
