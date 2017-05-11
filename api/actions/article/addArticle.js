@@ -3,8 +3,15 @@ const { sequelize } = ArticleModel;
 import * as ArticleValidation from '../../utils/validation/article';
 import { getSlug } from '../../utils/slug';
 
-const addArticleRequest = async ({title, content, previewSize = [1, 1] }) => { // TODO: remove default previewSize
-  const articleBody = ArticleValidation.checkArticleBody({title, content, previewSize});
+const addArticleRequest = async ({
+  title,
+  content,
+  previewSize = [1, 1],
+  type,
+  link,
+  description
+}) => { // TODO: remove default previewSize
+  const articleBody = ArticleValidation.checkArticleBody({title, content, previewSize, type, link, description});
   return await ArticleModel.create({
     ...articleBody,
     slug: getSlug(sequelize, title)
