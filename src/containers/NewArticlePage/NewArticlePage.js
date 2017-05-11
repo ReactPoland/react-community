@@ -6,6 +6,7 @@ import _isEmpty from 'lodash/isEmpty';
 import { addArticle } from 'redux/modules/articlesModule';
 // COMPONENTS
 import { PlainTextEditor, RichTextEditor } from 'components';
+import TypeSelectButtons from './TypeSelectButtons';
 // LAYOUT
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
@@ -29,6 +30,7 @@ export default class NewArticlePage extends Component {
   state = {
     newArticle: {
       title: 'Title',
+      type: 'own', // TODO: check if name is proper
       content: {
         'nodes': [
           {
@@ -90,12 +92,20 @@ export default class NewArticlePage extends Component {
 
   render() {
     const { addingArticle } = this.props;
-    const { newArticle: { title, content }, validationErrors } = this.state;
+    const { newArticle: { title, content, type }, validationErrors } = this.state;
     const styles = require('./NewArticlePage.scss');
 
     return (
       <div className={styles.container}>
         <Grid>
+          <Row>
+            <Col xs={12}>
+              <TypeSelectButtons
+                type={type}
+                onChange={val => this.onChange('type', val)}
+              />
+            </Col>
+          </Row>
           <Row>
             <Col xs={12}>
               <Paper className={styles.editor} zDepth={2}>
