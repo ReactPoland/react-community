@@ -30,9 +30,10 @@ export default class NewArticlePage extends Component {
 
   state = {
     newArticle: {
+      type: 'own', // TODO: check if name is proper
       title: 'Title...',
       description: 'Description...',
-      type: 'own', // TODO: check if name is proper
+      link: 'Link...',
       content: {
         'nodes': [
           {
@@ -90,14 +91,12 @@ export default class NewArticlePage extends Component {
 
     newArticle.content = JSON.stringify(newArticle.content);
 
-    console.warn('newArticle', newArticle);
-
-    // this.props.addArticle(newArticle);
+    this.props.addArticle(newArticle);
   }
 
   render() {
     const { addingArticle } = this.props;
-    const { newArticle: { type, title, description, content }, validationErrors } = this.state;
+    const { newArticle: { type, title, description, content, link }, validationErrors } = this.state;
     const styles = require('./NewArticlePage.scss');
 
     return (
@@ -126,8 +125,14 @@ export default class NewArticlePage extends Component {
                     onChange={val => { this.onChange('description', val); }}
                   />
                 </div>
+                {type === 'external' && <div className={styles.articleLink}>
+                  <PlainTextEditor
+                    initialState={link}
+                    onChange={val => { this.onChange('link', val); }}
+                  />
+                </div>}
                 {validationErrors.title && <p>{validationErrors.title}</p>}
-                <RichTextEditor
+                {type === 'own' && <RichTextEditor
                   initialState={content}
                   style={{
                     width: '100%',
@@ -135,7 +140,7 @@ export default class NewArticlePage extends Component {
                     maxHeight: '45vh',
                   }}
                   onChange={val => { this.onChange('content', val); }}
-                />
+                />}
                 {validationErrors.content && <p>{validationErrors.content}</p>}
                 <FlatButton
                   label={addingArticle ? 'Adding...' : 'Add article'}
