@@ -57,7 +57,7 @@ export default (store) => {
         <Route path="add" onEnter={requireLogin} component={ct.NewArticlePage} />
       </Route>
 
-      { /* Catch all route */ }
+      { /* Catches remaining routes */ }
       <Route path="*" component={ct.NotFound} status={404} />
     </Route>
   );

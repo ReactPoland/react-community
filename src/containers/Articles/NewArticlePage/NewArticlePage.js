@@ -91,7 +91,9 @@ export default class NewArticlePage extends Component {
 
     newArticle.content = JSON.stringify(newArticle.content);
 
-    this.props.addArticle(newArticle);
+    console.warn('newArticle', newArticle);
+
+    // this.props.addArticle(newArticle);
   }
 
   render() {
