@@ -1,4 +1,3 @@
-const resp = require('../../utils/serverResp');
 const CommentModel = require('../../db').comments;
 const ConversationModel = require('../../db').conversations;
 
@@ -11,7 +10,6 @@ const getConversationId = async (articleId) => {
 
   if (currConvers) {
     return {
-      success: true,
       itemId: currConvers.id
     };
   }
@@ -19,13 +17,12 @@ const getConversationId = async (articleId) => {
   return await ConversationModel.create({
     articleId
   }).then(item => ({
-    success: true,
     itemId: item.toJSON().id
   }));
 };
 
 const newCommentRequest = async ({ body, session }) => {
-  if (!body) return resp.error('bad request');
+  if (!body) throw new Error('bad request');
 
   const { body: commentBody, articleId, parentCommentId } = body;
 
@@ -45,10 +42,7 @@ const newCommentRequest = async ({ body, session }) => {
     pCommentId = parentComment.id;
   }
 
-  const converResp = await getConversationId(articleId)
-  .catch(err => err);
-
-  if (!converResp.success) return resp.error(converResp.message);
+  const converResp = await getConversationId(articleId);
 
   const commentEntity = {
     body: commentBody,
@@ -58,9 +52,7 @@ const newCommentRequest = async ({ body, session }) => {
     parentCommentId: pCommentId
   };
 
-  return CommentModel.create(commentEntity)
-    .then(respMess => resp.success(respMess))
-    .catch(err => resp.error(err.message));
+  return await CommentModel.create(commentEntity);
 };
 
 const newComment = (req) => {

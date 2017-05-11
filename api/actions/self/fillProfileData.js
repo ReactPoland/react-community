@@ -1,12 +1,9 @@
-const resp = require('../../utils/serverResp');
 const UserModel = require('../../db').users;
 
 const fillProfileDataReques = async ({ body, session }) => {
-  if (!body) throw resp.error('bad request');
+  if (!body) throw new Error('bad request');
 
-
-  const currentUser = await UserModel.findById(session.user.id)
-  .catch(error => { throw resp.error(error.message); });
+  const currentUser = await UserModel.findById(session.user.id);
 
   const userProfileData = {};
   ['firstName', 'lastName', 'pictureURL'].map(fieldName => {
@@ -22,8 +19,8 @@ const fillProfileDataReques = async ({ body, session }) => {
 
   return new Promise((resolve, reject) => {
     session.save((err) => {
-      if (err) reject(resp.error(err.message));
-      resolve(resp.success(updatedUser));
+      if (err) reject(err);
+      resolve(updatedUser);
     });
   });
 };

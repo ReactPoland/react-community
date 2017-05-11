@@ -1,5 +1,4 @@
 const EventModel = require('../../db').events;
-const resp = require('../../utils/serverResp');
 // import * as EventValidation from '../../utils/validation/article';
 
 const updateEventRequest = async (req) => {
@@ -10,7 +9,7 @@ const updateEventRequest = async (req) => {
     where: { id }
   })
   .catch(() => null);
-  if (!currEvent) throw resp.error('event not found');
+  if (!currEvent) throw new Error('event not found');
 
   const createResp = await EventModel.update({
     price: price || currEvent.price,
@@ -23,11 +22,7 @@ const updateEventRequest = async (req) => {
     googleLocationId: googleLocationId || currEvent.googleLocationId
   }, {
     where: { id }
-  })
-  .then(respMess => resp.success(respMess))
-  .catch(err => err);
-
-  if ( !(createResp.type === 'success') ) throw resp.error(createResp.message);
+  });
 
   return createResp;
 };

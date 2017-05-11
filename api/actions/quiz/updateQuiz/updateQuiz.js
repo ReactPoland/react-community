@@ -1,5 +1,4 @@
 const QuizModel = require('../../../db').quizzes;
-const resp = require('../../../utils/serverResp');
 
 const updateQuizRequest = async (req) => {
   const { description, title, id } = req.body;
@@ -8,7 +7,7 @@ const updateQuizRequest = async (req) => {
     where: { id }
   })
   .catch(() => null);
-  if (!currItem) throw resp.error('quiz not found');
+  if (!currItem) throw new Error('quiz not found');
 
   const createResp = await QuizModel.update({
     description: description || currItem.description,
@@ -19,10 +18,7 @@ const updateQuizRequest = async (req) => {
     },
     returning: true
   })
-  .then((response) => resp.success(response[1][0])) // first element
-  .catch(err => err);
-
-  if ( createResp.type !== 'success' ) throw resp.error(createResp.message);
+  .then((response) => response[1][0]); // first element
 
   return createResp;
 };

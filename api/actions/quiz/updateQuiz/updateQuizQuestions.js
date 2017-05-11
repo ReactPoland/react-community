@@ -3,7 +3,7 @@ const resp = require('../../../utils/serverResp');
 
 const updateQuizQuestions = async (req) => {
   const { questions } = req.body;
-  if (!questions || !questions.length) throw resp.error('questions not found');
+  if (!questions || !questions.length) throw new Error('questions not found');
 
   const serverAnswer = [];
 

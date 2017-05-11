@@ -3,7 +3,7 @@ export default function loadAuth(req) {
   const { user } = req.session;
   if (user) {
     resp = {};
-    ['id', 'pictureURL', 'firstName', 'lastName', 'filledProfile']
+    ['id', 'pictureURL', 'firstName', 'lastName', 'filledProfile', 'role']
       .map(fieldName => resp[fieldName] = user[fieldName]);
   }
 
