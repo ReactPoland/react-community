@@ -7,7 +7,7 @@ import { push } from 'react-router-redux';
 // LAYOUT
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
-import { MockCard } from 'components/mocked';
+import { Card, CardTitle, CardText } from 'material-ui/Card';
 // STORE
 import { loadArticles } from 'redux/modules/articlesModule';
 // COMPONENTS
@@ -46,21 +46,21 @@ class ArticlesGrid extends Component {
     return (
       <LoadingScreen loading={this.props.loadingArticles}>
         <Row>
-          {
-            this.props.articles.sort(descendingBy('size')).map((article) => {
-              const date = moment(article.createdAt).format('dddd, MMMM Do YYYY, h:mm:ss a');
-              return (
-                <Col key={article.id} md={article.size}>
-                  <MockCard
-                    title={article.title}
-                    subtitle={date}
-                    onClick={() => this.redirectToArticle(article.id)}
-                    style={{ cursor: 'pointer' }}
-                  />
-                </Col>
-              );
-            })
-          }
+          {this.props.articles.sort(descendingBy('size')).map((article) => {
+            const date = moment(article.createdAt).format('dddd, MMMM Do YYYY, h:mm:ss a');
+
+            return (
+              <Col key={article.id} md={article.size}>
+                <Card
+                  style={{ cursor: 'pointer', marginBottom: 16 }}
+                  onClick={() => this.redirectToArticle(article.id)}
+                >
+                  <CardTitle title={article.title} subtitle={date} />
+                  <CardText>{article.description}</CardText>
+                </Card>
+              </Col>
+            );
+          })}
         </Row>
       </LoadingScreen>
     );

@@ -13,10 +13,11 @@ class ArticlesList extends Component {
     return (
       <List>
         {
-          this.props.articles.map(({ id, title, slug }) => (
+          this.props.articles.map(({ id, title, description, slug }) => (
             <ListItem
               key={id}
               primaryText={title}
+              secondaryText={description}
               onClick={() => { this.props.onListItemClick({ id, slug }); }}
             />
           ))
