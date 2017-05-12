@@ -16,6 +16,7 @@ const loadCommentsRequest = async ({ body }) => {
     attributes: ['id', 'body', 'conversationId', 'createdAt', 'updatedAt', 'depth', 'parentCommentId'],
     include: [{
       model: UserModel,
+      as: 'user',
       attributes: ['id', 'firstName', 'lastName', 'pictureURL']
     }],
     order: [
