@@ -81,5 +81,6 @@ sequelize.sync({})
   });
 
 module.exports = {
-  ...models
+  ...models,
+  sequelize
 };
