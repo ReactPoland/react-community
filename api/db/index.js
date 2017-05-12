@@ -39,13 +39,13 @@ models.quizQuestions.belongsTo(models.quizzes, {
   onDelete: 'cascade',
 });
 models.quizQuestions.hasMany(models.quizAnswers, {
-  onDelete: 'cascade',
+  onDelete: 'cascade', // NOTE: probably doesn't need
   as: 'answers',
   foreignKey: 'questionId'
 });
 
 models.quizzes.hasMany(models.quizQuestions, {
-  onDelete: 'cascade',
+  onDelete: 'cascade', // NOTE: probably doesn't need
   as: 'questions',
   foreignKey: 'quizId'
 });
@@ -63,7 +63,9 @@ models.comments.belongsTo(models.users, {
   as: 'user',
   allowNull: false
 });
-models.comments.belongsTo(models.conversations);
+models.comments.belongsTo(models.conversations, {
+  onDelete: 'cascade'
+});
 
 models.users.hasMany(models.comments, {
   foreignKey: 'userId',
@@ -71,8 +73,13 @@ models.users.hasMany(models.comments, {
 });
 // models.users.hasMany(models.events, { as });
 
-models.conversations.hasMany(models.comments, { foreignKey: 'conversationId' });
-models.conversations.belongsTo(models.articles);
+models.conversations.hasMany(models.comments, {
+  foreignKey: 'conversationId',
+});
+
+models.conversations.belongsTo(models.articles, {
+  onDelete: 'cascade'
+});
 
 // sequelize.sync({force: true})
 sequelize.sync({})
