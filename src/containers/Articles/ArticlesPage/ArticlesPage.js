@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import _startsWith from 'lodash/startsWith';
+// import _startsWith from 'lodash/startsWith';
 // COMPONENTS
 import ArticlesList from './ArticlesList';
 // LAYOUT
@@ -11,7 +11,6 @@ import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import styles from './ArticlesPage.scss';
 
 const mappedState = ({ auth, articles }) => ({
   loggedIn: auth.loggedIn,
@@ -29,12 +28,7 @@ export default class ArticlesPage extends Component {
   }
 
   redirectToArticle = (article) => {
-    if (article.type === 'external') {
-      const link = _startsWith(article.link, 'http') ? article.link : 'http://' + article.link;
-      window.location = link;
-    } else {
-      this.props.pushState(`/article/${article.id}/${article.slug}`);
-    }
+    this.props.pushState(`/article/${article.id}/${article.slug}`);
   }
 
   render() {
@@ -49,7 +43,6 @@ export default class ArticlesPage extends Component {
           bottom: 40,
           zIndex: 1000
         }}
-        className={styles.AddArticleButton}
         onClick={() => this.props.pushState('/articles/add')}
       >
         <ContentAdd />

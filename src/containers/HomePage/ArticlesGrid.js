@@ -62,9 +62,9 @@ class ArticlesGrid extends Component {
                   onClick={() => this.redirectToArticle(article)}
                 >
                   <CardTitle title={article.title} subtitle={date} />
-                  <CardText>
+                  <CardText style={{ paddingTop: 0 }}>
                     <p>{article.description}</p>
-                    {article.link && <p>Go to: {article.link}</p>}
+                    {article.link && <p>Go to: {article.link} <i className="fa fa-external-link" /></p>}
                   </CardText>
                 </Card>
               </Col>

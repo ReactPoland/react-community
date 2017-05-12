@@ -201,6 +201,8 @@ export default class ArticlePage extends Component {
 
     if (!article) return null;
 
+    const external = article.type === 'external';
+
     return (
       <Grid style={{ height: '100%' }}>
         <Div flex column fullHeight>
@@ -212,7 +214,7 @@ export default class ArticlePage extends Component {
                 {this.renderEditButton()}
               </List>
             </ArticleHeader>
-            {this.renderEditor()}
+            {!external && this.renderEditor()}
             <List right>
               {this.renderDeleteButton()}
             </List>
