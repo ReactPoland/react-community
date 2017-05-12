@@ -25,7 +25,7 @@ export function prepareContent(jsonString) {
   if (typeof jsonString === 'object') return jsonString;
 
   try {
-    const obj = JSON.parse(JSON.parse(jsonString));
+    const obj = JSON.parse(jsonString);
 
     if (obj && typeof obj === 'object') return obj;
   } catch (error) {
@@ -85,7 +85,7 @@ export function loadArticles() {
 export function addArticle(article) {
   const data = {
     ...article,
-    content: JSON.stringify(article.content)
+    content: article.content
   };
 
   return {
@@ -99,7 +99,7 @@ export function addArticle(article) {
 export function editArticle(article) {
   const data = {
     ...article,
-    content: JSON.stringify(article.content)
+    content: article.content
   };
 
   return {
