@@ -1,5 +1,5 @@
 const ArticleModel = require('../../db').articles;
-const { sequelize } = ArticleModel;
+const sequelize = require('../../db').sequelize;
 import * as ArticleValidation from '../../utils/validation/article';
 import { getSlug } from '../../utils/slug';
 
