@@ -5,7 +5,7 @@ const addQuizRequest = async (req) => {
 
   const createResp = await QuizModel.create({
     description, title
-  })
+  });
 
   return createResp;
 };

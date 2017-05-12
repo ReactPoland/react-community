@@ -1,7 +1,6 @@
 import addQuizRequest from './addQuiz';
 import addQuizQuestionsRequest from './addQuizQuestions';
 import addQuizAnswersRequest from './addQuizAnswers';
-import resp from '../../../utils/serverResp';
 
 // api/quiz/add
 // api/quiz/add/questions
@@ -14,7 +13,7 @@ function addQuiz(data, params) {
     switch (type) {
       case 'questions': return addQuizQuestionsRequest(data);
       case 'answers': return addQuizAnswersRequest(data);
-      default: throw resp.error('route not found');
+      default: throw new Error('route not found');
     }
   });
 }
