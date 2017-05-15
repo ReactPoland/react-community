@@ -55,12 +55,14 @@ class RichTextEditor extends Component {
   static propTypes = {
     initialState: PropTypes.object,
     style: PropTypes.object,
-    readOnly: PropTypes.bool
+    readOnly: PropTypes.bool,
+    placeholder: PropTypes.string
   }
 
   static defaultProps = {
     initialState: defaultState,
-    style: {}
+    style: {},
+    placeholder: '...'
   }
 
   /**
@@ -315,7 +317,7 @@ class RichTextEditor extends Component {
       <div className="editor">
         <Editor
           spellCheck
-          placeholder={'Enter some rich text...'}
+          placeholder={this.props.placeholder}
           schema={schema}
           state={this.state.state}
           onChange={this.onChange}

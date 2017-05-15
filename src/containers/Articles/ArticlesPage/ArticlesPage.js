@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-// import _startsWith from 'lodash/startsWith';
 // COMPONENTS
 import ArticlesList from './ArticlesList';
 // LAYOUT
@@ -17,18 +16,18 @@ const mappedState = ({ auth, articles }) => ({
   articles: articles.all
 });
 
-const mappedActions = { pushState: push };
+const mappedActions = { redirect: push };
 
 @connect(mappedState, mappedActions)
 export default class ArticlesPage extends Component {
   static propTypes = {
     articles: PropTypes.array.isRequired,
-    pushState: PropTypes.func.isRequired,
+    redirect: PropTypes.func.isRequired,
     loggedIn: PropTypes.bool.isRequired
   }
 
   redirectToArticle = (article) => {
-    this.props.pushState(`/article/${article.id}/${article.slug}`);
+    this.props.redirect(`/article/${article.id}/${article.slug}`);
   }
 
   render() {
@@ -43,7 +42,7 @@ export default class ArticlesPage extends Component {
           bottom: 40,
           zIndex: 1000
         }}
-        onClick={() => this.props.pushState('/articles/add')}
+        onClick={() => this.props.redirect('/articles/add')}
       >
         <ContentAdd />
       </FloatingActionButton>

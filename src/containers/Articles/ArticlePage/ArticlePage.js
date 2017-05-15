@@ -60,7 +60,7 @@ export default class ArticlePage extends Component {
 
   componentDidMount() {
     const { article = {}, params = {} } = this.props;
-    // TODO: move it elsewhere
+    // TODO: move it to "onEnter"?
     this.checkSlugAndRedirect(article.slug, params.slug, article.id);
   }
 
@@ -85,11 +85,10 @@ export default class ArticlePage extends Component {
   // Prepares article content to use Slate's state objects
   prepareArticle(article) {
     if (!article) return {};
-    console.warn('should not have states', article);
 
     return {
       ...article,
-      content: article.content ? slate.objectToState(article.content) : {},
+      content: _isEmpty(article.content) ? {} : slate.objectToState(article.content),
       description: slate.textToState(article.description),
       link: slate.textToState(article.link),
       title: slate.textToState(article.title)
@@ -116,7 +115,6 @@ export default class ArticlePage extends Component {
   }
 
   cancelEditing = () => {
-    console.warn('this.props.article', this.props.article);
     this.setState({
       editingMode: false,
       article: this.prepareArticle(this.props.article)
@@ -142,15 +140,11 @@ export default class ArticlePage extends Component {
 
     if (!this.validateArticle(article)) return;
 
-    console.warn('before article', article);
-
     if (!_isEmpty(article.content)) article.content = slate.stateToObject(article.content);
     if (!_isEmpty(article.plainText)) article.plainText = slate.stateToText(article.content);
     if (!_isEmpty(article.description)) article.description = slate.stateToText(article.description);
     if (!_isEmpty(article.title)) article.title = slate.stateToText(article.title);
     if (!_isEmpty(article.link)) article.link = slate.stateToText(article.link);
-
-    console.warn('after article', article);
 
     this.props.editArticle(article);
   }

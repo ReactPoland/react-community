@@ -23,7 +23,7 @@ const REMOVE_ARTICLE_FAIL = 'REMOVE_ARTICLE_FAIL';
 // --- HELPERS ---
 
 // Makes sure that the rich editor alwasy get's object as a content
-export const prepareContent = (jsonString) => {
+const prepareContent = (jsonString) => {
   if (typeof jsonString === 'object') return jsonString;
 
   try {
@@ -70,47 +70,34 @@ const initialState = {
 
 // --- ACTIONS ---
 // LOAD
-export function loadArticles() {
-  return {
-    requestName: 'Load articles',
-    types: [LOAD_ARTICLES_REQUEST, LOAD_ARTICLES_SUCCESS, LOAD_ARTICLES_FAIL],
-    promise: (client) => client.get('/article/loadArticles')
-  };
-}
+export const loadArticles = () => ({
+  requestName: 'Load articles',
+  types: [LOAD_ARTICLES_REQUEST, LOAD_ARTICLES_SUCCESS, LOAD_ARTICLES_FAIL],
+  promise: (client) => client.get('/article/loadArticles')
+});
 
 // ADD
-export function addArticle(article) {
-  return {
-    requestName: 'Add article',
-    types: [ADD_ARTICLE_REQUEST, ADD_ARTICLE_SUCCESS, ADD_ARTICLE_FAIL],
-    promise: (client) => client.post('/article/addArticle', { data: article })
-  };
-}
+export const addArticle = (article) => ({
+  requestName: 'Add article',
+  types: [ADD_ARTICLE_REQUEST, ADD_ARTICLE_SUCCESS, ADD_ARTICLE_FAIL],
+  promise: (client) => client.post('/article/addArticle', { data: article })
+});
 
 // EDIT
-export function editArticle(article) {
-  const data = {
-    ...article,
-    content: article.content
-  };
-
-  return {
-    requestName: 'Edit article',
-    types: [EDIT_ARTICLE_REQUEST, EDIT_ARTICLE_SUCCESS, EDIT_ARTICLE_FAIL],
-    payload: { articleId: article.id, article },
-    promise: client => client.post('/article/updateArticle', { data })
-  };
-}
+export const editArticle = (article) => ({
+  requestName: 'Edit article',
+  types: [EDIT_ARTICLE_REQUEST, EDIT_ARTICLE_SUCCESS, EDIT_ARTICLE_FAIL],
+  payload: { articleId: article.id, article },
+  promise: client => client.post('/article/updateArticle', { data: { ...article, content: article.content } })
+});
 
 // REMOVE
-export function removeArticle(articleId) {
-  return {
-    requestName: 'Remove article',
-    types: [REMOVE_ARTICLE_REQUEST, REMOVE_ARTICLE_SUCCESS, REMOVE_ARTICLE_FAIL],
-    payload: { articleId },
-    promise: (client) => client.post('/article/removeArticle', { data: { id: articleId } })
-  };
-}
+export const removeArticle = (articleId) => ({
+  requestName: 'Remove article',
+  types: [REMOVE_ARTICLE_REQUEST, REMOVE_ARTICLE_SUCCESS, REMOVE_ARTICLE_FAIL],
+  payload: { articleId },
+  promise: (client) => client.post('/article/removeArticle', { data: { id: articleId } })
+});
 
 // --- REDUCER ---
 export default function articlesModule(state = initialState, action = {}) {

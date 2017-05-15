@@ -56,7 +56,7 @@ export default class NewArticlePage extends Component {
     this.setState(newState);
   }
 
-  // TODO: probably move to to 'utils'? SInce it's also used in ArticlePage
+  // TODO: probably move to to 'utils'? Since it's also used in ArticlePage
   validateArticle = (articleData) => {
     const { title, description, content } = articleData;
     const validationErrors = {};
@@ -88,8 +88,6 @@ export default class NewArticlePage extends Component {
     const { addingArticle } = this.props;
     const { newArticle: { type, title, description, content, link }, validationErrors } = this.state;
 
-    console.log('xxx', this.state.newArticle);
-
     return (
       <Div height="100%">
         <Grid>
@@ -108,18 +106,21 @@ export default class NewArticlePage extends Component {
                   <PlainTextEditor
                     initialState={title}
                     onChange={this.change('title')}
+                    placeholder="Title"
                   />
                 </h3>
                 <div className={styles.articleDescription}>
                   <PlainTextEditor
                     initialState={description}
                     onChange={this.change('description')}
+                    placeholder="Description"
                   />
                 </div>
                 {type === 'external' && <div className={styles.articleLink}>
                   <PlainTextEditor
                     initialState={link}
                     onChange={this.change('link')}
+                    placeholder="Link"
                   />
                 </div>}
                 {validationErrors.title && <p>{validationErrors.title}</p>}
@@ -127,6 +128,7 @@ export default class NewArticlePage extends Component {
                   initialState={content}
                   style={{ width: '100%', height: '100vh', maxHeight: '45vh' }}
                   onChange={this.change('content')}
+                  placeholder="Content"
                 />}
                 {validationErrors.content && <p>{validationErrors.content}</p>}
                 <FlatButton
