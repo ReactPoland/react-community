@@ -8,4 +8,4 @@ export removePractice from './removePractice';
 export removeTutorial from './removeTutorial';
 
 export updatePractice from './updatePractice';
-export upudateTutorial from './updateTutorial';
+export updateTutorial from './updateTutorial';

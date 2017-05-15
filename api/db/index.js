@@ -9,6 +9,7 @@ const QuizModel = require('./models/Quiz');
 const QuizQuestionModel = require('./models/QuizQuestion');
 const QuizAnswerModel = require('./models/QuizAnswer');
 const TutorialModel = require('./models/Tutorial');
+const LogModel = require('./models/Log');
 
 const models = {};
 
@@ -22,16 +23,24 @@ const models = {};
   QuizModel,
   QuizQuestionModel,
   QuizAnswerModel,
-  TutorialModel
+  TutorialModel,
+  LogModel
 ].map(modelItem => {
   models[modelItem.name] = sequelize.define(modelItem.name, {
     ...modelItem.model
+  }, {
+    ...modelItem.props
   });
 });
 
 models.tutorials.belongsTo(models.users, {
   foreignKey: { allowNull: false },
   as: 'author',
+  onDelete: 'cascade'
+});
+
+models.logs.belongsTo(models.users, {
+  as: 'user',
   onDelete: 'cascade'
 });
 

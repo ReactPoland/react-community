@@ -1,8 +1,10 @@
 const TutorialModel = require('../../db').tutorials;
 const UserModel = require('../../db').users;
+import Log from '../../utils/log';
 
 const updateTutorialRequest = async ({
-  body
+  body,
+  currentUser
 }) => {
   const { title, content, id } = body;
   const currentPractice = await TutorialModel.findOne({
@@ -23,6 +25,11 @@ const updateTutorialRequest = async ({
   if (content) updatingValues.content = content;
 
   const updatedPractice = await currentPractice.updateAttributes(updatingValues);
+
+  await Log.updateTutorial({
+    userId: currentUser.id,
+    entityId: updatedPractice.id
+  });
 
   return updatedPractice;
 };

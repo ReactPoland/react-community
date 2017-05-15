@@ -1,4 +1,5 @@
 const TutorialModel = require('../../db').tutorials;
+import Log from '../../utils/log';
 
 const addPracticeRequest = async ({
   body,
@@ -6,12 +7,19 @@ const addPracticeRequest = async ({
 }) => {
   const { title, content } = body;
 
-  return await TutorialModel.create({
+  const practiceItem = await TutorialModel.create({
     title,
     content,
     type: 'bestpractice',
     authorId: currentUser.id
   });
+
+  await Log.addPractice({
+    userId: currentUser.id,
+    entityId: practiceItem.id
+  });
+
+  return practiceItem;
 };
 
 function addPractice(req) {

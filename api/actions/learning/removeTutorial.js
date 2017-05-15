@@ -1,16 +1,27 @@
 const TutorialModel = require('../../db').tutorials;
+import Log from '../../utils/log';
 
 const removeTutorialRequest = async ({
-  body
+  body,
+  currentUser
 }) => {
   const { id } = body;
 
-  return await TutorialModel.destroy({
+  const count = await TutorialModel.destroy({
     where: {
       type: 'tutorial',
       id
     }
   });
+
+  if (count) {
+    await Log.removeTutorial({
+      entityId: id,
+      userId: currentUser.id
+    });
+  }
+
+  return count;
 };
 
 function removeTutorial(req) {

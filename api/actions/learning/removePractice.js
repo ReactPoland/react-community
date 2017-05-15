@@ -1,16 +1,27 @@
 const TutorialModel = require('../../db').tutorials;
+import Log from '../../utils/log';
 
 const removePracticeRequest = async ({
-  body
+  body,
+  currentUser
 }) => {
   const { id } = body;
 
-  return await TutorialModel.destroy({
+  const count = await TutorialModel.destroy({
     where: {
       type: 'bestpractice',
       id
     }
   });
+
+  if (count) {
+    await Log.removePractice({
+      entityId: id,
+      userId: currentUser.id
+    });
+  }
+
+  return count;
 };
 
 function removePractice(req) {

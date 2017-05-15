@@ -1,6 +1,5 @@
 const TutorialModel = require('../../db').tutorials;
-// const sequelize = require('../../db').sequelize;
-// import { getSlug } from '../../utils/slug';
+import Log from '../../utils/log';
 
 const addTutorialRequest = async ({
   body,
@@ -8,12 +7,19 @@ const addTutorialRequest = async ({
 }) => {
   const { title, content } = body;
 
-  return await TutorialModel.create({
+  const tutorialItem = await TutorialModel.create({
     title,
     content,
     type: 'tutorial',
     authorId: currentUser.id
   });
+
+  await Log.addTutorial({
+    userId: currentUser.id,
+    entityId: tutorialItem.id
+  });
+
+  return tutorialItem;
 };
 
 function addTutorial(req) {
