@@ -21,7 +21,8 @@ const updateEventRequest = async (req) => {
     lng: lng || currEvent.lng,
     googleLocationId: googleLocationId || currEvent.googleLocationId
   }, {
-    where: { id }
+    where: { id },
+    returning: true
   });
 
   return createResp;

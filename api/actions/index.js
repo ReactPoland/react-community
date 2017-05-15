@@ -7,3 +7,4 @@ export * as self from './self/index';
 export * as article from './article/index';
 export * as event from './event';
 export * as quiz from './quiz';
+export * as learning from './learning';
