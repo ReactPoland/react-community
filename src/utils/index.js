@@ -21,9 +21,16 @@ export const eventFormValidator = (formData) => {
   return { isValid: _isEmpty(errors), errors };
 };
 
+// Slate helpers for converting it's state to other types
 export const slate = {
   stateToText: state => Plain.serialize(state),
-  stateToObject: state => Raw.serialize(state),
+  stateToObject: (state) => {
+    // console.log('state', state);
+    return Raw.serialize(state, { terse: true });
+  },
   textToState: text => Plain.deserialize(text),
-  objectToState: object => Raw.deserialize(object, { terse: true })
+  objectToState: (object) => {
+    // console.warn('objectToState', object);
+    return Raw.deserialize(object, { terse: true });
+  }
 };

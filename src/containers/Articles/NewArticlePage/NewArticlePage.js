@@ -15,10 +15,9 @@ import Col from 'react-bootstrap/lib/Col';
 import Paper from 'material-ui/Paper';
 import FlatButton from 'material-ui/FlatButton';
 import { Div } from 'components/styled';
+import styles from './NewArticlePage.scss';
 
-const mappedState = ({ articles }) => ({
-  addingArticle: articles.addingArticle
-});
+const mappedState = ({ articles }) => ({ addingArticle: articles.addingArticle });
 
 const mappedActions = { addArticle };
 
@@ -34,7 +33,7 @@ export default class NewArticlePage extends Component {
       type: 'own',
       title: slate.textToState('Title...'),
       description: slate.textToState('Description...'),
-      link: 'http://',
+      link: slate.textToState('http://'),
       content: slate.textToState('Content...')
     },
     validationErrors: {
@@ -45,7 +44,7 @@ export default class NewArticlePage extends Component {
   }
 
   // Updates state of the article
-  onChange = (property, value) => {
+  change = (property) => (value) => {
     const newState = { ...this.state };
 
     newState.newArticle[property] = value;
@@ -57,6 +56,7 @@ export default class NewArticlePage extends Component {
     this.setState(newState);
   }
 
+  // TODO: probably move to to 'utils'? SInce it's also used in ArticlePage
   validateArticle = (articleData) => {
     const { title, description, content } = articleData;
     const validationErrors = {};
@@ -79,6 +79,7 @@ export default class NewArticlePage extends Component {
     newArticle.plainText = slate.stateToText(this.state.newArticle.content);
     newArticle.description = slate.stateToText(this.state.newArticle.description);
     newArticle.title = slate.stateToText(this.state.newArticle.title);
+    newArticle.link = slate.stateToText(this.state.newArticle.link);
 
     this.props.addArticle(newArticle);
   }
@@ -86,7 +87,8 @@ export default class NewArticlePage extends Component {
   render() {
     const { addingArticle } = this.props;
     const { newArticle: { type, title, description, content, link }, validationErrors } = this.state;
-    const styles = require('./NewArticlePage.scss');
+
+    console.log('xxx', this.state.newArticle);
 
     return (
       <Div height="100%">
@@ -95,7 +97,7 @@ export default class NewArticlePage extends Component {
             <Col xs={12}>
               <TypeSelectButtons
                 type={type}
-                onChange={val => { this.onChange('type', val); }}
+                onChange={this.change('type')}
               />
             </Col>
           </Row>
@@ -105,30 +107,26 @@ export default class NewArticlePage extends Component {
                 <h3 className={styles.articleTitle}>
                   <PlainTextEditor
                     initialState={title}
-                    onChange={val => { this.onChange('title', val); }}
+                    onChange={this.change('title')}
                   />
                 </h3>
                 <div className={styles.articleDescription}>
                   <PlainTextEditor
                     initialState={description}
-                    onChange={val => { this.onChange('description', val); }}
+                    onChange={this.change('description')}
                   />
                 </div>
                 {type === 'external' && <div className={styles.articleLink}>
                   <PlainTextEditor
                     initialState={link}
-                    onChange={val => { this.onChange('link', val); }}
+                    onChange={this.change('link')}
                   />
                 </div>}
                 {validationErrors.title && <p>{validationErrors.title}</p>}
                 {type === 'own' && <RichTextEditor
                   initialState={content}
-                  style={{
-                    width: '100%',
-                    height: '100vh',
-                    maxHeight: '45vh',
-                  }}
-                  onChange={val => { this.onChange('content', val); }}
+                  style={{ width: '100%', height: '100vh', maxHeight: '45vh' }}
+                  onChange={this.change('content')}
                 />}
                 {validationErrors.content && <p>{validationErrors.content}</p>}
                 <FlatButton

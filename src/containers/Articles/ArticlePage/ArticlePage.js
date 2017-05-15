@@ -71,8 +71,7 @@ export default class ArticlePage extends Component {
     if (nextProps.articleEdited !== this.props.articleEdited) {
       this.setState({
         editingMode: false,
-        editedContent: '',
-        editedTitle: ''
+        article: this.prepareArticle(article)
       });
     }
   }
@@ -86,10 +85,13 @@ export default class ArticlePage extends Component {
   // Prepares article content to use Slate's state objects
   prepareArticle(article) {
     if (!article) return {};
+    console.warn('should not have states', article);
+
     return {
       ...article,
-      content: slate.objectToState(article.content),
+      content: article.content ? slate.objectToState(article.content) : {},
       description: slate.textToState(article.description),
+      link: slate.textToState(article.link),
       title: slate.textToState(article.title)
     };
   }
@@ -109,36 +111,24 @@ export default class ArticlePage extends Component {
     this.setState({ article, validationErrors });
   }
 
-  editTitle = (editedTitle) => {
-    this.setState({ editedTitle });
-  }
-
-  editContent = (editedContent) => {
-    this.setState({ editedContent });
-  }
-
   toggleEditMode = () => {
-    this.setState({
-      editingMode: !this.state.editingMode,
-      editedContent: this.state.editingMode ? '' : '',
-      editedTitle: this.state.editingMode ? '' : ''
-    });
+    this.setState({ editingMode: !this.state.editingMode });
   }
 
   cancelEditing = () => {
+    console.warn('this.props.article', this.props.article);
     this.setState({
       editingMode: false,
-      editedContent: '',
-      editedTitle: ''
+      article: this.prepareArticle(this.props.article)
     });
   }
 
   validateArticle = (articleData) => {
-    const { title } = articleData;
+    const { title, description } = articleData;
     const validationErrors = {};
 
     if (!title) validationErrors.title = 'Title is required';
-    // if (!content || !content.document.nodes.length) validationErrors.content = 'Content is required';
+    if (!description) validationErrors.description = 'Description is required';
 
     this.setState({ validationErrors });
 
@@ -148,16 +138,21 @@ export default class ArticlePage extends Component {
   // API CALLS
 
   saveEdits = () => {
-    const editedArticle = { ...this.state.article };
+    const article = { ...this.state.article };
 
-    if (!this.validateArticle(editedArticle)) return;
+    if (!this.validateArticle(article)) return;
 
-    editedArticle.content = slate.stateToObject(this.state.article.content);
-    editedArticle.plainText = slate.stateToText(this.state.article.content);
-    editedArticle.description = slate.stateToText(this.state.article.description);
-    editedArticle.title = slate.stateToText(this.state.article.title);
+    console.warn('before article', article);
 
-    this.props.editArticle(editedArticle);
+    if (!_isEmpty(article.content)) article.content = slate.stateToObject(article.content);
+    if (!_isEmpty(article.plainText)) article.plainText = slate.stateToText(article.content);
+    if (!_isEmpty(article.description)) article.description = slate.stateToText(article.description);
+    if (!_isEmpty(article.title)) article.title = slate.stateToText(article.title);
+    if (!_isEmpty(article.link)) article.link = slate.stateToText(article.link);
+
+    console.warn('after article', article);
+
+    this.props.editArticle(article);
   }
 
   removeArticle = () => {
@@ -166,10 +161,19 @@ export default class ArticlePage extends Component {
 
   // RENDERING
 
-  renderTitle = () => (
+  renderTitleEditor = () => (
     <PlainTextEditor
       initialState={this.state.article.title}
       onChange={this.change('title')}
+      readOnly={!this.state.editingMode}
+      style={{ fontSize: 20 }}
+    />
+  )
+
+  renderLinkEditor = () => (
+    <PlainTextEditor
+      initialState={this.state.article.link}
+      onChange={this.change('link')}
       readOnly={!this.state.editingMode}
       style={{ fontSize: 20 }}
     />
@@ -233,7 +237,7 @@ export default class ArticlePage extends Component {
     );
   }
 
-  render() {
+  render = () => {
     const { article } = this.props;
 
     if (!article) return null;
@@ -245,13 +249,14 @@ export default class ArticlePage extends Component {
         <Div flex column fullHeight>
           <Div flexNone>
             <ArticleHeader>
-              {this.renderTitle()}
+              {this.renderTitleEditor()}
               <List right>
                 {this.renderSaveButton()}
                 {this.renderEditButton()}
               </List>
             </ArticleHeader>
             {this.renderDescriptionEditor()}
+            {isExternal && this.renderLinkEditor()}
             {!isExternal && this.renderContentEditor()}
             <List right>
               {this.renderDeleteButton()}
