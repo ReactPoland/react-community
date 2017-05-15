@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _isEmpty from 'lodash/isEmpty';
+import { slate } from 'utils';
 // STORE
 import { addArticle } from 'redux/modules/articlesModule';
 // COMPONENTS
@@ -31,27 +32,10 @@ export default class NewArticlePage extends Component {
   state = {
     newArticle: {
       type: 'own',
-      title: 'Title...',
-      description: 'Description...',
+      title: slate.textToState('Title...'),
+      description: slate.textToState('Description...'),
       link: 'http://',
-      content: {
-        'nodes': [
-          {
-            'kind': 'block',
-            'type': 'paragraph',
-            'nodes': [
-              {
-                'kind': 'text',
-                'ranges': [
-                  {
-                    'text': 'Content...'
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
+      content: slate.textToState('Content...')
     },
     validationErrors: {
       title: '',
@@ -73,11 +57,12 @@ export default class NewArticlePage extends Component {
   }
 
   validateArticle = (articleData) => {
-    const { title } = articleData;
+    const { title, description, content } = articleData;
     const validationErrors = {};
 
     if (!title) validationErrors.title = 'Title is required';
-    // if (!content || !content.document.nodes.length) validationErrors.content = 'Content is required';
+    if (!description) validationErrors.description = 'Description is required';
+    if (!content) validationErrors.content = 'Content is required';
 
     this.setState({ validationErrors });
 
@@ -89,7 +74,10 @@ export default class NewArticlePage extends Component {
 
     if (!this.validateArticle(newArticle)) return;
 
-    newArticle.content = JSON.stringify(newArticle.content);
+    newArticle.content = slate.stateToObject(this.state.newArticle.content);
+    newArticle.plainText = slate.stateToText(this.state.newArticle.content);
+    newArticle.description = slate.stateToText(this.state.newArticle.description);
+    newArticle.title = slate.stateToText(this.state.newArticle.title);
 
     this.props.addArticle(newArticle);
   }

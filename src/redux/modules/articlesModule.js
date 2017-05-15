@@ -21,35 +21,32 @@ const REMOVE_ARTICLE_SUCCESS = 'REMOVE_ARTICLE_SUCCESS';
 const REMOVE_ARTICLE_FAIL = 'REMOVE_ARTICLE_FAIL';
 
 // --- HELPERS ---
-export function prepareContent(jsonString) {
+
+// Makes sure that the rich editor alwasy get's object as a content
+export const prepareContent = (jsonString) => {
   if (typeof jsonString === 'object') return jsonString;
 
   try {
     const obj = JSON.parse(jsonString);
-
     if (obj && typeof obj === 'object') return obj;
   } catch (error) {
     if (debug) console.warn('ERROR: string cannot be parsed as JSON:', error);
     return {
-      'nodes': [
-        {
-          'kind': 'block',
-          'type': 'paragraph',
-          'nodes': [
-            {
-              'kind': 'text',
-              'ranges': [
-                {
-                  'text': `${jsonString}`
-                }
-              ]
-            }
-          ]
-        }
-      ]
+      kind: 'state',
+      document: {
+        data: {},
+        kind: 'document',
+        nodes: [
+          {
+            kind: 'block',
+            type: 'paragraph',
+            nodes: [{ kind: 'text', ranges: [{ text: `${jsonString}` }] }]
+          }
+        ]
+      }
     };
   }
-}
+};
 
 const initialState = {
   // Loading all articles
@@ -83,15 +80,10 @@ export function loadArticles() {
 
 // ADD
 export function addArticle(article) {
-  const data = {
-    ...article,
-    content: article.content
-  };
-
   return {
     requestName: 'Add article',
     types: [ADD_ARTICLE_REQUEST, ADD_ARTICLE_SUCCESS, ADD_ARTICLE_FAIL],
-    promise: (client) => client.post('/article/addArticle', { data })
+    promise: (client) => client.post('/article/addArticle', { data: article })
   };
 }
 
