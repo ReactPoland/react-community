@@ -42,7 +42,7 @@ const loginGitRequest = async (req) => {
   if (!userResp) {
     user = await UserModel.create({
       pictureURL: userDataResponse.avatar_url,
-      firstName: userDataResponse.name,
+      firstName: userDataResponse.name || 'Anonymous',
       lastName: '',
       ghID: userDataResponse.id
     })
