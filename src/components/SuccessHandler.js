@@ -11,17 +11,15 @@ const mappedState = ({ articles }) => ({
   articleRemoved: articles.articleRemoved
 });
 
-const mappedActions = {
-  pushState: push
-};
+const mappedActions = { redirect: push };
 
 @connect(mappedState, mappedActions)
-class SuccessHandler extends Component {
+export default class SuccessHandler extends Component {
   static propTypes = {
-    articleAdded: PropTypes.number,
+    articleAdded: PropTypes.object,
     articleEdited: PropTypes.bool.isRequired,
     articleRemoved: PropTypes.bool.isRequired,
-    pushState: PropTypes.func.isRequired
+    redirect: PropTypes.func.isRequired
   }
 
   state = { successMessage: null }
@@ -30,7 +28,7 @@ class SuccessHandler extends Component {
     // When article was successfully added...
     if (nextProps.articleAdded !== null && nextProps.articleAdded !== this.props.articleAdded) {
       this.setState({ successMessage: 'Article added' });
-      this.props.pushState(`/article/${nextProps.articleAdded}`);
+      this.props.redirect(`/article/${nextProps.articleAdded.id}/${nextProps.articleAdded.slug}`);
     }
 
     // When article was successfully updated...
@@ -41,7 +39,7 @@ class SuccessHandler extends Component {
     // When article was removed...
     if (nextProps.articleRemoved === true && nextProps.articleRemoved !== this.props.articleRemoved) {
       this.setState({ successMessage: 'Article removed' });
-      this.props.pushState('/articles');
+      this.props.redirect('/articles');
     }
   }
 
@@ -49,15 +47,11 @@ class SuccessHandler extends Component {
     this.setState({ successMessage: null });
   }
 
-  render() {
-    return (
-      <SuccessSnackbar
-        open={this.state.successMessage !== null}
-        message={this.state.successMessage}
-        onRequestClose={this.clearSuccessMessage}
-      />
-    );
-  }
+  render = () => (
+    <SuccessSnackbar
+      open={this.state.successMessage !== null}
+      message={this.state.successMessage}
+      onRequestClose={this.clearSuccessMessage}
+    />
+  )
 }
-
-export default SuccessHandler;

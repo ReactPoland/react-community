@@ -54,10 +54,10 @@ export default (store) => {
       <Route path="articles" component={ct.ArticlesContainer}>
         <IndexRoute component={ct.ArticlesPage} />
         <Route path="/article/:id(/:slug)" component={ct.ArticlePage} />
-        <Route path="add" component={ct.NewArticlePage} />
+        <Route path="add" onEnter={requireLogin} component={ct.NewArticlePage} />
       </Route>
 
-      { /* Catch all route */ }
+      { /* Catches remaining routes */ }
       <Route path="*" component={ct.NotFound} status={404} />
     </Route>
   );

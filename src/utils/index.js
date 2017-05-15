@@ -1,5 +1,6 @@
 import _startsWith from 'lodash/startsWith';
 import _isEmpty from 'lodash/isEmpty';
+import { Raw, Plain } from 'slate';
 
 export const ascendingBy = (key) => (a, b) => a[key] < b[key] ? -1 : a[key] > b[key] ? 1 : 0; // eslint-disable-line
 
@@ -18,4 +19,12 @@ export const eventFormValidator = (formData) => {
   if (!date) errors.date = 'Date is required';
 
   return { isValid: _isEmpty(errors), errors };
+};
+
+// Slate helpers for converting it's state to other types
+export const slate = {
+  stateToText: state => Plain.serialize(state),
+  stateToObject: state => Raw.serialize(state, { terse: true }),
+  textToState: text => Plain.deserialize(text),
+  objectToState: object => Raw.deserialize(object, { terse: true })
 };

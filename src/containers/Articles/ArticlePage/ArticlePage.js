@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import _find from 'lodash/find';
 import _isEmpty from 'lodash/isEmpty';
+import { slate } from 'utils';
 // STORE
 import { editArticle, removeArticle } from 'redux/modules/articlesModule';
 import { submitComment } from 'redux/modules/conversationModule';
@@ -29,7 +30,7 @@ const mappedActions = {
   editArticle,
   removeArticle,
   submitComment,
-  pushState: push
+  redirect: push
 };
 
 @connect(mappedState, mappedActions)
@@ -43,18 +44,23 @@ export default class ArticlePage extends Component {
     editArticle: PropTypes.func.isRequired,
     removeArticle: PropTypes.func.isRequired,
     submitComment: PropTypes.func.isRequired,
-    pushState: PropTypes.func.isRequired,
+    redirect: PropTypes.func.isRequired,
     loggedIn: PropTypes.bool.isRequired
   }
 
   state = {
     editingMode: false,
-    editedContent: '',
-    editedTitle: ''
+    article: this.prepareArticle(this.props.article),
+    validationErrors: {
+      title: '',
+      description: '',
+      content: ''
+    }
   }
 
   componentDidMount() {
     const { article = {}, params = {} } = this.props;
+    // TODO: move it to "onEnter"?
     this.checkSlugAndRedirect(article.slug, params.slug, article.id);
   }
 
@@ -65,50 +71,62 @@ export default class ArticlePage extends Component {
     if (nextProps.articleEdited !== this.props.articleEdited) {
       this.setState({
         editingMode: false,
-        editedContent: '',
-        editedTitle: ''
+        article: this.prepareArticle(article)
       });
     }
   }
 
   checkSlugAndRedirect = (articleSlug, paramsSlug, articleId) => {
     if ((articleSlug && articleId) && articleSlug !== paramsSlug ) {
-      this.props.pushState(`/article/${articleId}/${articleSlug}`);
+      this.props.redirect(`/article/${articleId}/${articleSlug}`);
     }
+  }
+
+  // Prepares article content to use Slate's state objects
+  prepareArticle(article) {
+    if (!article) return {};
+
+    return {
+      ...article,
+      content: _isEmpty(article.content) ? {} : slate.objectToState(article.content),
+      description: slate.textToState(article.description),
+      link: slate.textToState(article.link),
+      title: slate.textToState(article.title)
+    };
   }
 
   // EDITING ARTICLE
 
-  editTitle = (editedTitle) => {
-    this.setState({ editedTitle });
-  }
+  // Updates state of the article
+  change = (property) => (value) => {
+    const article = { ...this.state.article };
+    const validationErrors = { ...this.state.validationErrors };
 
-  editContent = (serializedState) => {
-    this.setState({ editedContent: serializedState });
+    // Update article
+    article[property] = value;
+    // Hide existing validation error
+    if (validationErrors[property] && value) validationErrors[property] = '';
+
+    this.setState({ article, validationErrors });
   }
 
   toggleEditMode = () => {
-    this.setState({
-      editingMode: !this.state.editingMode,
-      editedContent: this.state.editingMode ? '' : '',
-      editedTitle: this.state.editingMode ? '' : ''
-    });
+    this.setState({ editingMode: !this.state.editingMode });
   }
 
   cancelEditing = () => {
     this.setState({
       editingMode: false,
-      editedContent: '',
-      editedTitle: ''
+      article: this.prepareArticle(this.props.article)
     });
   }
 
   validateArticle = (articleData) => {
-    const { title } = articleData;
+    const { title, description } = articleData;
     const validationErrors = {};
 
     if (!title) validationErrors.title = 'Title is required';
-    // if (!content || !content.document.nodes.length) validationErrors.content = 'Content is required';
+    if (!description) validationErrors.description = 'Description is required';
 
     this.setState({ validationErrors });
 
@@ -118,17 +136,17 @@ export default class ArticlePage extends Component {
   // API CALLS
 
   saveEdits = () => {
-    const { article } = this.props;
+    const article = { ...this.state.article };
 
-    const editedArticle = {
-      id: article.id,
-      title: this.state.editedTitle || article.title,
-      content: (this.state.editedContent && JSON.stringify(this.state.editedContent)) || article.content
-    };
+    if (!this.validateArticle(article)) return;
 
-    if (!this.validateArticle(editedArticle)) return;
+    if (!_isEmpty(article.content)) article.content = slate.stateToObject(article.content);
+    if (!_isEmpty(article.plainText)) article.plainText = slate.stateToText(article.content);
+    if (!_isEmpty(article.description)) article.description = slate.stateToText(article.description);
+    if (!_isEmpty(article.title)) article.title = slate.stateToText(article.title);
+    if (!_isEmpty(article.link)) article.link = slate.stateToText(article.link);
 
-    this.props.editArticle(editedArticle);
+    this.props.editArticle(article);
   }
 
   removeArticle = () => {
@@ -137,22 +155,39 @@ export default class ArticlePage extends Component {
 
   // RENDERING
 
-  renderTitle = () => (
-    <h1 style={{ margin: 0 }}>
-      <PlainTextEditor
-        initialState={this.state.editedTitle || this.props.article.title}
-        onChange={this.editTitle}
-        readOnly={!this.state.editingMode}
-      />
-    </h1>
+  renderTitleEditor = () => (
+    <PlainTextEditor
+      initialState={this.state.article.title}
+      onChange={this.change('title')}
+      readOnly={!this.state.editingMode}
+      style={{ fontSize: 20 }}
+    />
   )
 
-  renderEditor = () => (
-    <RichTextEditor
-      initialState={this.props.article.content}
-      style={{ width: '100%' }}
+  renderLinkEditor = () => (
+    <PlainTextEditor
+      initialState={this.state.article.link}
+      onChange={this.change('link')}
       readOnly={!this.state.editingMode}
-      onChange={this.editContent}
+      style={{ fontSize: 20 }}
+    />
+  )
+
+  renderDescriptionEditor = () => (
+    <PlainTextEditor
+      initialState={this.state.article.description}
+      onChange={this.change('description')}
+      readOnly={!this.state.editingMode}
+      style={{ fontSize: 20, margin: '20px 0 24px' }}
+    />
+  )
+
+  renderContentEditor = () => (
+    <RichTextEditor
+      initialState={this.state.article.content}
+      onChange={this.change('content')}
+      readOnly={!this.state.editingMode}
+      style={{ width: '100%', fontSize: 20 }}
     />
   )
 
@@ -196,23 +231,27 @@ export default class ArticlePage extends Component {
     );
   }
 
-  render() {
+  render = () => {
     const { article } = this.props;
 
     if (!article) return null;
+
+    const isExternal = article.type === 'external';
 
     return (
       <Grid style={{ height: '100%' }}>
         <Div flex column fullHeight>
           <Div flexNone>
             <ArticleHeader>
-              {this.renderTitle()}
+              {this.renderTitleEditor()}
               <List right>
                 {this.renderSaveButton()}
                 {this.renderEditButton()}
               </List>
             </ArticleHeader>
-            {this.renderEditor()}
+            {this.renderDescriptionEditor()}
+            {isExternal && this.renderLinkEditor()}
+            {!isExternal && this.renderContentEditor()}
             <List right>
               {this.renderDeleteButton()}
             </List>

@@ -106,6 +106,7 @@ class AddLocationDialog extends Component {
         actions={actions}
         open={popupVisible}
         onRequestClose={this.closePopup}
+        autoScrollBodyContent
       >
         <AddLocationForm
           formData={formData}

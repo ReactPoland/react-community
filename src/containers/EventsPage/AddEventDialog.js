@@ -111,6 +111,7 @@ export default class AddEventDialog extends Component {
         actions={actions}
         open={popupVisible}
         onRequestClose={this.closePopup}
+        autoScrollBodyContent
       >
         <EventForm
           formData={formData}
