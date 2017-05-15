@@ -39,6 +39,7 @@ export default class NewArticlePage extends Component {
     },
     validationErrors: {
       title: '',
+      description: '',
       content: ''
     }
   }

@@ -50,7 +50,12 @@ export default class ArticlePage extends Component {
 
   state = {
     editingMode: false,
-    article: this.prepareArticle(this.props.article)
+    article: this.prepareArticle(this.props.article),
+    validationErrors: {
+      title: '',
+      description: '',
+      content: ''
+    }
   }
 
   componentDidMount() {
@@ -91,8 +96,17 @@ export default class ArticlePage extends Component {
 
   // EDITING ARTICLE
 
-  change = (type) => (value) => {
-    console.log(type, value);
+  // Updates state of the article
+  change = (property) => (value) => {
+    const article = { ...this.state.article };
+    const validationErrors = { ...this.state.validationErrors };
+
+    // Update article
+    article[property] = value;
+    // Hide existing validation error
+    if (validationErrors[property] && value) validationErrors[property] = '';
+
+    this.setState({ article, validationErrors });
   }
 
   editTitle = (editedTitle) => {
@@ -138,9 +152,12 @@ export default class ArticlePage extends Component {
 
     if (!this.validateArticle(editedArticle)) return;
 
-    console.warn('XXX editedArticle', editedArticle);
+    editedArticle.content = slate.stateToObject(this.state.article.content);
+    editedArticle.plainText = slate.stateToText(this.state.article.content);
+    editedArticle.description = slate.stateToText(this.state.article.description);
+    editedArticle.title = slate.stateToText(this.state.article.title);
 
-    // this.props.editArticle(editedArticle);
+    this.props.editArticle(editedArticle);
   }
 
   removeArticle = () => {
@@ -150,21 +167,21 @@ export default class ArticlePage extends Component {
   // RENDERING
 
   renderTitle = () => (
-      <PlainTextEditor
-        initialState={this.state.article.title}
-        onChange={this.change('title')}
-        readOnly={!this.state.editingMode}
-        style={{ fontSize: 20 }}
-      />
+    <PlainTextEditor
+      initialState={this.state.article.title}
+      onChange={this.change('title')}
+      readOnly={!this.state.editingMode}
+      style={{ fontSize: 20 }}
+    />
   )
 
   renderDescriptionEditor = () => (
-      <PlainTextEditor
-        initialState={this.state.article.description}
-        onChange={this.change('description')}
-        readOnly={!this.state.editingMode}
-        style={{ fontSize: 20, margin: '20px 0 24px' }}
-      />
+    <PlainTextEditor
+      initialState={this.state.article.description}
+      onChange={this.change('description')}
+      readOnly={!this.state.editingMode}
+      style={{ fontSize: 20, margin: '20px 0 24px' }}
+    />
   )
 
   renderContentEditor = () => (
@@ -218,7 +235,6 @@ export default class ArticlePage extends Component {
 
   render() {
     const { article } = this.props;
-    console.log('article', article);
 
     if (!article) return null;
 

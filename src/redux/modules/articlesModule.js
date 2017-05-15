@@ -155,13 +155,10 @@ export default function articlesModule(state = initialState, action = {}) {
         ...state,
         all: [
           ...state.all,
-          {
-            ...action.result.message,
-            content: JSON.parse(action.result.message.content)
-          }
+          action.result.message,
         ],
         addingArticle: false,
-        articleAdded: action.result.message.id
+        articleAdded: action.result.message
       };
     case ADD_ARTICLE_FAIL:
       return {

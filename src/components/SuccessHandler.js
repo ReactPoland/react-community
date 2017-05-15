@@ -18,7 +18,7 @@ const mappedActions = {
 @connect(mappedState, mappedActions)
 class SuccessHandler extends Component {
   static propTypes = {
-    articleAdded: PropTypes.number,
+    articleAdded: PropTypes.object,
     articleEdited: PropTypes.bool.isRequired,
     articleRemoved: PropTypes.bool.isRequired,
     pushState: PropTypes.func.isRequired
@@ -30,7 +30,7 @@ class SuccessHandler extends Component {
     // When article was successfully added...
     if (nextProps.articleAdded !== null && nextProps.articleAdded !== this.props.articleAdded) {
       this.setState({ successMessage: 'Article added' });
-      this.props.pushState(`/article/${nextProps.articleAdded}`);
+      this.props.pushState(`/article/${nextProps.articleAdded.id}/${nextProps.articleAdded.slug}`);
     }
 
     // When article was successfully updated...
