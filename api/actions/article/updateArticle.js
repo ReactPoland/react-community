@@ -26,9 +26,8 @@ const updateArticleRequest = async ({title, content, id, previewSize, link, desc
     ...articleBody,
     slug: getSlug(sequelize, articleBody.title)
   }, {
-    where: {
-      id
-    }
+    where: { id },
+    returning: true
   });
 };
 
