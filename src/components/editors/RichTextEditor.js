@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Editor, Raw } from 'slate';
+import { Editor, Raw, Plain } from 'slate';
 import defaultState from './state.json';
 
 /**
@@ -55,12 +55,14 @@ class RichTextEditor extends Component {
   static propTypes = {
     initialState: PropTypes.object,
     style: PropTypes.object,
-    readOnly: PropTypes.bool
+    readOnly: PropTypes.bool,
+    placeholder: PropTypes.string
   }
 
   static defaultProps = {
     initialState: defaultState,
-    style: {}
+    style: {},
+    placeholder: '...'
   }
 
   /**
@@ -70,7 +72,7 @@ class RichTextEditor extends Component {
    */
 
   state = {
-    state: Raw.deserialize(this.props.initialState, { terse: true })
+    state: this.props.initialState
   };
 
   /**
@@ -104,7 +106,7 @@ class RichTextEditor extends Component {
    */
 
   onChange = (state) => {
-    this.props.onChange(Raw.serialize(state));
+    this.props.onChange(state);
     this.setState({ state });
   }
 
@@ -315,7 +317,7 @@ class RichTextEditor extends Component {
       <div className="editor">
         <Editor
           spellCheck
-          placeholder={'Enter some rich text...'}
+          placeholder={this.props.placeholder}
           schema={schema}
           state={this.state.state}
           onChange={this.onChange}

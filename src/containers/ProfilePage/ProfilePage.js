@@ -97,7 +97,7 @@ export default class ProfilePage extends Component {
       <LoadingScreen loading={this.props.loadingUsers}>
         <Grid className={styles.ProfilePage}>
           <Helmet title="Profile" />
-          {!user.filledProfile &&
+          {isCurrentUsersProfile && !user.filledProfile &&
             <Paper style={{ padding: 16, marginBottom: 24 }}>
               <h3>Hello {user.firstName}! Please complete your profile</h3>
             </Paper>
@@ -115,9 +115,9 @@ export default class ProfilePage extends Component {
               />
               <Link to="/world" style={{ flex: 1 }}>
                 <Div flex justifyContent="center" alignItems="center" relative style={{ height: 200, minWidth: 200 }}>
-                  <Paper style={{ position: 'absolute', padding: 16, zIndex: 500 }} zDepth={3}>
+                  {isCurrentUsersProfile && <Paper style={{ position: 'absolute', padding: 16, zIndex: 500 }} zDepth={3}>
                     Pin yourself
-                  </Paper>
+                  </Paper>}
                   <Map static style={{ height: '100%' }} />
                 </Div>
               </Link>

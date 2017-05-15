@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Editor, Plain } from 'slate';
+import { Editor } from 'slate';
 
 /**
  * Define a schema.
@@ -46,7 +46,7 @@ const schema = {
 
 class PlainTextEditor extends Component {
   static propTypes = {
-    initialState: PropTypes.string,
+    initialState: PropTypes.object,
     placeholder: PropTypes.string,
     style: PropTypes.object,
     readOnly: PropTypes.bool,
@@ -67,7 +67,7 @@ class PlainTextEditor extends Component {
    */
 
   state = {
-    state: Plain.deserialize(this.props.initialState, { terse: true })
+    state: this.props.initialState
   };
 
   /**
@@ -77,7 +77,7 @@ class PlainTextEditor extends Component {
    */
 
   onChange = (state) => {
-    this.props.onChange(Plain.serialize(state));
+    this.props.onChange(state);
     this.setState({ state });
   }
 
