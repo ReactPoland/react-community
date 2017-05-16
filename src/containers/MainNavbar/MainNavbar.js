@@ -52,11 +52,12 @@ export default class MainNavbar extends Component {
               <NavItem>Tutorials</NavItem>
             </LinkContainer>
 
-            { permission(user).onlyStaff
-                ? <LinkContainer to="/articles">
-                    <NavItem>Articles</NavItem>
-                  </LinkContainer>
-                : <span />
+            {
+              permission(user).isStaff
+              &&
+                (<LinkContainer to="/articles">
+                  <NavItem>Articles</NavItem>
+                </LinkContainer>)
             }
 
             <LinkContainer to="/events">

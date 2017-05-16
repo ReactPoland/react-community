@@ -195,7 +195,7 @@ export default class ArticlePage extends Component {
   )
 
   renderEditButton = () => {
-    if (!this.props.loggedIn || !this.props.permissions.onlyStaff) return null;
+    if (!this.props.loggedIn || !this.props.permissions.isStaff) return null;
 
     const { editingMode } = this.state;
 
@@ -210,7 +210,7 @@ export default class ArticlePage extends Component {
   }
 
   renderDeleteButton = () => {
-    if (!this.props.loggedIn || this.state.editingMode || !this.props.permissions.onlyStaff) return null;
+    if (!this.props.loggedIn || this.state.editingMode || !this.props.permissions.isStaff) return null;
 
     return (
       <FlatButton

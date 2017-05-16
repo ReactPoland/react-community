@@ -32,7 +32,7 @@ export default (store) => {
   // Redirect when user role is different than staff
   const checkStaff = (nextState, replace, cb) => {
     const { user } = store.getState().auth;
-    const isStaff = permission(user).onlyStaff;
+    const isStaff = permission(user).isStaff;
     if (!isStaff) {
       replace('/');
     }

@@ -53,7 +53,7 @@ export default class ArticlesPage extends Component {
 
     return (
       <Grid style={{ position: 'relative', height: '100%' }}>
-        {loggedIn && permissions.onlyStaff && AddArticleButton}
+        {loggedIn && permissions.isStaff && AddArticleButton}
         <Row>
           <Col xs={12}>
             <h1>Articles</h1>
