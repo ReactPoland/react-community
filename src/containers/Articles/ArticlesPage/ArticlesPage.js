@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
+import permission from 'utils/privileges';
 // COMPONENTS
 import ArticlesList from './ArticlesList';
 // LAYOUT
@@ -13,7 +14,8 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 
 const mappedState = ({ auth, articles }) => ({
   loggedIn: auth.loggedIn,
-  articles: articles.all
+  articles: articles.all,
+  permissions: permission(auth.user)
 });
 
 const mappedActions = { redirect: push };
@@ -23,7 +25,8 @@ export default class ArticlesPage extends Component {
   static propTypes = {
     articles: PropTypes.array.isRequired,
     redirect: PropTypes.func.isRequired,
-    loggedIn: PropTypes.bool.isRequired
+    loggedIn: PropTypes.bool.isRequired,
+    permissions: PropTypes.object.isRequired
   }
 
   redirectToArticle = (article) => {
@@ -31,7 +34,7 @@ export default class ArticlesPage extends Component {
   }
 
   render() {
-    const { articles, loggedIn } = this.props;
+    const { articles, loggedIn, permissions } = this.props;
 
     // TODO: move to a separate component - rk
     const AddArticleButton = (
@@ -50,7 +53,7 @@ export default class ArticlesPage extends Component {
 
     return (
       <Grid style={{ position: 'relative', height: '100%' }}>
-        {loggedIn && AddArticleButton}
+        {loggedIn && permissions.onlyStaff && AddArticleButton}
         <Row>
           <Col xs={12}>
             <h1>Articles</h1>

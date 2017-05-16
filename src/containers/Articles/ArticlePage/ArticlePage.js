@@ -5,6 +5,7 @@ import { push } from 'react-router-redux';
 import _find from 'lodash/find';
 import _isEmpty from 'lodash/isEmpty';
 import { slate } from 'utils';
+import permission from 'utils/privileges';
 // STORE
 import { editArticle, removeArticle } from 'redux/modules/articlesModule';
 import { submitComment } from 'redux/modules/conversationModule';
@@ -23,7 +24,8 @@ const mappedState = ({ articles, auth }, props) => ({
   editingArticle: articles.editingArticle,
   articleEdited: articles.articleEdited,
   removingArticle: articles.removingArticle,
-  loggedIn: auth.loggedIn
+  loggedIn: auth.loggedIn,
+  permissions: permission(auth.user)
 });
 
 const mappedActions = {
@@ -45,7 +47,8 @@ export default class ArticlePage extends Component {
     removeArticle: PropTypes.func.isRequired,
     submitComment: PropTypes.func.isRequired,
     redirect: PropTypes.func.isRequired,
-    loggedIn: PropTypes.bool.isRequired
+    loggedIn: PropTypes.bool.isRequired,
+    permissions: PropTypes.object.isRequired
   }
 
   state = {
@@ -192,7 +195,7 @@ export default class ArticlePage extends Component {
   )
 
   renderEditButton = () => {
-    if (!this.props.loggedIn) return null;
+    if (!this.props.loggedIn || !this.props.permissions.onlyStaff) return null;
 
     const { editingMode } = this.state;
 
@@ -207,7 +210,7 @@ export default class ArticlePage extends Component {
   }
 
   renderDeleteButton = () => {
-    if (!this.props.loggedIn || this.state.editingMode) return null;
+    if (!this.props.loggedIn || this.state.editingMode || !this.props.permissions.onlyStaff) return null;
 
     return (
       <FlatButton
