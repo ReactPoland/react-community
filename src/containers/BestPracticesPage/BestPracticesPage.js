@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Helmet from 'react-helmet';
+import { Link } from 'react-router';
 // LAYOUT
 import Jumbotron from 'react-bootstrap/lib/Jumbotron';
 import Grid from 'react-bootstrap/lib/Grid';
@@ -36,10 +37,11 @@ export default class BestPracticesPage extends Component {
             <List>
               {
                 bestPractices.map(({ id, name }) => (
-                  <ListItem
-                    key={id}
-                    primaryText={name}
-                  />
+                  <Link to={`best-practice/${id}`} key={id}>
+                    <ListItem
+                      primaryText={name}
+                    />
+                  </Link>
                 ))
               }
             </List>

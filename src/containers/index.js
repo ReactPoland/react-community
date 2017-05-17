@@ -10,6 +10,7 @@ export ArticlePage from './Articles/ArticlePage/ArticlePage';
 export NewArticlePage from './Articles/NewArticlePage/NewArticlePage';
 // OTHER
 export BestPracticesPage from './BestPracticesPage/BestPracticesPage';
+export BestPracticesPreview from './BestPracticesPage/BestPracticesPreview';
 export Conversation from './Conversation/Conversation';
 export DialogsContainer from './DialogsContainer/DialogsContainer';
 export EventsPage from './EventsPage/EventsPage';
