@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { IndexLink } from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
 import config from '../../config';
+import permission from 'utils/privileges';
 // STORE
 import { openDialog } from 'redux/modules/dialogModule';
 // COMPONENTS
@@ -51,9 +52,13 @@ export default class MainNavbar extends Component {
               <NavItem>Tutorials</NavItem>
             </LinkContainer>
 
-            <LinkContainer to="/articles">
-              <NavItem>Articles</NavItem>
-            </LinkContainer>
+            {
+              permission(user).isStaff
+              &&
+                (<LinkContainer to="/articles">
+                  <NavItem>Articles</NavItem>
+                </LinkContainer>)
+            }
 
             <LinkContainer to="/events">
               <NavItem>Events</NavItem>

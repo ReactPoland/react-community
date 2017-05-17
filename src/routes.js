@@ -1,6 +1,7 @@
 import React from 'react';
 import { IndexRoute, Route } from 'react-router';
 import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
+import permission from 'utils/privileges';
 import * as ct from 'containers';
 
 export default (store) => {
@@ -24,6 +25,16 @@ export default (store) => {
     // Check if user has finished registration and we're not on "/profile" already
     if (user && !user.filledProfile && nextState.location.pathname !== '/profile') {
       replace('/profile');
+    }
+    cb();
+  };
+
+  // Redirect when user role is different than staff
+  const checkStaff = (nextState, replace, cb) => {
+    const { user } = store.getState().auth;
+    const isStaff = permission(user).isStaff;
+    if (!isStaff) {
+      replace('/');
     }
     cb();
   };
@@ -52,9 +63,9 @@ export default (store) => {
       </Route>
 
       <Route path="articles" component={ct.ArticlesContainer}>
-        <IndexRoute component={ct.ArticlesPage} />
+        <IndexRoute component={ct.ArticlesPage} onEnter={checkStaff} />
         <Route path="/article/:id(/:slug)" component={ct.ArticlePage} />
-        <Route path="add" onEnter={requireLogin} component={ct.NewArticlePage} />
+        <Route path="add" onEnter={checkStaff} component={ct.NewArticlePage} />
       </Route>
 
       { /* Catches remaining routes */ }
