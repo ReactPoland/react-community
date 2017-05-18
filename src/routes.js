@@ -53,7 +53,10 @@ export default (store) => {
 
       { /* Routes */ }
       <Route path="world" component={ct.WorldPage} noFooter />
-      <Route path="tutorials" component={ct.TutorialsPage} />
+      <Route path="tutorials">
+        <IndexRoute component={ct.TutorialsPage} />
+        <Route path="*" component={ct.TutorialPage} />
+      </Route>
       <Route path="events" component={ct.EventsPage} />
       <Route path="best-practices" component={ct.BestPracticesPage} />
 
