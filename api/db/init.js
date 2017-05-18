@@ -1,13 +1,11 @@
 const Sequelize = require('sequelize');
-const config = require('./config');
+const config = require('../config').default;
 
-if (!(config && config.database)) {
+if (!(config && config.dbConfig)) {
   throw new Error('config file not found');
 }
 
-const dbConf = config.database;
-
-const sequelize = new Sequelize(dbConf.url, {
+const sequelize = new Sequelize(config.dbConfig.url, {
   pool: {
     max: 4,
     min: 0,

@@ -1,5 +1,5 @@
 const request = require('request');
-import gitConfig from './config';
+import { gitConfig } from '../../config';
 import querystring from 'querystring';
 
 export const getAccessToken = async ({ code, state }) => {
