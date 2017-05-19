@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { logout, login } from 'redux/modules/auth';
 import NavItem from 'react-bootstrap/lib/NavItem';
-import gitConf from '../../api/utils/github/config';
+import { gitAuthLink } from '../utils';
 
 const mappedState = ({ auth }) => ({
   user: auth.user,
@@ -33,7 +33,7 @@ class LoginLogoutButton extends Component {
   render() {
     return this.props.user
       ? <NavItem onClick={this.logOut}>{this.props.loggingOut ? 'Logging out...' : 'Logout'}</NavItem>
-      : <NavItem href={gitConf.getAuthLink()} onClick={this.logIn}>{this.props.loggingIn ? 'Logging in...' : 'Log in with GitHub'}</NavItem>;
+      : <NavItem href={gitAuthLink()} onClick={this.logIn}>{this.props.loggingIn ? 'Logging in...' : 'Log in with GitHub'}</NavItem>;
   }
 }
 
