@@ -64,7 +64,7 @@ export default class BestPracticesPage extends Component {
     const { bestPractices, permissions } = this.props;
     return (
       <Grid className={styles.BestPracticesPage}>
-        {AddPracticeButton}
+        {permissions.shouldAuth && AddPracticeButton}
         <Helmet title="Best Practices" />
         <Jumbotron>
           <h1>Best Practices</h1>
