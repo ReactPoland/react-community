@@ -150,7 +150,7 @@ export default class BestPracticesPreview extends Component {
     );
   }
   render() {
-    const { practice, permissions } = this.props;
+    const { practice } = this.props;
     const { editingMode } = this.state;
     if (!practice) return null;
     return (
@@ -163,7 +163,7 @@ export default class BestPracticesPreview extends Component {
                   {this.renderTitleEditor()}
                 </ToolbarGroup>
                 <ToolbarGroup>
-                  {permissions.isStaff && this.renderSaveEditButton()}
+                  {this.renderSaveEditButton()}
                   {editingMode ? this.renderCancelButton() : this.renderDisscussionButton()}
                 </ToolbarGroup>
               </Toolbar>
