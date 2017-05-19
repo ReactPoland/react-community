@@ -3,23 +3,42 @@ import Helmet from 'react-helmet';
 import { Link } from 'react-router';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+// STORE
+import { removePractice } from 'redux/modules/practicesModule';
 // LAYOUT
 import Jumbotron from 'react-bootstrap/lib/Jumbotron';
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import { List, ListItem } from 'material-ui/List';
+import IconButton from 'material-ui/IconButton';
+import ActionDelete from 'material-ui/svg-icons/action/delete';
 import styles from './BestPracticesPage.scss';
 
 const mappedState = ({ practices }) => ({
   bestPractices: practices.all
 });
 
-@connect(mappedState)
+const mappedActions = {
+  removePractice
+};
+
+@connect(mappedState, mappedActions)
 export default class BestPracticesPage extends Component {
   static propTypes = {
-    bestPractices: PropTypes.array.isRequired
+    bestPractices: PropTypes.array.isRequired,
+    removePractice: PropTypes.func.isRequired
   };
+  renderRemoveButton = (practiceID) => (
+    <IconButton
+      onTouchTap={() => this.props.removePractice(practiceID)}
+      >
+      <ActionDelete
+        color={'#e8e8e8'}
+        hoverColor={'#f00'}
+       />
+    </IconButton>
+  )
   render() {
     const { bestPractices } = this.props;
     return (
@@ -37,6 +56,7 @@ export default class BestPracticesPage extends Component {
                   <Link to={`best-practice/${practice.id}`} key={practice.id}>
                     <ListItem
                       primaryText={practice.title}
+                      rightIconButton={this.renderRemoveButton(practice.id)}
                     />
                   </Link>
                 ))

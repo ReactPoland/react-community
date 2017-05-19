@@ -4,10 +4,13 @@ import { connect } from 'react-redux';
 import _find from 'lodash/find';
 import _isEmpty from 'lodash/isEmpty';
 import { slate } from 'utils';
+// STORE
+import { editPractice } from 'redux/modules/practicesModule';
+// LAYOUT
 import styles from './BestPracticesPreview.scss';
 import FlatButton from 'material-ui/FlatButton';
-import { Toolbar, ToolbarTitle, ToolbarGroup } from 'material-ui/Toolbar';
-import { RichTextEditor } from 'components';
+import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar';
+import { PlainTextEditor, RichTextEditor } from 'components';
 import Paper from 'material-ui/Paper';
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
@@ -16,15 +19,19 @@ import Col from 'react-bootstrap/lib/Col';
 const mappedState = ({ practices }, props) => ({
   practice: _find(practices.all, pract => props.params.id === `${pract.id}`),
   editingPractice: practices.editingPractice,
-  articleEdited: practices.articleEdited,
+  practiceEdited: practices.practiceEdited,
   removingPractice: practices.removingPractice,
 });
-@connect(mappedState)
+const mappedActions = {
+  editPractice
+};
+@connect(mappedState, mappedActions)
 export default class BestPracticesPreview extends Component {
   static propTypes = {
     practice: PropTypes.object,
     params: PropTypes.object.isRequired,
-    practiceEdited: PropTypes.bool
+    practiceEdited: PropTypes.bool,
+    editPractice: PropTypes.func.isRequired
   }
   state = {
     editingMode: false,
@@ -66,25 +73,54 @@ export default class BestPracticesPreview extends Component {
 
     this.setState({ practice, validationErrors });
   }
+  validateArticle = (practiceData) => {
+    const { title } = practiceData;
+    const validationErrors = {};
 
-  renderContentEditor = () => (
-    <RichTextEditor
-      initialState={this.state.practice.content}
-      onChange={this.change('content')}
-      readOnly={!this.state.editingMode}
-      style={{ width: '100%', fontSize: 20 }}
-    />
-  )
+    if (!title) validationErrors.title = 'Title is required';
+    this.setState({ validationErrors });
+
+    return _isEmpty(validationErrors);
+  }
+
+  saveEditButtonActions = () => {
+    const { practice } = {...this.state};
+    if (!this.validateArticle(practice)) return;
+    if (this.state.editingMode) {
+      if (!_isEmpty(practice.title)) practice.title = slate.stateToText(practice.title);
+      if (!_isEmpty(practice.content)) practice.content = slate.stateToObject(practice.content);
+      this.props.editPractice(practice);
+      this.setState({ editingMode: !this.state.editingMode });
+    } else {
+      this.setState({ editingMode: !this.state.editingMode });
+    }
+  }
   renderSaveEditButton = () => {
     return (
       <FlatButton
         style={{ margin: 0 }}
         label={this.state.editingMode ? 'Save' : 'Edit'}
         primary
-        onClick={ () => this.setState({ editingMode: !this.state.editingMode })}
+        onClick={ () => this.saveEditButtonActions()}
       />
     );
   }
+  renderTitleEditor = () => (
+    <PlainTextEditor
+      initialState={this.state.practice.title}
+      onChange={this.change('title')}
+      readOnly={!this.state.editingMode}
+      style={{ fontSize: 20 }}
+    />
+  )
+  renderContentEditor = () => (
+    <RichTextEditor
+      initialState={this.state.practice.content}
+      onChange={this.change('content')}
+      readOnly={!this.state.editingMode}
+      style={{ width: '90%', fontSize: 16 }}
+    />
+  )
   renderDisscussionCancelButton = () => {
     return (
       <FlatButton
@@ -104,7 +140,9 @@ export default class BestPracticesPreview extends Component {
           <Col sm={12} md={8} lg={8}>
             <Paper zDepth={1}>
               <Toolbar>
-                <ToolbarTitle text={practice.title}/>
+                <ToolbarGroup>
+                  {this.renderTitleEditor()}
+                </ToolbarGroup>
                 <ToolbarGroup>
                   {this.renderSaveEditButton()}
                   {this.renderDisscussionCancelButton()}
