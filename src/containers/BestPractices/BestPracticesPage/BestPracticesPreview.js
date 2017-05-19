@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import _find from 'lodash/find';
 import _isEmpty from 'lodash/isEmpty';
 import { slate } from 'utils';
+import permission from 'utils/privileges';
 // STORE
 import { editPractice } from 'redux/modules/practicesModule';
 // LAYOUT
@@ -16,11 +17,12 @@ import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 
-const mappedState = ({ practices }, props) => ({
+const mappedState = ({ practices, auth }, props) => ({
   practice: _find(practices.all, pract => props.params.id === `${pract.id}`),
   editingPractice: practices.editingPractice,
   practiceEdited: practices.practiceEdited,
   removingPractice: practices.removingPractice,
+  permissions: permission(auth.user)
 });
 const mappedActions = {
   editPractice
@@ -31,7 +33,8 @@ export default class BestPracticesPreview extends Component {
     practice: PropTypes.object,
     params: PropTypes.object.isRequired,
     practiceEdited: PropTypes.bool,
-    editPractice: PropTypes.func.isRequired
+    editPractice: PropTypes.func.isRequired,
+    permissions: PropTypes.object.isRequired
   }
   state = {
     editingMode: false,
@@ -88,16 +91,13 @@ export default class BestPracticesPreview extends Component {
     const { practice } = { ...this.state };
     if (!this.validatePractice(practice)) return;
     if (this.state.editingMode) {
-      if (!_isEmpty(practice.title)) practice.title = slate.stateToText(practice.title);
-      if (!_isEmpty(practice.plainText)) practice.plainText = slate.stateToText(practice.content);
       if (!_isEmpty(practice.content)) practice.content = slate.stateToObject(practice.content);
+      if (!_isEmpty(practice.plainText)) practice.plainText = slate.stateToText(practice.content);
+      if (!_isEmpty(practice.title)) practice.title = slate.stateToText(practice.title);
       this.props.editPractice(practice);
       this.setState({ editingMode: !this.state.editingMode });
     } else {
-      this.setState({
-        editingMode: !this.state.editingMode,
-        practice: this.props.practice
-      });
+      this.setState({ editingMode: !this.state.editingMode });
     }
   }
   renderSaveEditButton = () => {
@@ -106,7 +106,7 @@ export default class BestPracticesPreview extends Component {
         style={{ margin: 0 }}
         label={this.state.editingMode ? 'Save' : 'Edit'}
         primary
-        onClick={ () => this.saveEditButtonActions()}
+        onClick={() => this.saveEditButtonActions()}
       />
     );
   }
@@ -142,12 +142,15 @@ export default class BestPracticesPreview extends Component {
         style={{ margin: 0 }}
         label={'Cancel'}
         secondary
-        onClick={ () => this.setState({ editingMode: false })}
+        onClick={ () => this.setState({
+          practice: this.preparePractice(this.props.practice),
+          editingMode: false
+        })}
       />
     );
   }
   render() {
-    const { practice } = this.props;
+    const { practice, permissions } = this.props;
     const { editingMode } = this.state;
     if (!practice) return null;
     return (
@@ -160,7 +163,7 @@ export default class BestPracticesPreview extends Component {
                   {this.renderTitleEditor()}
                 </ToolbarGroup>
                 <ToolbarGroup>
-                  {this.renderSaveEditButton()}
+                  {permissions.isStaff && this.renderSaveEditButton()}
                   {editingMode ? this.renderCancelButton() : this.renderDisscussionButton()}
                 </ToolbarGroup>
               </Toolbar>

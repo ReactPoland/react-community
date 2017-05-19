@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import { push } from 'react-router-redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import permission from 'utils/privileges';
 // STORE
 import { removePractice } from 'redux/modules/practicesModule';
 // LAYOUT
@@ -18,8 +19,9 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import styles from './BestPracticesPage.scss';
 
-const mappedState = ({ practices }) => ({
-  bestPractices: practices.all
+const mappedState = ({ practices, auth }) => ({
+  bestPractices: practices.all,
+  permissions: permission(auth.user)
 });
 
 const mappedActions = {
@@ -32,7 +34,8 @@ export default class BestPracticesPage extends Component {
   static propTypes = {
     bestPractices: PropTypes.array.isRequired,
     removePractice: PropTypes.func.isRequired,
-    redirect: PropTypes.func.isRequired
+    redirect: PropTypes.func.isRequired,
+    permissions: PropTypes.object.isRequired
   };
   renderRemoveButton = (practiceID) => (
     <IconButton
@@ -58,10 +61,10 @@ export default class BestPracticesPage extends Component {
           <ContentAdd />
         </FloatingActionButton>
       );
-    const { bestPractices } = this.props;
+    const { bestPractices, permissions } = this.props;
     return (
       <Grid className={styles.BestPracticesPage}>
-        {AddPracticeButton}
+        {permissions.isStaff && AddPracticeButton}
         <Helmet title="Best Practices" />
         <Jumbotron>
           <h1>Best Practices</h1>
@@ -75,7 +78,7 @@ export default class BestPracticesPage extends Component {
                   <Link to={`best-practice/${practice.id}`} key={practice.id}>
                     <ListItem
                       primaryText={practice.title}
-                      rightIconButton={this.renderRemoveButton(practice.id)}
+                      rightIconButton={permissions.isStaff && this.renderRemoveButton(practice.id)}
                     />
                   </Link>
                 ))

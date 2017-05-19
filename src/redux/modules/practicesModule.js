@@ -1,5 +1,7 @@
 import _sample from 'lodash/sample';
 
+const debug = false;
+
 // ---ACTION TYPES ---
 // LOAD
 const LOAD_PRACTICES_REQUEST = 'LOAD_PRACTICES_REQUEST';
@@ -22,24 +24,28 @@ const REMOVE_PRACTICE_FAIL = 'REMOVE_PRACTICE_FAIL';
 
 // Makes sure that the rich editor alwasy get's object as a content
 const prepareContent = (jsonString) => {
-  if (typeof jsonString === 'object' && jsonString !== null) return jsonString;
+  if (typeof jsonString === 'object') return jsonString;
 
-  const obj = JSON.parse(jsonString);
-  if (obj && typeof obj === 'object' && obj !== null) return obj;
-  return {
-    kind: 'state',
-    document: {
-      data: {},
-      kind: 'document',
-      nodes: [
-        {
-          kind: 'block',
-          type: 'paragraph',
-          nodes: [{ kind: 'text', ranges: [{ text: `${jsonString ? jsonString : 'content...'}` }] }]
-        }
-      ]
-    }
-  };
+  try {
+    const obj = JSON.parse(jsonString);
+    if (obj && typeof obj === 'object') return obj;
+  } catch (error) {
+    if (debug) console.warn('ERROR: string cannot be parsed as JSON:', error);
+    return {
+      kind: 'state',
+      document: {
+        data: {},
+        kind: 'document',
+        nodes: [
+          {
+            kind: 'block',
+            type: 'paragraph',
+            nodes: [{ kind: 'text', ranges: [{ text: `${jsonString}` }] }]
+          }
+        ]
+      }
+    };
+  }
 };
 const initialState = {
   // Loading all practices
