@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router';
+import { push } from 'react-router-redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // STORE
@@ -13,6 +14,8 @@ import Col from 'react-bootstrap/lib/Col';
 import { List, ListItem } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 import styles from './BestPracticesPage.scss';
 
 const mappedState = ({ practices }) => ({
@@ -20,14 +23,16 @@ const mappedState = ({ practices }) => ({
 });
 
 const mappedActions = {
-  removePractice
+  removePractice,
+  redirect: push
 };
 
 @connect(mappedState, mappedActions)
 export default class BestPracticesPage extends Component {
   static propTypes = {
     bestPractices: PropTypes.array.isRequired,
-    removePractice: PropTypes.func.isRequired
+    removePractice: PropTypes.func.isRequired,
+    redirect: PropTypes.func.isRequired
   };
   renderRemoveButton = (practiceID) => (
     <IconButton
@@ -40,9 +45,23 @@ export default class BestPracticesPage extends Component {
     </IconButton>
   )
   render() {
+    const AddPracticeButton = (
+      <FloatingActionButton
+        style={{
+          position: 'fixed',
+          right: 40,
+          bottom: 40,
+          zIndex: 1000
+        }}
+        onClick={() => this.props.redirect('/best-practices/add')}
+        >
+          <ContentAdd />
+        </FloatingActionButton>
+      );
     const { bestPractices } = this.props;
     return (
       <Grid className={styles.BestPracticesPage}>
+        {AddPracticeButton}
         <Helmet title="Best Practices" />
         <Jumbotron>
           <h1>Best Practices</h1>

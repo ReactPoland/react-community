@@ -58,6 +58,7 @@ export default (store) => {
       <Route path="best-practices" component={ct.BestPracticesContainer}>
         <IndexRoute component={ct.BestPracticesPage} />
         <Route path="/best-practice/:id" component={ct.BestPracticesPreview} />
+        <Route path="add" onEnter={checkStaff} component={ct.NewPracticePage} />
       </Route>
 
       <Route path="users">

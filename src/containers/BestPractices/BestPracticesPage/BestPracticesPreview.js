@@ -37,7 +37,8 @@ export default class BestPracticesPreview extends Component {
     editingMode: false,
     practice: this.preparePractice(this.props.practice),
     validationErrors: {
-      content: ''
+      content: '',
+      text: ''
     }
   }
   componentWillReceiveProps(nextProps) {
@@ -73,7 +74,7 @@ export default class BestPracticesPreview extends Component {
 
     this.setState({ practice, validationErrors });
   }
-  validateArticle = (practiceData) => {
+  validatePractice = (practiceData) => {
     const { title } = practiceData;
     const validationErrors = {};
 
@@ -84,15 +85,19 @@ export default class BestPracticesPreview extends Component {
   }
 
   saveEditButtonActions = () => {
-    const { practice } = {...this.state};
-    if (!this.validateArticle(practice)) return;
+    const { practice } = { ...this.state };
+    if (!this.validatePractice(practice)) return;
     if (this.state.editingMode) {
       if (!_isEmpty(practice.title)) practice.title = slate.stateToText(practice.title);
+      if (!_isEmpty(practice.plainText)) practice.plainText = slate.stateToText(practice.content);
       if (!_isEmpty(practice.content)) practice.content = slate.stateToObject(practice.content);
       this.props.editPractice(practice);
       this.setState({ editingMode: !this.state.editingMode });
     } else {
-      this.setState({ editingMode: !this.state.editingMode });
+      this.setState({
+        editingMode: !this.state.editingMode,
+        practice: this.props.practice
+      });
     }
   }
   renderSaveEditButton = () => {
@@ -121,18 +126,29 @@ export default class BestPracticesPreview extends Component {
       style={{ width: '90%', fontSize: 16 }}
     />
   )
-  renderDisscussionCancelButton = () => {
+  renderDisscussionButton = () => {
     return (
       <FlatButton
         style={{ margin: 0 }}
         label={this.state.editingMode ? 'Cancel' : 'Discussion'}
         secondary
-        onClick={ () => this.setState({ editingMode: !this.state.editingMode })}
+        onClick={ () => {} }
+      />
+    );
+  }
+  renderCancelButton = () => {
+    return (
+      <FlatButton
+        style={{ margin: 0 }}
+        label={'Cancel'}
+        secondary
+        onClick={ () => this.setState({ editingMode: false })}
       />
     );
   }
   render() {
     const { practice } = this.props;
+    const { editingMode } = this.state;
     if (!practice) return null;
     return (
       <Grid className={styles.BestPracticesPreview}>
@@ -145,7 +161,7 @@ export default class BestPracticesPreview extends Component {
                 </ToolbarGroup>
                 <ToolbarGroup>
                   {this.renderSaveEditButton()}
-                  {this.renderDisscussionCancelButton()}
+                  {editingMode ? this.renderCancelButton() : this.renderDisscussionButton()}
                 </ToolbarGroup>
               </Toolbar>
               <div className={styles['BestPracticesPreview-content']}>

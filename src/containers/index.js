@@ -12,6 +12,7 @@ export NewArticlePage from './Articles/NewArticlePage/NewArticlePage';
 export BestPracticesContainer from './BestPractices/BestPracticesContainer';
 export BestPracticesPage from './BestPractices/BestPracticesPage/BestPracticesPage';
 export BestPracticesPreview from './BestPractices/BestPracticesPage/BestPracticesPreview';
+export NewPracticePage from './BestPractices/NewPracticePage';
 // OTHER
 export Conversation from './Conversation/Conversation';
 export DialogsContainer from './DialogsContainer/DialogsContainer';
