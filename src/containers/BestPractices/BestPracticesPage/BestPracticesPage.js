@@ -19,6 +19,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import styles from './BestPracticesPage.scss';
 
+// THIS CHANGE WAS MADE FOR CHECK CODESHIP
 const mappedState = ({ practices, auth }) => ({
   bestPractices: practices.all,
   permissions: permission(auth.user)
