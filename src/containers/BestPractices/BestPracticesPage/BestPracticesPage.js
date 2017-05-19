@@ -78,7 +78,7 @@ export default class BestPracticesPage extends Component {
                   <Link to={`best-practice/${practice.id}`} key={practice.id}>
                     <ListItem
                       primaryText={practice.title}
-                      rightIconButton={permissions.isStaff && this.renderRemoveButton(practice.id)}
+                      rightIconButton={permissions.isStaff && this.renderRemoveButton(practice.id) || null}
                     />
                   </Link>
                 ))
