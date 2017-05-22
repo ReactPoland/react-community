@@ -43,7 +43,7 @@ export default class EventsCalendar extends Component {
     if (modifiers.disabled) return;
     const range = DateUtils.addDayToRange(day, this.state);
     this.setState(range);
-    this.props.onDayClick(range);
+    if (this.props.onDayClick) this.props.onDayClick(range);
     if (debug) console.info('Clicked date:', day, modifiers);
 
     this.setState({ selectedDay: modifiers.selected ? null : day });

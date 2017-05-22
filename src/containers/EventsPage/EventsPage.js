@@ -152,9 +152,9 @@ export default class EventsPage extends Component {
       />
     );
 
-    const otherEventsList = <EventsList title="Other events" events={otherEvents} />;
+    const otherEventsList = <EventsList title="Other events" range={this.state.rangeToFilterEvents} events={otherEvents} />;
 
-    const allEventsList = <EventsList title="All events" events={allEvents} />;
+    const allEventsList = <EventsList title="All events" range={this.state.rangeToFilterEvents} events={allEvents} />;
 
     // Other components
 
