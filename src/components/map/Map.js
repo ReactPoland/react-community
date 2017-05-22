@@ -39,7 +39,7 @@ const Map = (props) => {
       dragging={!props.static}
       touchZoom={!props.static}
       scrollWheelZoom={!props.static}
-      minZoom={props.static ? 1 : 3}
+      minZoom={props.static ? 1 : 0}
       maxBounds={[[-90, -180], [90, 180]]} // Prevents scrolling outside map edges
       style={props.style}
     >
