@@ -55,7 +55,11 @@ export default (store) => {
       <Route path="world" component={ct.WorldPage} noFooter />
       <Route path="tutorials" component={ct.TutorialsPage} />
       <Route path="events" component={ct.EventsPage} />
-      <Route path="best-practices" component={ct.BestPracticesPage} />
+      <Route path="best-practices" component={ct.BestPracticesContainer}>
+        <IndexRoute component={ct.BestPracticesPage} />
+        <Route path="/best-practice/:id" component={ct.BestPracticesPreview} />
+        <Route path="add" onEnter={checkStaff} component={ct.NewPracticePage} />
+      </Route>
 
       <Route path="users">
         <IndexRoute component={ct.UsersPage} />
