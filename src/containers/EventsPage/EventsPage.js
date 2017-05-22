@@ -62,10 +62,7 @@ export default class EventsPage extends Component {
   }
 
   onSelectDays = (range) => {
-    const rangeInMiliseconds = { ...range };
-    rangeInMiliseconds.from = Date.parse(rangeInMiliseconds.from);
-    rangeInMiliseconds.to = Date.parse(rangeInMiliseconds.to);
-    this.setState({ rangeToFilterEvents: rangeInMiliseconds });
+    this.setState({ rangeToFilterEvents: range });
   }
 
   prepareEvent = (eventData) => {

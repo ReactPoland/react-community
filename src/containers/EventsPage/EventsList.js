@@ -10,7 +10,8 @@ import { List } from 'material-ui/List';
 const EventsList = (props) => (
     <Paper style={{ padding: 16, marginBottom: 24 }}>
       {props.title && <h3>{props.title}</h3>}
-      <List>{!props.range || (!props.range.from || !props.range.to) || (props.range.from === props.range.to)
+      <List>
+        {!props.range || (!props.range.from || !props.range.to)
         ? props.events
           .sort(ascendingBy('date'))
           .map((event) => (
@@ -23,7 +24,7 @@ const EventsList = (props) => (
           ))
         : props.events
           .sort(ascendingBy('date'))
-          .filter((event) => (props.range && (props.range.from < Date.parse(event.date)) && (Date.parse(event.date) < props.range.to)))
+          .filter((event) => (props.range && (props.range.from <= Date.parse(event.date)) && (Date.parse(event.date) <= props.range.to)))
           .map((event) => (
             <EventsListItem
               key={event.id}
@@ -31,8 +32,8 @@ const EventsList = (props) => (
               onDelete={props.onDelete}
               onEdit={props.onEdit}
             />
-          ))
-      }</List>
+          ))}
+      </List>
     </Paper>
   );
 
