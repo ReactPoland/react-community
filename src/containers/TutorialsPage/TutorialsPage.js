@@ -10,6 +10,7 @@ import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import Paper from 'material-ui/Paper';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ActionWork from 'material-ui/svg-icons/action/work';
 import ActionBook from 'material-ui/svg-icons/action/book';
 import ActionTrackChanges from 'material-ui/svg-icons/action/track-changes';
@@ -35,9 +36,23 @@ export default class TutorialsPage extends Component {
     permissions: PropTypes.object.isRequired
   };
   render() {
-    console.log(this.props);
+    const { permissions } = this.props;
+    const AddPracticeButton = (
+      <FloatingActionButton
+        style={{
+          position: 'fixed',
+          right: 40,
+          bottom: 40,
+          zIndex: 1000
+        }}
+        onClick={() => this.props.redirect('/tutorials/add')}
+        >
+          <ContentAdd />
+        </FloatingActionButton>
+      );
     return (
       <Grid className={styles.TutorialsPage}>
+        {permissions.isStaff && AddPracticeButton}
         <Helmet title="Tutorials" />
         <Jumbotron>
           <h1>Tutorials</h1>

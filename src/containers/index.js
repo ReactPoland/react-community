@@ -16,6 +16,7 @@ export NewPracticePage from './BestPractices/NewPracticePage';
 // TUTORIALS
 export TutorialsContainer from './TutorialsPage/TutorialsContainer';
 export TutorialsPage from './TutorialsPage/TutorialsPage';
+export NewTutorialPage from './TutorialsPage/NewTutorialPage';
 // OTHER
 export Conversation from './Conversation/Conversation';
 export DialogsContainer from './DialogsContainer/DialogsContainer';
