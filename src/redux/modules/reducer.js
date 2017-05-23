@@ -12,6 +12,7 @@ import dialogModule from './dialogModule';
 import usersModule from './usersModule';
 import errorsModule from './errorsModule';
 import eventsModule from './eventsModule';
+import quizzes from './quizzesModule';
 
 export default combineReducers({
   routing: routerReducer,
@@ -21,6 +22,7 @@ export default combineReducers({
   info,
   map: mapModule,
   articles: articlesModule,
+  quizzes,
   conversation: conversationModule,
   dialog: dialogModule,
   users: usersModule,

@@ -54,13 +54,11 @@ const loadQuizQuestion = async (id) => {
 // api/quiz/load/:quizId
 // api/quiz/load/question/:questionId
 const loadQuizzes = (req, params) => {
-  return req.permission.shouldAuth().then(() => {
-    if (!params || !params.length) return loadQuizzesRequest();
-    if (params.length === 1) return loadQuiz(params[0]);
-    if (params.length === 2 && params[0] === 'question') return loadQuizQuestion(params[1]);
+  if (!params || !params.length) return loadQuizzesRequest();
+  if (params.length === 1) return req.permission.onlyStaff().then(() => loadQuiz(params[0]));
+  if (params.length === 2 && params[0] === 'question') return req.permission.onlyStaff().then(() => loadQuizQuestion(params[1]));
 
-    throw new Error('route not found');
-  });
+  return Promise.reject(new Error('route not found'));
 };
 
 export default loadQuizzes;

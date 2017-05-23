@@ -57,6 +57,9 @@ export default (store) => {
       <Route path="events" component={ct.EventsPage} />
       <Route path="best-practices" component={ct.BestPracticesPage} />
 
+      <Route path="quizzes" component={ct.QuizzesContainer} />
+      <Route path="quizzes/:id" component={ct.QuestionsPage} />
+
       <Route path="users">
         <IndexRoute component={ct.UsersPage} />
         <Route path="/user/:id" name="UserPage" component={ct.ProfilePage} />
