@@ -6,11 +6,13 @@ import _isEmpty from 'lodash/isEmpty';
 import { slate } from 'utils';
 import permission from 'utils/privileges';
 // STORE
-import { editTutorial } from 'redux/modules/tutorialsModule';
+import { editTutorial, removeTutorial } from 'redux/modules/tutorialsModule';
 // LAYOUT
 import styles from './TutorialPreview.scss';
 import FlatButton from 'material-ui/FlatButton';
 import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar';
+import ActionDelete from 'material-ui/svg-icons/action/delete';
+import IconButton from 'material-ui/IconButton';
 import { PlainTextEditor, RichTextEditor } from 'components';
 import Paper from 'material-ui/Paper';
 import Grid from 'react-bootstrap/lib/Grid';
@@ -25,7 +27,8 @@ const mappedState = ({ tutorials, auth }, props) => ({
   permissions: permission(auth.user)
 });
 const mappedActions = {
-  editTutorial
+  editTutorial,
+  removeTutorial
 };
 @connect(mappedState, mappedActions)
 export default class TutorialPreview extends Component {
@@ -34,7 +37,9 @@ export default class TutorialPreview extends Component {
     params: PropTypes.object.isRequired,
     tutorialEdited: PropTypes.bool,
     editTutorial: PropTypes.func.isRequired,
-    permissions: PropTypes.object.isRequired
+    removeTutorial: PropTypes.func.isRequired,
+    permissions: PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired
   }
   state = {
     editingMode: false,
@@ -136,6 +141,17 @@ export default class TutorialPreview extends Component {
       />
     );
   }
+  renderRemoveButton = () => {
+    const { tutorial, router } = this.props;
+    return (
+      <IconButton onClick={() => {
+        router.goBack();
+        this.props.removeTutorial(tutorial.id);
+      }}>
+        <ActionDelete color="#ff0000" />
+      </IconButton>
+    );
+  }
   renderCancelButton = () => {
     return (
       <FlatButton
@@ -165,6 +181,7 @@ export default class TutorialPreview extends Component {
                 <ToolbarGroup>
                   {permissions.isStaff && this.renderSaveEditButton()}
                   {editingMode ? this.renderCancelButton() : this.renderDisscussionButton()}
+                  {permissions.isStaff && this.renderRemoveButton()}
                 </ToolbarGroup>
               </Toolbar>
               <div className={styles['TutorialPreview-content']}>
