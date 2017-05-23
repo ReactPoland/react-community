@@ -8,6 +8,9 @@ export ArticlesContainer from './Articles/ArticlesContainer';
 export ArticlesPage from './Articles/ArticlesPage/ArticlesPage';
 export ArticlePage from './Articles/ArticlePage/ArticlePage';
 export NewArticlePage from './Articles/NewArticlePage/NewArticlePage';
+// QUiZZES
+export QuizzesPage from './Quizzes';
+export QuestionsPage from './Quizzes/Questions';
 // OTHER
 export BestPracticesPage from './BestPracticesPage/BestPracticesPage';
 export Conversation from './Conversation/Conversation';
