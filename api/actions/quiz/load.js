@@ -18,6 +18,7 @@ const loadQuiz = async (id) => {
       model: QuestionModel,
       as: 'questions',
       include: [{
+        attributes: ['answer', 'id'],
         model: AnswerModel,
         as: 'answers'
       }]
@@ -37,6 +38,7 @@ const loadQuizQuestion = async (id) => {
 
   const quesionResp = await QuestionModel.findOne({
     include: [{
+      attributes: ['answer', 'id'],
       model: AnswerModel,
       as: 'answers'
     }],
@@ -52,11 +54,13 @@ const loadQuizQuestion = async (id) => {
 // api/quiz/load/:quizId
 // api/quiz/load/question/:questionId
 const loadQuizzes = (req, params) => {
-  if (!params || !params.length) return loadQuizzesRequest();
-  if (params.length === 1) return loadQuiz(params[0]);
-  if (params.length === 2 && params[0] === 'question') return loadQuizQuestion(params[1]);
+  return req.permission.shouldAuth().then(() => {
+    if (!params || !params.length) return loadQuizzesRequest();
+    if (params.length === 1) return loadQuiz(params[0]);
+    if (params.length === 2 && params[0] === 'question') return loadQuizQuestion(params[1]);
 
-  return Promise.reject(new Error('route not found'));
+    throw new Error('route not found');
+  });
 };
 
 export default loadQuizzes;

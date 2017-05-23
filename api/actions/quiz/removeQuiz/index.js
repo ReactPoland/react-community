@@ -7,7 +7,7 @@ import resp from '../../../utils/serverResp';
 // api/quiz/remove/questions
 // api/quiz/remove/answers
 function removeQuiz(data, params) {
-  return data.permission.shouldAuth().then(() => {
+  return data.permission.onlyStaff().then(() => {
     if (!params || !params.length) return removeQuizRequest(data);
 
     const type = params[0];

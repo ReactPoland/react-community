@@ -6,7 +6,7 @@ import addQuizAnswersRequest from './addQuizAnswers';
 // api/quiz/add/questions
 // api/quiz/add/answers
 function addQuiz(data, params) {
-  return data.permission.shouldAuth().then(() => {
+  return data.permission.onlyStaff().then(() => {
     if (!params || !params.length) return addQuizRequest(data);
 
     const type = params[0];

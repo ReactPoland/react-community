@@ -7,7 +7,7 @@ import resp from '../../../utils/serverResp';
 // api/quiz/update/questions
 // api/quiz/update/answers
 function updateQuiz(data, params) {
-  return data.permission.shouldAuth().then(() => {
+  return data.permission.onlyStaff().then(() => {
     if (!params || !params.length) return updateQuizRequest(data);
 
     const type = params[0];
