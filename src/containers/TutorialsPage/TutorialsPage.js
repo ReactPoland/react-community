@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Helmet from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import permission from 'utils/privileges';
 import { push } from 'react-router-redux';
 // LAYOUT
@@ -11,11 +12,7 @@ import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import Paper from 'material-ui/Paper';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ActionWork from 'material-ui/svg-icons/action/work';
-import ActionBook from 'material-ui/svg-icons/action/book';
 import ActionTrackChanges from 'material-ui/svg-icons/action/track-changes';
-import HardwarePhoneIphone from 'material-ui/svg-icons/hardware/phone-iphone';
-import SocialPublic from 'material-ui/svg-icons/social/public';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import styles from './TutorialsPage.scss';
 
@@ -36,7 +33,7 @@ export default class TutorialsPage extends Component {
     permissions: PropTypes.object.isRequired
   };
   render() {
-    const { permissions } = this.props;
+    const { permissions, tutorials } = this.props;
     const AddPracticeButton = (
       <FloatingActionButton
         style={{
@@ -50,6 +47,16 @@ export default class TutorialsPage extends Component {
           <ContentAdd />
         </FloatingActionButton>
       );
+    const tutorialList = tutorials.map(tutorial => (
+        <Col md={6} key={tutorial.id}>
+          <Link to={`/tutorial/${tutorial.id}`}>
+            <Paper zDepth={1} className={styles['TutorialsPage-card']}>
+              <ActionTrackChanges style={{ width: '15rem', height: '15rem' }} />
+              <h3 className={styles['TutorialsPage-card-title']}>{tutorial.title}</h3>
+            </Paper>
+          </Link>
+        </Col>
+      ));
     return (
       <Grid className={styles.TutorialsPage}>
         {permissions.isStaff && AddPracticeButton}
@@ -59,36 +66,7 @@ export default class TutorialsPage extends Component {
           <p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
         </Jumbotron>
         <Row>
-          <Col md={6}>
-            <Paper zDepth={1} className={styles['TutorialsPage-card']}>
-              <ActionWork style={{ width: '15rem', height: '15rem' }} />
-              <h3 className={styles['TutorialsPage-card-title']}>Recommended Learning Resources</h3>
-            </Paper>
-          </Col>
-          <Col md={6}>
-            <Paper zDepth={1} className={styles['TutorialsPage-card']}>
-              <ActionBook style={{ width: '15rem', height: '15rem' }} />
-              <h3 className={styles['TutorialsPage-card-title']}>Recommended Books</h3>
-            </Paper>
-          </Col>
-          <Col md={6}>
-            <Paper zDepth={1} className={styles['TutorialsPage-card']}>
-              <ActionTrackChanges style={{ width: '15rem', height: '15rem' }} />
-              <h3 className={styles['TutorialsPage-card-title']}>React, Redux - the Right Way</h3>
-            </Paper>
-          </Col>
-          <Col md={6}>
-            <Paper zDepth={1} className={styles['TutorialsPage-card']}>
-              <HardwarePhoneIphone style={{ width: '15rem', height: '15rem' }} />
-              <h3 className={styles['TutorialsPage-card-title']}>Migration first React Native Apps</h3>
-            </Paper>
-          </Col>
-          <Col md={6}>
-            <Paper zDepth={1} className={styles['TutorialsPage-card']}>
-              <SocialPublic style={{ width: '15rem', height: '15rem' }} />
-              <h3 className={styles['TutorialsPage-card-title']}>Exploring GraphQL</h3>
-            </Paper>
-          </Col>
+          {tutorialList}
           <Col md={6}>
             <Paper zDepth={1} className={styles['TutorialsPage-card']}>
               <ContentAdd style={{ width: '15rem', height: '15rem' }} />
