@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import Helmet from 'react-helmet';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import permission from 'utils/privileges';
+import { push } from 'react-router-redux';
 // LAYOUT
 import Jumbotron from 'react-bootstrap/lib/Jumbotron';
 import Grid from 'react-bootstrap/lib/Grid';
@@ -14,8 +18,24 @@ import SocialPublic from 'material-ui/svg-icons/social/public';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import styles from './TutorialsPage.scss';
 
+const mappedState = ({ tutorials, auth }) => ({
+  tutorials: tutorials.all,
+  permissions: permission(auth.user)
+});
+
+const mappedActions = {
+  redirect: push
+};
+
+@connect(mappedState, mappedActions)
 export default class TutorialsPage extends Component {
+  static propTypes = {
+    tutorials: PropTypes.array.isRequired,
+    redirect: PropTypes.func.isRequired,
+    permissions: PropTypes.object.isRequired
+  };
   render() {
+    console.log(this.props);
     return (
       <Grid className={styles.TutorialsPage}>
         <Helmet title="Tutorials" />
