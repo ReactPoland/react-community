@@ -42,9 +42,12 @@ export default class EventsCalendar extends Component {
   handleDayClick = (day, modifiers) => {
     if (modifiers.disabled) return;
     const range = DateUtils.addDayToRange(day, this.state);
-    if (range.from && !range.to) range.to = new Date(range.from.setHours(23, 59));
-    if (range.from) range.from = new Date(range.from.setHours(0, 0));
-    if (range.to) range.to = new Date(range.to.setHours(23, 59));
+    if (range.from) {
+      let rangeTo = new Date(range.from.setHours(23, 59));
+      range.from = new Date(range.from.setHours(0, 0));
+      if (range.to) rangeTo = new Date(range.to.setHours(23, 59));
+      range.to = rangeTo;
+    }
     this.setState(range);
     if (this.props.onDayClick) this.props.onDayClick(range);
     if (debug) console.info('Clicked date:', day, modifiers);
