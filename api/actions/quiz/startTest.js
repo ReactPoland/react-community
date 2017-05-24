@@ -68,7 +68,16 @@ const startTestRequest = async (req) => {
       }
     });
 
-    return previousQuestions;
+    // order as in the quizStats
+    const orderedPreviousQuestions = [];
+    notFinished.questions.forEach(questionId => {
+      orderedPreviousQuestions
+        .push(
+          previousQuestions.find(quesion => quesion.id === questionId)
+        );
+    });
+
+    return orderedPreviousQuestions;
   }
 
   const dbQuiz = await loadQuiz(quizId);
