@@ -1,4 +1,4 @@
-import _startsWith from 'lodash/startsWith';
+// import _startsWith from 'lodash/startsWith';
 import _isEmpty from 'lodash/isEmpty';
 import { Raw, Plain } from 'slate';
 import config from '../config';
@@ -10,10 +10,11 @@ export const descendingBy = (key) => (a, b) => a[key] < b[key] ? 1 : a[key] > b[
 export const eventFormValidator = (formData) => {
   const { title, link, description, location, date, price } = formData;
   const errors = {};
+  const urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
 
   if (!title) errors.title = 'Title is required';
-  if (!link || link === 'http://') errors.link = 'Link is required';
-  if (!(_startsWith(link, 'http://') || _startsWith(link, 'https://'))) errors.link = 'Link must start with "http://"';
+  if (!link.match(urlRegex) && link !== '') errors.link = 'Insert correct URL';// IN EVENTS LINK iS NOT required
+  // if (!(_startsWith(link, 'http://') || _startsWith(link, 'https://'))) errors.link = 'Link must start with "http://"';
   if (!description) errors.description = 'Description is required';
   if (!location) errors.location = 'Location is required';
   if (price === '' || isNaN(price)) errors.price = 'Price must be a number';
