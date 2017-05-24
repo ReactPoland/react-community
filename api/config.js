@@ -29,6 +29,13 @@ export const gitConfig = {
   ghUrl: 'https://api.github.com',
 };
 
+export const apiConfig = {
+  quiz: {
+    questionLimit: 5,
+    delayTime: 1000 * 60 * 60 * 24 // one day
+  }
+};
+
 export default {
   devDbConfig,
   prodDbConfig,

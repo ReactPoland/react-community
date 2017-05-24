@@ -10,6 +10,7 @@ const QuizQuestionModel = require('./models/QuizQuestion');
 const QuizAnswerModel = require('./models/QuizAnswer');
 const TutorialModel = require('./models/Tutorial');
 const LogModel = require('./models/Log');
+const QuizStatModel = require('./models/QuizStat');
 
 const models = {};
 
@@ -24,7 +25,8 @@ const models = {};
   QuizQuestionModel,
   QuizAnswerModel,
   TutorialModel,
-  LogModel
+  LogModel,
+  QuizStatModel
 ].map(modelItem => {
   models[modelItem.name] = sequelize.define(modelItem.name, {
     ...modelItem.model
@@ -33,17 +35,33 @@ const models = {};
   });
 });
 
+// QUIZ STATS
+models.quizStats.belongsTo(models.users, {
+  foreignKey: { allowNull: false },
+  as: 'user',
+  onDelete: 'cascade'
+});
+
+models.quizStats.belongsTo(models.quizzes, {
+  foreignKey: { allowNull: false },
+  as: 'quiz',
+  onDelete: 'cascade'
+});
+
+// TUTORIALS
 models.tutorials.belongsTo(models.users, {
   foreignKey: { allowNull: false },
   as: 'author',
   onDelete: 'cascade'
 });
 
+// LOGS
 models.logs.belongsTo(models.users, {
   as: 'user',
   onDelete: 'cascade'
 });
 
+// QUIZZES
 models.quizAnswers.belongsTo(models.quizQuestions, {
   foreignKey: { allowNull: false },
   as: 'question',
@@ -67,14 +85,14 @@ models.quizzes.hasMany(models.quizQuestions, {
   foreignKey: 'quizId'
 });
 
-
+// EVENTS
 models.events.belongsTo(models.users, {
   foreignKey: { allowNull: false },
   as: 'organizedBy',
   allowNull: false
 });
 
-
+// COMMENTS
 models.comments.belongsTo(models.users, {
   foreignKey: { allowNull: false },
   as: 'user',
@@ -90,7 +108,7 @@ models.users.hasMany(models.comments, {
 });
 
 // models.users.hasMany(models.events, { as });
-
+// CONVERSATIONS
 models.conversations.hasMany(models.comments, {
   foreignKey: 'conversationId',
 });

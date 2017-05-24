@@ -9,7 +9,7 @@ const loadQuizzesRequest = async () => {
 };
 
 
-const loadQuiz = async (id) => {
+export const loadQuiz = async (id) => {
   const quizId = parseInt(id, 10);
   if (isNaN(quizId)) throw new Error('invalid id');
 
