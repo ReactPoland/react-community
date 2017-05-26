@@ -137,11 +137,9 @@ export default class ProfilePage extends Component {
             <Row>
               <Col xs={6}>
                 <h3>Test results</h3>
-                <p>HTML / CSS 50%</p>
-                <p>JAVASCRIPT</p>
-                <p>REACT / REDUX 75%</p>
-                <p>REACT NATIVE 30%</p>
-                <p>GRAPHQL 64%</p>
+                {user.quizStats.map((quizItem, key) => (
+                  <p key={key} >{quizItem.title} {parseFloat(quizItem.avg) * 100}%</p>
+                )) }
               </Col>
               <Col xs={6}>
                 <h3>Activity</h3>

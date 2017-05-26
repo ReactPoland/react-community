@@ -42,6 +42,11 @@ models.quizStats.belongsTo(models.users, {
   onDelete: 'cascade'
 });
 
+models.users.hasMany(models.quizStats, {
+  as: 'quizStats',
+  foreignKey: 'userId',
+});
+
 models.quizStats.belongsTo(models.quizzes, {
   foreignKey: { allowNull: false },
   as: 'quiz',

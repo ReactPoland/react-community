@@ -1,4 +1,6 @@
 // import _sample from 'lodash/sample';
+import ApiClient from 'helpers/ApiClient';
+import { showError } from 'redux/modules/errorsModule';
 
 // const debug = false;
 
@@ -88,12 +90,40 @@ export const startQuiz = (quizId) => ({
   promise: (client) => client.post('/quiz/startTest', { data: { quizId } })
 });
 
-export const finishQuiz = (data) => ({
-  requestName: 'Finish test',
-  payload: { quizId: data.quizId },
-  types: [LOAD_QUIZZES_REQUEST, FINISH_TEST_QUIZ_SUCCESS, FINISH_TEST_QUIZ_FAIL],
-  promise: (client) => client.post('/quiz/finishTest', { data })
-});
+// export const finishQuiz = (data) => ({
+//   requestName: 'Finish test',
+//   payload: { quizId: data.quizId },
+//   types: [LOAD_QUIZZES_REQUEST, FINISH_TEST_QUIZ_SUCCESS, FINISH_TEST_QUIZ_FAIL],
+//   promise: (client) => client.post('/quiz/finishTest', { data })
+// });
+
+export const finishQuiz = (data) => {
+  return async (dispatch) => {
+    dispatch({
+      type: LOAD_QUIZZES_REQUEST
+    });
+
+    const client = new ApiClient();
+
+    try {
+      const finishTestResponse = await client
+        .post('/quiz/finishTest', { data });
+
+      // TODO: update profile stats
+      // TODO: set last stats on the quizzes thumbnail
+      dispatch({
+        type: FINISH_TEST_QUIZ_SUCCESS,
+        result: finishTestResponse,
+        payload: { quizId: data.quizId }
+      });
+    } catch (error) {
+      dispatch(showError({
+        requestName: 'finish test',
+        error
+      }));
+    }
+  };
+};
 
 // ADD
 // export const addArticle = (article) => ({
