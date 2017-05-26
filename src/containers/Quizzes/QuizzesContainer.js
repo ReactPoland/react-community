@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // STORE
 import { loadQuizzes } from 'redux/modules/quizzesModule';
+import { browserHistory } from 'react-router';
 // COMPONENTS
 import QuizWrap from './QuizWrap';
 import QuizzesPage from './QuizzesPage';
@@ -26,6 +27,10 @@ class QuizzesContainer extends Component {
       PropTypes.array
     ])
   }
+  onSelectQuiz = quizId => ev => {
+    ev.preventDefault();
+    browserHistory.push(`quizzes/${quizId}`);
+  }
 
   render() {
     return (
@@ -35,7 +40,7 @@ class QuizzesContainer extends Component {
         refreshAction={this.props.loadQuizzes}
         loading={this.props.loading} >
 
-        <QuizzesPage list={this.props.list} />
+        <QuizzesPage list={this.props.list} onSelectQuiz={this.onSelectQuiz} />
       </QuizWrap>
     );
   }

@@ -64,6 +64,10 @@ export default class MainNavbar extends Component {
               <NavItem>Events</NavItem>
             </LinkContainer>
 
+            <LinkContainer to="/quizzes">
+              <NavItem>Test</NavItem>
+            </LinkContainer>
+
             <LinkContainer to="/users">
               <NavItem>Users</NavItem>
             </LinkContainer>

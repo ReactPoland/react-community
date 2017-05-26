@@ -10,7 +10,7 @@ export ArticlePage from './Articles/ArticlePage/ArticlePage';
 export NewArticlePage from './Articles/NewArticlePage/NewArticlePage';
 // QUiZZES
 export QuizzesContainer from './Quizzes/QuizzesContainer';
-export QuestionsPage from './Quizzes/Questions';
+export QuestionsContainer from './Quizzes/Questions/QuestionsContainer';
 // OTHER
 export BestPracticesPage from './BestPracticesPage/BestPracticesPage';
 export Conversation from './Conversation/Conversation';

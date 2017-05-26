@@ -7,6 +7,12 @@
 const LOAD_QUIZZES_REQUEST = 'LOAD_QUIZZES_REQUEST';
 const LOAD_QUIZZES_SUCCESS = 'LOAD_QUIZZES_SUCCESS';
 const LOAD_QUIZZES_FAIL = 'LOAD_QUIZZES_FAIL';
+
+const LOAD_TEST_QUIZ_SUCCESS = 'LOAD_TEST_QUIZ_SUCCESS';
+const LOAD_TEST_QUIZ_FAIL = 'LOAD_TEST_QUIZ_FAIL';
+
+const FINISH_TEST_QUIZ_SUCCESS = 'FINISH_TEST_QUIZ_SUCCESS';
+const FINISH_TEST_QUIZ_FAIL = 'FINISH_TEST_QUIZ_FAIL';
 // ADD
 // const ADD_ARTICLE_REQUEST = 'ADD_ARTICLE_REQUEST';
 // const ADD_ARTICLE_SUCCESS = 'ADD_ARTICLE_SUCCESS';
@@ -52,6 +58,8 @@ const initialState = {
   // Loading all articles
   list: null,
   loading: false,
+  tests: {},
+  finishTests: {}
   // articlesLoaded: false,
   // loadArticlesError: false,
   // Adding new article
@@ -68,9 +76,23 @@ const initialState = {
 // --- ACTIONS ---
 // LOAD
 export const loadQuizzes = () => ({
-  requestName: 'Load articles',
+  requestName: 'Load quizzes',
   types: [LOAD_QUIZZES_REQUEST, LOAD_QUIZZES_SUCCESS, LOAD_QUIZZES_FAIL],
   promise: (client) => client.get('/quiz/load')
+});
+
+export const startQuiz = (quizId) => ({
+  requestName: 'Load test',
+  payload: { quizId },
+  types: [LOAD_QUIZZES_REQUEST, LOAD_TEST_QUIZ_SUCCESS, LOAD_TEST_QUIZ_FAIL],
+  promise: (client) => client.post('/quiz/startTest', { data: { quizId } })
+});
+
+export const finishQuiz = (data) => ({
+  requestName: 'Finish test',
+  payload: { quizId: data.quizId },
+  types: [LOAD_QUIZZES_REQUEST, FINISH_TEST_QUIZ_SUCCESS, FINISH_TEST_QUIZ_FAIL],
+  promise: (client) => client.post('/quiz/finishTest', { data })
 });
 
 // ADD
@@ -113,7 +135,6 @@ export default function articlesModule(state = initialState, action = {}) {
         // size: _sample([6, 12]), // TODO: this will be set on the page, and should be stored in the DB
         // content: prepareContent(article.content)
       // }));
-      console.log(action);
       return {
         ...state,
         list: action.result.message,
@@ -130,6 +151,42 @@ export default function articlesModule(state = initialState, action = {}) {
         // loadingArticles: false,
         // articlesLoaded: false,
         // loadArticlesError: true
+      };
+    case LOAD_TEST_QUIZ_SUCCESS:
+      return {
+        ...state,
+        tests: {
+          ...state.tests,
+          [action.payload.quizId]: action.result.message
+        },
+        loading: false
+      };
+    case LOAD_TEST_QUIZ_FAIL:
+      return {
+        ...state,
+        tests: {
+          ...state.tests,
+          [action.payload.quizId]: undefined
+        },
+        loading: false
+      };
+    case FINISH_TEST_QUIZ_SUCCESS:
+      return {
+        ...state,
+        finishTests: {
+          ...state.tests,
+          [action.payload.quizId]: action.result.message
+        },
+        loading: false
+      };
+    case FINISH_TEST_QUIZ_FAIL:
+      return {
+        ...state,
+        finishTests: {
+          ...state.tests,
+          [action.payload.quizId]: undefined
+        },
+        loading: false
       };
     default:
       return state;

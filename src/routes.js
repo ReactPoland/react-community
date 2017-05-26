@@ -58,7 +58,7 @@ export default (store) => {
       <Route path="best-practices" component={ct.BestPracticesPage} />
 
       <Route path="quizzes" component={ct.QuizzesContainer} />
-      <Route path="quizzes/:id" component={ct.QuestionsPage} />
+      <Route path="quizzes/:id" component={ct.QuestionsContainer} />
 
       <Route path="users">
         <IndexRoute component={ct.UsersPage} />
