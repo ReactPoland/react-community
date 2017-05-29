@@ -105,6 +105,12 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.IgnorePlugin(/webpack-stats\.json$/),
     new webpack.DefinePlugin({
+      'process.env': {
+        HOST: `"${process.env.HOST}"`,
+        PORT: `"${process.env.PORT}"`,
+        GIT_CLIENT_ID: `"${process.env.GIT_CLIENT_ID}"`,
+      },
+
       __CLIENT__: true,
       __SERVER__: false,
       __DEVELOPMENT__: true,
