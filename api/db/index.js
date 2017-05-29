@@ -47,6 +47,11 @@ models.users.hasMany(models.quizStats, {
   foreignKey: 'userId',
 });
 
+models.quizzes.hasMany(models.quizStats, {
+  as: 'quizStats',
+  foreignKey: 'quizId'
+});
+
 models.quizStats.belongsTo(models.quizzes, {
   foreignKey: { allowNull: false },
   as: 'quiz',

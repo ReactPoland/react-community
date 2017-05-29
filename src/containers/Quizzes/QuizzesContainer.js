@@ -10,6 +10,7 @@ import QuizzesPage from './QuizzesPage';
 
 const mappedState = ({ quizzes }) => ({
   list: quizzes.list,
+  finishTests: quizzes.finishTests,
   loading: quizzes.loading,
   listLoaded: !!quizzes.list
 });
@@ -25,11 +26,15 @@ class QuizzesContainer extends Component {
     list: PropTypes.oneOfType([
       PropTypes.object,
       PropTypes.array
-    ])
+    ]),
+    finishTests: PropTypes.object
   }
+
   onSelectQuiz = quizId => ev => {
     ev.preventDefault();
-    browserHistory.push(`quizzes/${quizId}`);
+    if (!this.props.finishTests[quizId]) {
+      browserHistory.push(`quizzes/${quizId}`);
+    }
   }
 
   render() {
@@ -40,7 +45,10 @@ class QuizzesContainer extends Component {
         refreshAction={this.props.loadQuizzes}
         loading={this.props.loading} >
 
-        <QuizzesPage list={this.props.list} onSelectQuiz={this.onSelectQuiz} />
+        <QuizzesPage
+          finishTests={this.props.finishTests}
+          list={this.props.list}
+          onSelectQuiz={this.onSelectQuiz} />
       </QuizWrap>
     );
   }

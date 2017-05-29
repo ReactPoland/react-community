@@ -95,7 +95,6 @@ const finishTestRequest = async (req) => {
     finishTime,
     correctPercent
   });
-  console.log('step', correctAnswered, currentQuiz.questions.length);
 
   return {
     finishTime,

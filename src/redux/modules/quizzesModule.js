@@ -165,10 +165,19 @@ export default function articlesModule(state = initialState, action = {}) {
         // size: _sample([6, 12]), // TODO: this will be set on the page, and should be stored in the DB
         // content: prepareContent(article.content)
       // }));
+
+      const finishTests = state.finishTests;
+      action.result.message.map(quizItem => {
+        if (quizItem.quizStats && quizItem.quizStats.length) {
+          finishTests[quizItem.id] = quizItem.quizStats[0];
+        }
+      });
+
       return {
         ...state,
         list: action.result.message,
-        loading: false
+        loading: false,
+        finishTests
         // all: all,
         // loadingArticles: false,
         // articlesLoaded: true
