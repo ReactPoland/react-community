@@ -20,8 +20,6 @@ const loginGitRequest = async (req) => {
   const accessToken = gitTokenResponse.access_token;
   const userDataResponse = await GithubHelpers.getUser({ token: accessToken });
 
-  console.log(userDataResponse);
-
   // 1. find user in the db.
   const userResp = await UserModel.findOne({
     where: {
