@@ -1,15 +1,15 @@
 const permission = (user) => {
   let isStaff = false;
-  let shouldAuth = false;
+  let isAuth = false;
   if (user && user.role) {
-    shouldAuth = true;
+    isAuth = true;
     if (user.role === 'staff') {
       isStaff = true;
     }
   }
   return {
     isStaff,
-    shouldAuth
+    isAuth
   };
 };
 

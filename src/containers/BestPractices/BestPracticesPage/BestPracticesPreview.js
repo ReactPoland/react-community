@@ -163,7 +163,7 @@ export default class BestPracticesPreview extends Component {
                   {this.renderTitleEditor()}
                 </ToolbarGroup>
                 <ToolbarGroup>
-                  {permissions.shouldAuth && this.renderSaveEditButton()}
+                  {permissions.isAuth && this.renderSaveEditButton()}
                   {editingMode ? this.renderCancelButton() : this.renderDisscussionButton()}
                 </ToolbarGroup>
               </Toolbar>

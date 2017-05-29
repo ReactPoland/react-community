@@ -7,15 +7,22 @@ import { browserHistory } from 'react-router';
 // COMPONENTS
 import QuizWrap from './QuizWrap';
 import QuizzesPage from './QuizzesPage';
+import permission from 'utils/privileges';
 
-const mappedState = ({ quizzes }) => ({
+import { showError } from 'redux/modules/errorsModule';
+
+const mappedState = ({ quizzes, auth }) => ({
   list: quizzes.list,
   finishTests: quizzes.finishTests,
   loading: quizzes.loading,
-  listLoaded: !!quizzes.list
+  listLoaded: !!quizzes.list,
+  permissions: permission(auth.user)
 });
 
-const mappedActions = { loadQuizzes };
+const mappedActions = {
+  loadQuizzes,
+  showError
+};
 
 @connect(mappedState, mappedActions)
 class QuizzesContainer extends Component {
@@ -23,18 +30,32 @@ class QuizzesContainer extends Component {
     loading: PropTypes.bool.isRequired,
     listLoaded: PropTypes.bool.isRequired,
     loadQuizzes: PropTypes.func.isRequired,
+    showError: PropTypes.func.isRequired,
     list: PropTypes.oneOfType([
       PropTypes.object,
       PropTypes.array
     ]),
+    permissions: PropTypes.object.isRequired,
     finishTests: PropTypes.object
   }
 
   onSelectQuiz = quizId => ev => {
     ev.preventDefault();
-    if (!this.props.finishTests[quizId]) {
-      browserHistory.push(`quizzes/${quizId}`);
+    if (!this.props.permissions.isAuth) {
+      return this.props.showError({
+        requestName: 'start test',
+        error: new Error('User not authorized')
+      });
     }
+
+    if (this.props.finishTests[quizId]) {
+      return this.props.showError({
+        requestName: 'start test',
+        error: new Error('User was tested today')
+      });
+    }
+
+    browserHistory.push(`quizzes/${quizId}`);
   }
 
   render() {
