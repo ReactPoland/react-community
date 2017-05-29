@@ -11,13 +11,21 @@ export NewArticlePage from './Articles/NewArticlePage/NewArticlePage';
 // QUiZZES
 export QuizzesContainer from './Quizzes/QuizzesContainer';
 export QuestionsContainer from './Quizzes/Questions/QuestionsContainer';
+// BEST PRACTICES
+export BestPracticesContainer from './BestPractices/BestPracticesContainer';
+export BestPracticesPage from './BestPractices/BestPracticesPage/BestPracticesPage';
+export BestPracticesPreview from './BestPractices/BestPracticesPage/BestPracticesPreview';
+export NewPracticePage from './BestPractices/NewPracticePage';
+// TUTORIALS
+export TutorialsContainer from './TutorialsPage/TutorialsContainer';
+export TutorialsPage from './TutorialsPage/TutorialsPage';
+export NewTutorialPage from './TutorialsPage/NewTutorialPage';
+export TutorialPreview from './TutorialsPage/TutorialPreview';
 // OTHER
-export BestPracticesPage from './BestPracticesPage/BestPracticesPage';
 export Conversation from './Conversation/Conversation';
 export DialogsContainer from './DialogsContainer/DialogsContainer';
 export EventsPage from './EventsPage/EventsPage';
 export HomePage from './HomePage/HomePage';
 export ProfilePage from './ProfilePage/ProfilePage';
-export TutorialsPage from './TutorialsPage/TutorialsPage';
 export UsersPage from './UsersPage/UsersPage';
 export WorldPage from './WorldPage/WorldPage';

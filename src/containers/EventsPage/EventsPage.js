@@ -52,12 +52,17 @@ export default class EventsPage extends Component {
   state = {
     showAddEventDialog: false,
     showEditEventDialog: false,
-    eventToEditId: null
+    eventToEditId: null,
+    rangeToFilterEvents: null
   }
 
   componentWillMount() {
     // Load events, if they're not ready
     if (!this.props.eventsLoaded && !this.props.loadingEvents) this.props.loadEvents();
+  }
+
+  onSelectDays = (range) => {
+    this.setState({ rangeToFilterEvents: range });
   }
 
   prepareEvent = (eventData) => {
@@ -138,14 +143,15 @@ export default class EventsPage extends Component {
       <EventsList
         title="Your events"
         events={userEvents}
+        range={this.state.rangeToFilterEvents}
         onEdit={this.openEditEventDialog}
         onDelete={this.deleteEvent}
       />
     );
 
-    const otherEventsList = <EventsList title="Other events" events={otherEvents} />;
+    const otherEventsList = <EventsList title="Other events" range={this.state.rangeToFilterEvents} events={otherEvents} />;
 
-    const allEventsList = <EventsList title="All events" events={allEvents} />;
+    const allEventsList = <EventsList title="All events" range={this.state.rangeToFilterEvents} events={allEvents} />;
 
     // Other components
 
@@ -177,7 +183,9 @@ export default class EventsPage extends Component {
               markers={this.props.events}
             />
           </Div>
-          <EventsCalendar />
+          <EventsCalendar
+            onDayClick={this.onSelectDays}
+          />
         </Div>
       </Paper>
     );
