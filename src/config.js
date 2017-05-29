@@ -10,19 +10,6 @@ const environment = {
   }
 }[process.env.NODE_ENV || 'development'];
 
-// prepare git redirect hostname
-let gitRedirectHost = process.env.HOST || 'localhost';
-
-let gitRedirectPort;
-
-if (!environment.isProduction) {
-  gitRedirectPort = _defaultTo(process.env.PORT, '3000');
-}
-
-if (gitRedirectPort) {
-  gitRedirectHost += ':' + gitRedirectPort;
-}
-
 module.exports = Object.assign({
   host: process.env.HOST || 'localhost',
   port: process.env.PORT,
@@ -30,7 +17,7 @@ module.exports = Object.assign({
   apiPort: process.env.APIPORT,
   git: {
     clientId: _defaultTo(process.env.GIT_CLIENT_ID, 'a5ed526682843ecc1b68'),
-    redirectUrl: `http://${gitRedirectHost}/api/loginGitRedirect/`,
+    redirectUrl: '/api/loginGitRedirect/',
     authUrl: 'https://github.com/login/oauth/authorize',
   },
   googleMapsKey: 'AIzaSyCD3X-Lrhc7YL0WlC6LceHVH9LzshluPd0',

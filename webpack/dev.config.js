@@ -106,9 +106,7 @@ module.exports = {
     new webpack.IgnorePlugin(/webpack-stats\.json$/),
     new webpack.DefinePlugin({
       'process.env': {
-        HOST: `"${process.env.HOST}"`,
-        PORT: `"${process.env.PORT}"`,
-        GIT_CLIENT_ID: `"${process.env.GIT_CLIENT_ID}"`,
+        GIT_CLIENT_ID: `${process.env.GIT_CLIENT_ID}`,
       },
 
       __CLIENT__: true,

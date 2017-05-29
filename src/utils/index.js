@@ -25,7 +25,7 @@ export const eventFormValidator = (formData) => {
 
 export const gitAuthLink = () => {
   const state = Math.floor(Math.random() * 10000);
-  return `${config.git.authUrl}/?client_id=${config.git.clientId}&redirect_uri=${config.git.redirectUrl}&state=${state}`;
+  return `${config.git.authUrl}/?client_id=${config.git.clientId}&redirect_uri=${location.protocol}//${location.host}${config.git.redirectUrl}&state=${state}`;
 };
 
 // Slate helpers for converting it's state to other types
