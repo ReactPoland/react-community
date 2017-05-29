@@ -59,7 +59,7 @@ module.exports = {
     new ExtractTextPlugin('[name]-[chunkhash].css', {allChunks: true}),
     new webpack.DefinePlugin({
       'process.env': {
-        GIT_CLIENT_ID: `${process.env.GIT_CLIENT_ID}`,
+        GIT_CLIENT_ID: process.env.GIT_CLIENT_ID ? `"${process.env.GIT_CLIENT_ID}"` : 'a5ed526682843ecc1b68',
         NODE_ENV: '"production"'
       },
 

@@ -106,7 +106,7 @@ module.exports = {
     new webpack.IgnorePlugin(/webpack-stats\.json$/),
     new webpack.DefinePlugin({
       'process.env': {
-        GIT_CLIENT_ID: `${process.env.GIT_CLIENT_ID}`,
+        GIT_CLIENT_ID: process.env.GIT_CLIENT_ID ? `"${process.env.GIT_CLIENT_ID}"` : 'a5ed526682843ecc1b68',
       },
 
       __CLIENT__: true,

@@ -1,5 +1,4 @@
 require('babel-polyfill');
-const _defaultTo = require('lodash/defaultTo');
 
 const environment = {
   development: {
@@ -16,7 +15,7 @@ module.exports = Object.assign({
   apiHost: process.env.APIHOST || 'localhost',
   apiPort: process.env.APIPORT,
   git: {
-    clientId: _defaultTo(process.env.GIT_CLIENT_ID, 'a5ed526682843ecc1b68'),
+    clientId: process.env.GIT_CLIENT_ID,
     redirectUrl: '/api/loginGitRedirect/',
     authUrl: 'https://github.com/login/oauth/authorize',
   },
