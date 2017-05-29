@@ -13,6 +13,9 @@ var assetsPath = path.resolve(projectRootPath, './static/dist');
 // https://github.com/halt-hammerzeit/webpack-isomorphic-tools
 var WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
 var webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack-isomorphic-tools'));
+var projectConfig = require('../src/project.config.js');
+
+Object.keys(projectConfig).map(propName => projectConfig[propName] = `"${projectConfig[propName]}"` )
 
 module.exports = {
   devtool: 'source-map',
@@ -59,10 +62,9 @@ module.exports = {
     new ExtractTextPlugin('[name]-[chunkhash].css', {allChunks: true}),
     new webpack.DefinePlugin({
       'process.env': {
-        GIT_CLIENT_ID: process.env.GIT_CLIENT_ID ? `"${process.env.GIT_CLIENT_ID}"` : 'a5ed526682843ecc1b68',
         NODE_ENV: '"production"'
       },
-
+      __CLIENT_CONFIG__: projectConfig,
       __CLIENT__: true,
       __SERVER__: false,
       __DEVELOPMENT__: false,

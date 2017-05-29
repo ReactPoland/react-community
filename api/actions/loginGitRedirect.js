@@ -1,30 +1,26 @@
 import * as GithubHelpers from '../utils/github';
 const UserModel = require('../db').users;
 
-const errorResponse = (error, message) => ({
-  error, message
-});
+const errorGenerator = (message) => {
+  throw new Error(message);
+};
 
 const loginGitRequest = async (req) => {
   const { error, code, state } = req.query;
   const { session } = req;
 
-  if (session.user) return errorResponse('loggedIn', 'You are logged in. Please logout before');
+  if (session.user) errorGenerator('loggedIn. You are logged in. Please logout before');
 
-  if (error) return errorResponse(error, req.query.error_description);
+  if (error) errorGenerator(req.query.error_description);
   // TODO: check state property
-  if (!state || !code) return errorResponse('emptyRoute', 'No state and code attributes');
+  if (!state || !code) errorGenerator('emptyRoute. No state and code attributes');
 
-  const gitTokenResponse = await GithubHelpers.getAccessToken({ code, state })
-    .catch(err => ({ error: 'tokenAccess', error_description: err && err.message }) );
-
-  if (gitTokenResponse.error) return errorResponse(gitTokenResponse.error, gitTokenResponse.error_description);
+  const gitTokenResponse = await GithubHelpers.getAccessToken({ code, state });
 
   const accessToken = gitTokenResponse.access_token;
-  const userDataResponse = await GithubHelpers.getUser({ token: accessToken })
-    .catch(err => ({ error: 'fetchData', error_description: err && err.message }) );
+  const userDataResponse = await GithubHelpers.getUser({ token: accessToken });
 
-  if (userDataResponse.error) return errorResponse(userDataResponse.error, userDataResponse.error_description);
+  console.log(userDataResponse);
 
   // 1. find user in the db.
   const userResp = await UserModel.findOne({
@@ -32,10 +28,7 @@ const loginGitRequest = async (req) => {
       ghID: userDataResponse.id
     }
   })
-  .then(item => item && item.toJSON())
-  .catch(err => ({ error: 'findUserRequest', error_description: err && err.message }));
-
-  if (userResp && userResp.error) return errorResponse(userResp.error, userResp.error_description);
+  .then(item => item && item.toJSON());
 
   let user;
   // 2. Create if doesn't exist
@@ -46,13 +39,10 @@ const loginGitRequest = async (req) => {
       lastName: '',
       ghID: userDataResponse.id
     })
-    .then(item => item && item.toJSON())
-    .catch(err => ({ error: 'createUser', error_description: err && err.message}));
+    .then(item => item && item.toJSON());
   } else {
     user = userResp;
   }
-
-  if (user && user.error) return errorResponse(user.error, user.error_description);
 
   // 3. Write to session
   session.user = {

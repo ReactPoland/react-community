@@ -14,11 +14,6 @@ module.exports = Object.assign({
   port: process.env.PORT,
   apiHost: process.env.APIHOST || 'localhost',
   apiPort: process.env.APIPORT,
-  git: {
-    clientId: process.env.GIT_CLIENT_ID,
-    redirectUrl: '/api/loginGitRedirect/',
-    authUrl: 'https://github.com/login/oauth/authorize',
-  },
   googleMapsKey: 'AIzaSyCD3X-Lrhc7YL0WlC6LceHVH9LzshluPd0',
   app: {
     title: 'React Community',

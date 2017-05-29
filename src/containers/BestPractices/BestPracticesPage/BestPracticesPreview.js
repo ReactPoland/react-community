@@ -168,7 +168,7 @@ export default class BestPracticesPreview extends Component {
                 </ToolbarGroup>
               </Toolbar>
               <div className={styles['BestPracticesPreview-content']}>
-                {this.renderContentEditor()}
+                {editingMode && this.renderContentEditor()}
               </div>
             </Paper>
           </Col>

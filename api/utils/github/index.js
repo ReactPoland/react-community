@@ -44,12 +44,10 @@ export const getUser = async ({ token }) => {
         'Content-Type': 'application/json'
       },
     }, (accessError, accessRes, body) => {
-      if (!accessError) {
-        resolve(body);
-      } else {
-        reject(accessError);
-      }
+      if (accessError) reject(accessError);
+      const response = JSON.parse(body);
+      if (accessRes.statusCode > 400) reject(new Error(`getUser request. ${response.message}`));
+      resolve(response);
     });
-  })
-    .then(body => JSON.parse(body) );
+  });
 };

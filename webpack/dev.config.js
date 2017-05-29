@@ -7,7 +7,9 @@ var webpack = require('webpack');
 var assetsPath = path.resolve(__dirname, '../static/dist');
 var host = (process.env.HOST || 'localhost');
 var port = (+process.env.PORT + 1) || 3001;
+var projectConfig = require('../src/project.config.js');
 
+Object.keys(projectConfig).map(propName => projectConfig[propName] = `"${projectConfig[propName]}"` )
 // https://github.com/halt-hammerzeit/webpack-isomorphic-tools
 var WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
 var webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack-isomorphic-tools'));
@@ -105,10 +107,7 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.IgnorePlugin(/webpack-stats\.json$/),
     new webpack.DefinePlugin({
-      'process.env': {
-        GIT_CLIENT_ID: process.env.GIT_CLIENT_ID ? `"${process.env.GIT_CLIENT_ID}"` : 'a5ed526682843ecc1b68',
-      },
-
+      __CLIENT_CONFIG__: projectConfig,
       __CLIENT__: true,
       __SERVER__: false,
       __DEVELOPMENT__: true,

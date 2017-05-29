@@ -1,5 +1,5 @@
 const _defaultTo = require('lodash/defaultTo');
-const config = require('../src/config');
+const projectConfig = require('../src/project.config');
 const cliDbConfig = require('./db/cli/config/config');
 // DATABASE
 const devDbConfig = cliDbConfig.development; // development default database
@@ -21,9 +21,7 @@ export const dbConfig = {
 dbConfig.url = `postgres://${dbConfig.username}:${dbConfig.password}@${dbConfig.host}:${dbConfig.port}/${dbConfig.database}`;
 
 export const gitConfig = {
-  authUrl: config.git.authUrl, // used on the frontend
-  clientId: config.git.clientId, // used on the frontend
-  redirectUrl: config.git.redirectUrl, // used on the frontend
+  clientId: projectConfig.GIT_CLIENT_ID, // used on the frontend
   accessTokenUrl: 'https://github.com/login/oauth/access_token',
   clientSecret: _defaultTo(process.env.GIT_CLIENT_SECRET, 'ddf654feec8b9272ff5a8f69e3790694f8e21165'),
   ghUrl: 'https://api.github.com',
