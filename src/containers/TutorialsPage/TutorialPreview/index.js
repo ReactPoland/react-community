@@ -93,12 +93,12 @@ export default class TutorialPreview extends Component {
   }
 
   saveEditButtonActions = () => {
-    const { tutorial } = { ...this.state };
+    const tutorial = { ...this.state.tutorial };
     if (!this.validateTutorial(tutorial)) return;
     if (this.state.editingMode) {
-      if (!_isEmpty(tutorial.content)) tutorial.content = slate.stateToObject(tutorial.content);
-      if (!_isEmpty(tutorial.plainText)) tutorial.plainText = slate.stateToText(tutorial.content);
-      if (!_isEmpty(tutorial.title)) tutorial.title = slate.stateToText(tutorial.title);
+      if (!_isEmpty(this.state.tutorial.content)) tutorial.content = slate.stateToObject(this.state.tutorial.content);
+      if (!_isEmpty(this.state.tutorial.plainText)) tutorial.plainText = slate.stateToText(this.state.tutorial.content);
+      if (!_isEmpty(this.state.tutorial.title)) tutorial.title = slate.stateToText(this.state.tutorial.title);
       this.props.editTutorial(tutorial);
       this.setState({ editingMode: !this.state.editingMode });
     } else {
@@ -117,7 +117,7 @@ export default class TutorialPreview extends Component {
   }
   renderTitleEditor = () => (
     <PlainTextEditor
-      initialState={this.state.tutorial.title}
+      state={this.state.tutorial.title}
       onChange={this.change('title')}
       readOnly={!this.state.editingMode}
       style={{ fontSize: 20 }}
@@ -125,7 +125,7 @@ export default class TutorialPreview extends Component {
   )
   renderContentEditor = () => (
     <RichTextEditor
-      initialState={this.state.tutorial.content}
+      state={this.state.tutorial.content}
       onChange={this.change('content')}
       readOnly={!this.state.editingMode}
       style={{ width: '90%', fontSize: 16 }}
