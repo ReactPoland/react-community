@@ -42,7 +42,8 @@ class ArticlesGrid extends Component {
   redirectToArticle = (article) => {
     if (article.type === 'external') {
       const link = _startsWith(article.link, 'http') ? article.link : 'http://' + article.link;
-      window.location = link;
+      const win = window.open(link, '_blank');
+      win.focus();
     } else {
       this.props.pushState(`/article/${article.id}/${article.slug}`);
     }
