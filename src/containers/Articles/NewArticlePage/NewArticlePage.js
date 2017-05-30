@@ -104,28 +104,28 @@ export default class NewArticlePage extends Component {
               <Paper className={styles.articleEditor} zDepth={2}>
                 <h3 className={styles.articleTitle}>
                   <PlainTextEditor
-                    initialState={title}
+                    state={title}
                     onChange={this.change('title')}
                     placeholder="Title"
                   />
                 </h3>
                 <div className={styles.articleDescription}>
                   <PlainTextEditor
-                    initialState={description}
+                    state={description}
                     onChange={this.change('description')}
                     placeholder="Description"
                   />
                 </div>
                 {type === 'external' && <div className={styles.articleLink}>
                   <PlainTextEditor
-                    initialState={link}
+                    state={link}
                     onChange={this.change('link')}
                     placeholder="Link"
                   />
                 </div>}
                 {validationErrors.title && <p>{validationErrors.title}</p>}
                 {type === 'own' && <RichTextEditor
-                  initialState={content}
+                  state={content}
                   style={{ width: '100%', height: '100vh', maxHeight: '45vh' }}
                   onChange={this.change('content')}
                   placeholder="Content"

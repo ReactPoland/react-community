@@ -91,14 +91,14 @@ export default class NewTutorialPage extends Component {
               <Paper className={styles.tutorialEditor} zDepth={2}>
                 <h3 className={styles.tutorialTitle}>
                   <PlainTextEditor
-                    initialState={title}
+                    state={title}
                     onChange={this.change('title')}
                     placeholder="Title"
                   />
                 </h3>
                 {validationErrors.title && <p>{validationErrors.title}</p>}
                 <RichTextEditor
-                  initialState={content}
+                  state={content}
                   style={{ width: '100%', height: '100vh', maxHeight: '45vh' }}
                   onChange={this.change('content')}
                   placeholder="Content"

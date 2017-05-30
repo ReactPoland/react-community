@@ -55,6 +55,61 @@ export default class BestPracticesPreview extends Component {
     }
   }
 
+  getCurrentTopButtons = () => {
+    let buttons = this.generalMode.topButtons;
+    if (this.state.editingMode) buttons = this.editingMode.topButtons;
+
+    const viewButtons = [];
+
+    buttons.map((buttItem, key) => {
+      let allow = true;
+      if (buttItem.shouldShow) {
+        if (!buttItem.shouldShow()) allow = false;
+      }
+      if (allow) viewButtons.push(<TopButton {...buttItem.params} key={key} />);
+    });
+
+    return viewButtons;
+  }
+
+  generalMode = {
+    topButtons: [{
+      shouldShow: () => this.props.permissions.isAuth,
+      params: {
+        label: 'Edit',
+        primary: true,
+        onClick: () => this.setState({ editingMode: true })
+      }
+    }, {
+      shouldShow: () => this.props.permissions.isAuth,
+      params: {
+        label: 'Discussion',
+        secondary: true,
+        onClick: () => console.log('Discussion')
+      }
+    }]
+  }
+
+  editingMode = {
+    topButtons: [{
+      shouldShow: () => this.props.permissions.isAuth,
+      params: {
+        label: 'Save',
+        primary: true,
+        onClick: () => this.saveButtonActions()
+      }
+    }, {
+      params: {
+        label: 'Close',
+        secondary: true,
+        onClick: () => this.setState({
+          practice: this.preparePractice(this.props.practice),
+          editingMode: false
+        })
+      }
+    }]
+  }
+
   // Prepares article content to use Slate's state objects
   preparePractice(practice) {
     if (!practice) return {};
@@ -65,6 +120,7 @@ export default class BestPracticesPreview extends Component {
       title: slate.textToState(practice.title)
     };
   }
+
   // Updates state of the practice
   change = (property) => (value) => {
     const practice = { ...this.state.practice };
@@ -77,6 +133,7 @@ export default class BestPracticesPreview extends Component {
 
     this.setState({ practice, validationErrors });
   }
+
   validatePractice = (practiceData) => {
     const { title } = practiceData;
     const validationErrors = {};
@@ -87,72 +144,43 @@ export default class BestPracticesPreview extends Component {
     return _isEmpty(validationErrors);
   }
 
-  saveEditButtonActions = () => {
-    const { practice } = { ...this.state };
+  saveButtonActions = () => {
+    const practice = { ...this.state.practice };
+
+    if (!_isEmpty(this.state.practice.content)) practice.content = slate.stateToObject(this.state.practice.content);
+    if (!_isEmpty(this.state.practice.plainText)) practice.plainText = slate.stateToText(this.state.practice.content);
+    if (!_isEmpty(this.state.practice.title)) practice.title = slate.stateToText(this.state.practice.title);
+
     if (!this.validatePractice(practice)) return;
-    if (this.state.editingMode) {
-      if (!_isEmpty(practice.content)) practice.content = slate.stateToObject(practice.content);
-      if (!_isEmpty(practice.plainText)) practice.plainText = slate.stateToText(practice.content);
-      if (!_isEmpty(practice.title)) practice.title = slate.stateToText(practice.title);
-      this.props.editPractice(practice);
-      this.setState({ editingMode: !this.state.editingMode });
-    } else {
-      this.setState({ editingMode: !this.state.editingMode });
-    }
+
+    this.props.editPractice(practice);
+
+    this.setState({ editingMode: false });
   }
-  renderSaveEditButton = () => {
-    return (
-      <FlatButton
-        style={{ margin: 0 }}
-        label={this.state.editingMode ? 'Save' : 'Edit'}
-        primary
-        onClick={() => this.saveEditButtonActions()}
-      />
-    );
-  }
+
   renderTitleEditor = () => (
     <PlainTextEditor
-      initialState={this.state.practice.title}
+      state={this.state.practice.title}
       onChange={this.change('title')}
       readOnly={!this.state.editingMode}
       style={{ fontSize: 20 }}
     />
   )
-  renderContentEditor = () => (
-    <RichTextEditor
-      initialState={this.state.practice.content}
-      onChange={this.change('content')}
-      readOnly={!this.state.editingMode}
-      style={{ width: '90%', fontSize: 16 }}
-    />
-  )
-  renderDisscussionButton = () => {
+  renderContentEditor = () => {
     return (
-      <FlatButton
-        style={{ margin: 0 }}
-        label={this.state.editingMode ? 'Cancel' : 'Discussion'}
-        secondary
-        onClick={ () => {} }
+      <RichTextEditor
+        state={this.state.practice.content}
+        onChange={this.change('content')}
+        readOnly={!this.state.editingMode}
+        style={{ width: '90%', fontSize: 16 }}
       />
     );
   }
-  renderCancelButton = () => {
-    return (
-      <FlatButton
-        style={{ margin: 0 }}
-        label={'Cancel'}
-        secondary
-        onClick={ () => this.setState({
-          practice: this.preparePractice(this.props.practice),
-          editingMode: false
-        })}
-      />
-    );
-  }
+
   render() {
-    const { practice, permissions } = this.props;
-    const { editingMode } = this.state;
+    const { practice } = this.props;
     if (!practice) return null;
+
     return (
       <Grid className={styles.BestPracticesPreview}>
         <Row className={styles['BestPracticesPreview-center-content']}>
@@ -162,13 +190,10 @@ export default class BestPracticesPreview extends Component {
                 <ToolbarGroup>
                   {this.renderTitleEditor()}
                 </ToolbarGroup>
-                <ToolbarGroup>
-                  {permissions.isAuth && this.renderSaveEditButton()}
-                  {editingMode ? this.renderCancelButton() : this.renderDisscussionButton()}
-                </ToolbarGroup>
+                <ToolbarGroup>{this.getCurrentTopButtons()}</ToolbarGroup>
               </Toolbar>
               <div className={styles['BestPracticesPreview-content']}>
-                {editingMode && this.renderContentEditor()}
+                {this.renderContentEditor()}
               </div>
             </Paper>
           </Col>
@@ -177,3 +202,10 @@ export default class BestPracticesPreview extends Component {
     );
   }
 }
+
+const TopButton = ({ ...params }) => (
+  <FlatButton
+    style={{ margin: 0 }}
+    {...params}
+  />
+);

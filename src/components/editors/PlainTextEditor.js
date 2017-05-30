@@ -46,15 +46,14 @@ const schema = {
 
 class PlainTextEditor extends Component {
   static propTypes = {
-    initialState: PropTypes.object,
     placeholder: PropTypes.string,
+    state: PropTypes.object,
     style: PropTypes.object,
     readOnly: PropTypes.bool,
     onChange: PropTypes.func
   }
 
   static defaultProps = {
-    initialState: '...',
     placeholder: '',
     style: {},
     onChange: () => {}
@@ -67,7 +66,7 @@ class PlainTextEditor extends Component {
    */
 
   state = {
-    state: this.props.initialState
+    state: this.props.state
   };
 
   /**
@@ -78,7 +77,6 @@ class PlainTextEditor extends Component {
 
   onChange = (state) => {
     this.props.onChange(state);
-    this.setState({ state });
   }
 
   /**
@@ -94,7 +92,7 @@ class PlainTextEditor extends Component {
           spellCheck
           placeholder={this.props.placeholder}
           schema={schema}
-          state={this.state.state}
+          state={this.props.state}
           onChange={this.onChange}
           readOnly={this.props.readOnly}
         />

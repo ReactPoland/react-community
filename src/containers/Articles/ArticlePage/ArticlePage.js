@@ -160,7 +160,7 @@ export default class ArticlePage extends Component {
 
   renderTitleEditor = () => (
     <PlainTextEditor
-      initialState={this.state.article.title}
+      state={this.state.article.title}
       onChange={this.change('title')}
       readOnly={!this.state.editingMode}
       style={{ fontSize: 20 }}
@@ -169,7 +169,7 @@ export default class ArticlePage extends Component {
 
   renderLinkEditor = () => (
     <PlainTextEditor
-      initialState={this.state.article.link}
+      state={this.state.article.link}
       onChange={this.change('link')}
       readOnly={!this.state.editingMode}
       style={{ fontSize: 20 }}
@@ -178,7 +178,7 @@ export default class ArticlePage extends Component {
 
   renderDescriptionEditor = () => (
     <PlainTextEditor
-      initialState={this.state.article.description}
+      state={this.state.article.description}
       onChange={this.change('description')}
       readOnly={!this.state.editingMode}
       style={{ fontSize: 20, margin: '20px 0 24px' }}
@@ -187,7 +187,7 @@ export default class ArticlePage extends Component {
 
   renderContentEditor = () => (
     <RichTextEditor
-      initialState={this.state.article.content}
+      state={this.state.article.content}
       onChange={this.change('content')}
       readOnly={!this.state.editingMode}
       style={{ width: '100%', fontSize: 20 }}

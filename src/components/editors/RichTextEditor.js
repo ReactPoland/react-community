@@ -53,7 +53,6 @@ const schema = {
 
 class RichTextEditor extends Component {
   static propTypes = {
-    initialState: PropTypes.object,
     style: PropTypes.object,
     readOnly: PropTypes.bool,
     placeholder: PropTypes.string
@@ -83,7 +82,7 @@ class RichTextEditor extends Component {
    */
 
   hasMark = (type) => {
-    const { state } = this.state;
+    const { state } = this.props;
     return state.marks.some(mark => mark.type === type);
   }
 
@@ -95,7 +94,7 @@ class RichTextEditor extends Component {
    */
 
   hasBlock = (type) => {
-    const { state } = this.state;
+    const { state } = this.props;
     return state.blocks.some(node => node.type === type);
   }
 
@@ -107,7 +106,7 @@ class RichTextEditor extends Component {
 
   onChange = (state) => {
     this.props.onChange(state);
-    this.setState({ state });
+    // this.setState({ state });
   }
 
   /**
@@ -158,14 +157,15 @@ class RichTextEditor extends Component {
 
   onClickMark = (e, type) => {
     e.preventDefault();
-    let { state } = this.state;
+    let { state } = this.props;
 
     state = state
       .transform()
       .toggleMark(type)
       .apply();
+    this.onChange(state)
 
-    this.setState({ state });
+    // this.setState({ state });
   }
 
   /**
@@ -177,7 +177,7 @@ class RichTextEditor extends Component {
 
   onClickBlock = (e, type) => {
     e.preventDefault();
-    let { state } = this.state;
+    let { state } = this.props;
     const transform = state.transform();
     const { document } = state;
 
@@ -223,7 +223,8 @@ class RichTextEditor extends Component {
     }
 
     state = transform.apply();
-    this.setState({ state });
+    this.onChange(state);
+    // this.setState({ state });
   }
 
   /**
@@ -319,7 +320,7 @@ class RichTextEditor extends Component {
           spellCheck
           placeholder={this.props.placeholder}
           schema={schema}
-          state={this.state.state}
+          state={this.props.state}
           onChange={this.onChange}
           onKeyDown={this.onKeyDown}
           readOnly={this.props.readOnly}
