@@ -8,11 +8,12 @@ import { push } from 'react-router-redux';
 import Jumbotron from 'react-bootstrap/lib/Jumbotron';
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
-import Col from 'react-bootstrap/lib/Col';
-import Paper from 'material-ui/Paper';
+// import Col from 'react-bootstrap/lib/Col';
+// import Paper from 'material-ui/Paper';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import styles from './TutorialsPage.scss';
+import ProposeTopicDialog from './ProposeTopicDialog';
 
 import TutorialsThumbnails from './TutorialsThumbnails';
 
@@ -33,9 +34,20 @@ export default class TutorialsPage extends Component {
     permissions: PropTypes.object.isRequired
   };
 
+  state = {
+    newProposePopup: null
+  }
+
   onSelectTutorial = (id) => (ev) => {
     ev.preventDefault();
+    if (id === 'newPropose') return this.setState({ newProposePopup: true });
     this.props.redirect(`/tutorial/${id}`);
+  }
+
+  closePopup = () => this.setState({ newProposePopup: null })
+
+  proposeSubmit = () => {
+    console.log('submit');
   }
 
   render() {
@@ -54,6 +66,13 @@ export default class TutorialsPage extends Component {
         </FloatingActionButton>
       );
 
+    const copyTutorials = [
+      ...tutorials, {
+        id: 'newPropose',
+        title: 'Propose your topic'
+      }
+    ];
+
     return (
       <Grid className={styles.TutorialsPage}>
         {permissions.isStaff && AddPracticeButton}
@@ -64,15 +83,13 @@ export default class TutorialsPage extends Component {
         </Jumbotron>
         <Row>
           <TutorialsThumbnails
-            list={tutorials}
+            list={copyTutorials}
             onSelect={this.onSelectTutorial} />
-          <Col md={6}>
-            <Paper zDepth={1} className={styles['TutorialsPage-card']}>
-              <ContentAdd style={{ width: '15rem', height: '15rem' }} />
-              <h3 className={styles['TutorialsPage-card-title']}>Propose your topic</h3>
-            </Paper>
-          </Col>
         </Row>
+        <ProposeTopicDialog
+          open={!!this.state.newProposePopup}
+          closePopup={this.closePopup}
+          onSubmit={this.proposeSubmit} />
       </Grid>
     );
   }
