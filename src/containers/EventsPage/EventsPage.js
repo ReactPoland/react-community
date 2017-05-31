@@ -76,6 +76,10 @@ export default class EventsPage extends Component {
     this.setState({ rangeToFilterEvents: range });
   }
 
+  onSelectEvent = (id) => {
+    console.log(id);
+  }
+
   prepareEvent = (eventData) => {
     return {
       id: eventData.id,
@@ -157,13 +161,26 @@ export default class EventsPage extends Component {
         events={userEvents}
         range={this.state.rangeToFilterEvents}
         onEdit={this.openEditEventDialog}
+        onSelectEvent={this.onSelectEvent}
         onDelete={this.deleteEvent}
       />
     );
 
-    const otherEventsList = <EventsList title="Other events" range={this.state.rangeToFilterEvents} events={otherEvents} />;
+    const otherEventsList = (
+      <EventsList
+        title="Other events"
+        range={this.state.rangeToFilterEvents}
+        onSelectEvent={this.onSelectEvent}
+        events={otherEvents} />
+    );
 
-    const allEventsList = <EventsList title="All events" range={this.state.rangeToFilterEvents} events={allEvents} />;
+    const allEventsList = (
+      <EventsList
+        title="All events"
+        onSelectEvent={this.onSelectEvent}
+        range={this.state.rangeToFilterEvents}
+        events={allEvents} />
+    );
 
     // Other components
 
