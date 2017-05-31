@@ -24,6 +24,7 @@ export TutorialPreview from './TutorialsPage/TutorialPreview';
 
 // OTHER
 export Conversation from './Conversation/Conversation';
+export Login from './Login';
 export DialogsContainer from './DialogsContainer/DialogsContainer';
 export EventsPage from './EventsPage/EventsPage';
 export HomePage from './HomePage/HomePage';
