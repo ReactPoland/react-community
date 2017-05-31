@@ -18,7 +18,7 @@ import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import FlatButton from 'material-ui/FlatButton';
 import { ArticleHeader, List, Div } from 'components/styled';
-import { gitAuthLink } from 'utils';
+import { Link } from 'react-router';
 
 const mappedState = ({ articles, auth }, props) => ({
   article: _find(articles.all, art => props.params.id === `${art.id}`),
@@ -268,7 +268,7 @@ export default class ArticlePage extends Component {
               </Row> :
               <Row>
                 <Col sm={12} md={8}>
-                  <h3>Please <a href={gitAuthLink()}>login</a> to add your comments</h3>
+                  <h3>Please <Link to="/login">login</Link> to add your comments</h3>
                 </Col>
               </Row>
             }
