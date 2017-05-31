@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import _last from 'lodash/last';
 // STORE
 import { loadMarkers, removeMarker, addMarker } from 'redux/modules/mapModule';
+import { showError } from 'redux/modules/errorsModule';
 // COMPONENTS
 import { LoadingScreen, Map } from 'components';
 import AddLocationDialog from './AddLocationDialog';
@@ -25,7 +26,8 @@ const mappedState = ({ map, auth }) => ({
 const mappedActions = {
   loadMarkers,
   addMarker,
-  removeMarker
+  removeMarker,
+  showError
 };
 
 @connect(mappedState, mappedActions)
@@ -40,6 +42,7 @@ export default class WorldPage extends Component {
     loadMarkers: PropTypes.func.isRequired,
     addMarker: PropTypes.func.isRequired,
     removeMarker: PropTypes.func.isRequired,
+    showError: PropTypes.func.isRequired,
     loggedIn: PropTypes.bool.isRequired
   }
 
@@ -67,7 +70,7 @@ export default class WorldPage extends Component {
   }
 
   openAddLocationDialog = () => {
-    if (!this.props.loggedIn) return;
+    if (!this.props.loggedIn) return this.props.showError({ requestName: 'Pin yourself', error: new Error('Should authorizated') });
     this.setState({ showAddLocationDialog: true });
   }
 
@@ -99,19 +102,14 @@ export default class WorldPage extends Component {
     const { mapMarkers, loadingMarkers, addingMarker, markerAdded, removingMarker, loggedIn } = this.props;
     const { showAddLocationDialog, mapCenterCoord, mapZoomLevel } = this.state;
 
-    const AddMarkerButton = (
-      <FloatingActionButton
-        className={styles.AddMarkerButton}
-        onClick={this.openAddLocationDialog}
-      >
-        <ContentAdd />
-      </FloatingActionButton>
-    );
-
     return (
       <LoadingScreen loading={loadingMarkers}>
         <div className={styles.WorldPage}>
-          {loggedIn && AddMarkerButton}
+          <FloatingActionButton
+            className={styles.AddMarkerButton}
+            onClick={this.openAddLocationDialog} >
+            <ContentAdd />
+          </FloatingActionButton>
           <Map
             type="users"
             centerCoords={mapCenterCoord}
@@ -121,13 +119,13 @@ export default class WorldPage extends Component {
             removingMarker={removingMarker}
             loggedIn={loggedIn}
           />
-          {loggedIn && <AddLocationDialog
+          <AddLocationDialog
             popupVisible={showAddLocationDialog}
             closePopup={this.closeAddLocationDialog}
             addMarker={this.addMarker}
             addingMarker={addingMarker}
             markerAdded={markerAdded}
-          />}
+          />
         </div>
       </LoadingScreen>
     );

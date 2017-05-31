@@ -43,6 +43,13 @@ const Map = (props) => {
       maxBounds={[[-90, -180], [90, 180]]} // Prevents scrolling outside map edges
       style={props.style}
     >
+      <div
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+        }}
+        >test</div>
       <TileLayer
         url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
