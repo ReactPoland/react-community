@@ -11,10 +11,12 @@ const QuizAnswerModel = require('./models/QuizAnswer');
 const TutorialModel = require('./models/Tutorial');
 const LogModel = require('./models/Log');
 const QuizStatModel = require('./models/QuizStat');
+const TopicProposeModel = require('./models/TopicPropose');
 
 const models = {};
 
 [
+  TopicProposeModel,
   MarkerModel,
   ArticleModel,
   UserModel,

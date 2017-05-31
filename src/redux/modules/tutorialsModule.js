@@ -20,6 +20,14 @@ const REMOVE_TUTORIAL_REQUEST = 'REMOVE_TUTORIAL_REQUEST';
 const REMOVE_TUTORIAL_SUCCESS = 'REMOVE_TUTORIAL_SUCCESS';
 const REMOVE_TUTORIAL_FAIL = 'REMOVE_TUTORIAL_FAIL';
 
+const SHOW_TUTORIAL_PROPOSE_DIALOG = 'SHOW_TUTORIAL_PROPOSE_DIALOG';
+const HIDE_TUTORIAL_PROPOSE_DIALOG = 'HIDE_TUTORIAL_PROPOSE_DIALOG';
+
+
+const SEND_TUTORIAL_PROPOSE_REQUEST = 'SEND_TUTORIAL_PROPOSE_REQUEST';
+const SEND_TUTORIAL_PROPOSE_SUCCESS = 'SEND_TUTORIAL_PROPOSE_SUCCESS';
+const SEND_TUTORIAL_PROPOSE_FAIL = 'SEND_TUTORIAL_PROPOSE_FAIL';
+
 // --- HELPERS ---
 
 // Makes sure that the rich editor alwasy get's object as a content
@@ -64,10 +72,28 @@ const initialState = {
   // Removing a tutorial
   removingTutorial: null, // (Number) ID of an tutorial being removed
   tutorialRemoved: false,
-  removeTutorialError: false
+  removeTutorialError: false,
+
+  proposeDialog: null,
+  tutorialProposed: false
 };
 
 // --- ACTIONS ---
+export const showProposeDialog = (payload) => ({
+  type: SHOW_TUTORIAL_PROPOSE_DIALOG,
+  payload
+});
+
+export const hideProposeDialog = () => ({
+  type: HIDE_TUTORIAL_PROPOSE_DIALOG
+});
+
+export const sendPropose = (title) => ({
+  requestName: 'Send propose',
+  types: [SEND_TUTORIAL_PROPOSE_REQUEST, SEND_TUTORIAL_PROPOSE_SUCCESS, SEND_TUTORIAL_PROPOSE_FAIL],
+  promise: (client) => client.post('/learning/proposeTutorial', { data: { title } })
+});
+
 // LOAD
 export const loadTutorials = () => ({
   requestName: 'Load tutorials',
@@ -197,6 +223,34 @@ export default function tutorialsModule(state = initialState, action = {}) {
         tutorialRemoved: false,
         removeTutorialError: true
       };
+    case SHOW_TUTORIAL_PROPOSE_DIALOG:
+      return {
+        ...state,
+        proposeDialog: action.payload
+      };
+    case HIDE_TUTORIAL_PROPOSE_DIALOG:
+      return {
+        ...state,
+        proposeDialog: null
+      };
+    case SEND_TUTORIAL_PROPOSE_REQUEST:
+      return {
+        ...state,
+        tutorialProposed: false
+      };
+    case SEND_TUTORIAL_PROPOSE_SUCCESS:
+      return {
+        ...state,
+        tutorialProposed: true,
+        proposeDialog: false
+      };
+    case SEND_TUTORIAL_PROPOSE_FAIL:
+      return {
+        ...state,
+        tutorialProposed: false,
+        tutorialProposeError: true
+      };
+
     default:
       return state;
   }

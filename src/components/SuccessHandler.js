@@ -5,10 +5,11 @@ import { push } from 'react-router-redux';
 // COMPONENTS
 import { SuccessSnackbar } from 'components';
 
-const mappedState = ({ articles }) => ({
+const mappedState = ({ articles, tutorials }) => ({
   articleAdded: articles.articleAdded,
   articleEdited: articles.articleEdited,
-  articleRemoved: articles.articleRemoved
+  articleRemoved: articles.articleRemoved,
+  tutorialProposed: tutorials.tutorialProposed
 });
 
 const mappedActions = { redirect: push };
@@ -19,7 +20,8 @@ export default class SuccessHandler extends Component {
     articleAdded: PropTypes.object,
     articleEdited: PropTypes.bool.isRequired,
     articleRemoved: PropTypes.bool.isRequired,
-    redirect: PropTypes.func.isRequired
+    tutorialProposed: PropTypes.bool.isRequired,
+    redirect: PropTypes.func.isRequired,
   }
 
   state = { successMessage: null }
@@ -34,6 +36,11 @@ export default class SuccessHandler extends Component {
     // When article was successfully updated...
     if (nextProps.articleEdited !== this.props.articleEdited) {
       this.setState({ successMessage: 'Article updated' });
+    }
+
+    // When article was removed...
+    if (nextProps.tutorialProposed === true && nextProps.tutorialProposed !== this.props.tutorialProposed) {
+      this.setState({ successMessage: 'Tutorial proposed' });
     }
 
     // When article was removed...

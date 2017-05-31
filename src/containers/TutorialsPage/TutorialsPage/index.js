@@ -17,37 +17,46 @@ import ProposeTopicDialog from './ProposeTopicDialog';
 
 import TutorialsThumbnails from './TutorialsThumbnails';
 
+import { showProposeDialog, hideProposeDialog, sendPropose } from 'redux/modules/tutorialsModule';
+
 const mappedState = ({ tutorials, auth }) => ({
-  tutorials: tutorials.all,
+  tutorials: tutorials,
   permissions: permission(auth.user)
 });
 
 const mappedActions = {
-  redirect: push
+  redirect: push,
+  showProposeDialog,
+  hideProposeDialog,
+  sendPropose
 };
 
 @connect(mappedState, mappedActions)
 export default class TutorialsPage extends Component {
   static propTypes = {
-    tutorials: PropTypes.array.isRequired,
+    tutorials: PropTypes.object.isRequired,
     redirect: PropTypes.func.isRequired,
+    showProposeDialog: PropTypes.func.isRequired,
+    hideProposeDialog: PropTypes.func.isRequired,
+    sendPropose: PropTypes.func.isRequired,
     permissions: PropTypes.object.isRequired
   };
 
-  state = {
-    newProposePopup: null
-  }
+  // state = {
+    // newProposePopup: null
+  // }
 
   onSelectTutorial = (id) => (ev) => {
     ev.preventDefault();
-    if (id === 'newPropose') return this.setState({ newProposePopup: true });
+    if (id === 'newPropose') return this.props.showProposeDialog( true );
     this.props.redirect(`/tutorial/${id}`);
   }
 
-  closePopup = () => this.setState({ newProposePopup: null })
+  closePopup = () => this.props.hideProposeDialog()
 
-  proposeSubmit = () => {
-    console.log('submit');
+  proposeSubmit = (title) => {
+    this.props.sendPropose(title);
+    // console.log('submit');
   }
 
   render() {
@@ -67,7 +76,7 @@ export default class TutorialsPage extends Component {
       );
 
     const copyTutorials = [
-      ...tutorials, {
+      ...tutorials.all, {
         id: 'newPropose',
         title: 'Propose your topic'
       }
@@ -87,7 +96,7 @@ export default class TutorialsPage extends Component {
             onSelect={this.onSelectTutorial} />
         </Row>
         <ProposeTopicDialog
-          open={!!this.state.newProposePopup}
+          open={!!this.props.tutorials.proposeDialog}
           closePopup={this.closePopup}
           onSubmit={this.proposeSubmit} />
       </Grid>

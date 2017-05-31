@@ -9,3 +9,5 @@ export removeTutorial from './removeTutorial';
 
 export updatePractice from './updatePractice';
 export updateTutorial from './updateTutorial';
+
+export proposeTutorial from './proposeTutorial';
