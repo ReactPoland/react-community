@@ -17,6 +17,8 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import { EventsCalendar, LoadingScreen } from 'components';
 import { MockCard } from 'components/mocked';
 import { Div } from 'components/styled';
+import permission from 'utils/privileges';
+import { showError } from 'redux/modules/errorsModule';
 
 const mappedState = ({ events, auth }) => ({
   events: events.all,
@@ -25,10 +27,17 @@ const mappedState = ({ events, auth }) => ({
   eventsLoaded: events.eventsLoaded,
   // Authorization
   loggedIn: auth.loggedIn,
-  user: auth.user
+  user: auth.user,
+  permission: permission(auth.user)
 });
 
-const mappedActions = { loadEvents, addEvent, editEvent, removeEvent };
+const mappedActions = {
+  loadEvents,
+  addEvent,
+  editEvent,
+  removeEvent,
+  showError
+};
 
 @connect(mappedState, mappedActions)
 export default class EventsPage extends Component {
@@ -46,7 +55,9 @@ export default class EventsPage extends Component {
     removeEvent: PropTypes.func.isRequired,
     // Authorization
     loggedIn: PropTypes.bool.isRequired,
-    user: PropTypes.object
+    user: PropTypes.object,
+    permission: PropTypes.object,
+    showError: PropTypes.func.isRequired
   }
 
   state = {
@@ -83,7 +94,8 @@ export default class EventsPage extends Component {
   // DIALOG WINDOW (MODAL) HANDLING
 
   openAddEventDialog = () => {
-    this.setState({ showAddEventDialog: true });
+    if (this.props.permission.isAuth) this.setState({ showAddEventDialog: true });
+    else this.props.showError({ requestName: 'Add new event', error: new Error('Please authorize') });
   }
 
   closeAddEventDialog = () => {
@@ -157,21 +169,6 @@ export default class EventsPage extends Component {
 
     const centerCoords = firstEvent && [firstEvent.lat, firstEvent.lng];
 
-    // TODO: move to a separate component - rk
-    const addEventButton = (
-      <FloatingActionButton
-        style={{
-          position: 'fixed',
-          right: 40,
-          bottom: 40,
-          zIndex: 1000
-        }}
-        onClick={this.openAddEventDialog}
-      >
-        <ContentAdd />
-      </FloatingActionButton>
-    );
-
     const mapAndCalendar = (
       <Paper style={{ overflow: 'hidden', marginBottom: 24 }}>
         <Div flex wrap>
@@ -193,7 +190,17 @@ export default class EventsPage extends Component {
     return (
       <LoadingScreen loading={this.props.loadingEvents}>
         <Grid style={{ paddingTop: 24 }}>
-          {this.props.loggedIn && addEventButton}
+          <FloatingActionButton
+            style={{
+              position: 'fixed',
+              right: 40,
+              bottom: 40,
+              zIndex: 1000
+            }}
+            onClick={this.openAddEventDialog} >
+            <ContentAdd />
+          </FloatingActionButton>
+
           <Helmet title="Events" />
           <MockCard title="React Events" content />
           {mapAndCalendar}
