@@ -8,6 +8,7 @@ import { loadEvents, addEvent, editEvent, removeEvent } from 'redux/modules/even
 import { Map } from 'components';
 import AddEventDialog from './AddEventDialog';
 import EditEventDialog from './EditEventDialog';
+import ViewEventDialog from './ViewEventDialog';
 import EventsList from './EventsList';
 // LAYOUT
 import Grid from 'react-bootstrap/lib/Grid';
@@ -63,6 +64,7 @@ export default class EventsPage extends Component {
   state = {
     showAddEventDialog: false,
     showEditEventDialog: false,
+    eventDetailDialog: null,
     eventToEditId: null,
     rangeToFilterEvents: null
   }
@@ -76,9 +78,14 @@ export default class EventsPage extends Component {
     this.setState({ rangeToFilterEvents: range });
   }
 
-  onSelectEvent = (id) => {
-    console.log(id);
+  onSelectEvent = (id) => () => {
+    const event = this.props.events.find(currentEvent => currentEvent.id === id);
+    this.setState({
+      eventDetailDialog: { ...event }
+    });
   }
+
+  closeEventDetail = () => this.setState({ eventDetailDialog: null })
 
   prepareEvent = (eventData) => {
     return {
@@ -237,6 +244,10 @@ export default class EventsPage extends Component {
             closePopup={this.closeEditEventDialog}
             editEvent={this.editEvent}
           />
+          <ViewEventDialog
+            open={!!this.state.eventDetailDialog}
+            closePopup={this.closeEventDetail}
+            event={this.state.eventDetailDialog} />
         </Grid>
       </LoadingScreen>
     );

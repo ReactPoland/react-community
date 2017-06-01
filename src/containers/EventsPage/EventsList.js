@@ -23,6 +23,7 @@ const EventsList = (props) => {
               <EventsListItem
                 key={event.id}
                 event={event}
+                onSelect={props.onSelectEvent}
                 onDelete={props.onDelete}
                 onEdit={props.onEdit}
               />
@@ -38,6 +39,7 @@ EventsList.propTypes = {
   events: PropTypes.array.isRequired,
   onDelete: PropTypes.func,
   onEdit: PropTypes.func,
+  onSelectEvent: PropTypes.func,
   range: PropTypes.object
 };
 

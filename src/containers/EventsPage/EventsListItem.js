@@ -26,6 +26,7 @@ const EventsListItem = (props) => {
 
   return (
     <ListItem
+      onClick={props.onSelect(props.event.id)}
       key={props.event.id}
       primaryText={props.event.title}
       secondaryText={moment(props.event.date).format('MMMM Do YYYY')}
@@ -37,6 +38,7 @@ const EventsListItem = (props) => {
 EventsListItem.propTypes = {
   event: PropTypes.object.isRequired,
   onDelete: PropTypes.func,
+  onSelect: PropTypes.func,
   onEdit: PropTypes.func
 };
 
