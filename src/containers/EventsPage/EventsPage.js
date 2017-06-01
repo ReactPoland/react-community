@@ -72,6 +72,10 @@ export default class EventsPage extends Component {
   componentWillMount() {
     // Load events, if they're not ready
     if (!this.props.eventsLoaded && !this.props.loadingEvents) this.props.loadEvents();
+
+    // Initializes Google Maps code
+    const { google } = window;
+    this.geocoder = new google.maps.Geocoder;
   }
 
   onSelectDays = (range) => {
@@ -80,8 +84,22 @@ export default class EventsPage extends Component {
 
   onSelectEvent = (id) => () => {
     const event = this.props.events.find(currentEvent => currentEvent.id === id);
-    this.setState({
-      eventDetailDialog: { ...event }
+    this.getLocation(event.googleLocationId).then(location => {
+      this.setState({
+        eventDetailDialog: {
+          ...event,
+          location
+        }
+      });
+    });
+  }
+
+  getLocation = async (googleLocationId) => {
+    if (!googleLocationId) return undefined;
+    return new Promise(resolve => {
+      this.geocoder.geocode({ placeId: googleLocationId }, results => {
+        resolve(results[0]);
+      });
     });
   }
 

@@ -8,6 +8,7 @@ class LocationInput extends Component {
     onChooseLocation: PropTypes.func.isRequired,
     errorText: PropTypes.string,
     fullWidth: PropTypes.bool,
+    disabled: PropTypes.bool,
     location: PropTypes.object
   }
 
@@ -47,11 +48,12 @@ class LocationInput extends Component {
   };
 
   render() {
-    const { floatingLabelText, errorText, fullWidth, location } = this.props;
+    const { floatingLabelText, errorText, fullWidth, location, disabled } = this.props;
     const { predictions } = this.state;
 
     return (
       <AutoComplete
+        disabled={disabled}
         floatingLabelText={floatingLabelText}
         errorText={errorText}
         searchText={location && (location.description || location.formatted_address) || ''}

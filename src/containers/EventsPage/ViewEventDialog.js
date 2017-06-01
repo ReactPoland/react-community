@@ -15,7 +15,6 @@ export default class ViewEventDialog extends Component {
     closePopup: PropTypes.func.isRequired
   }
 
-  // Clears state and closes dialog window
   closePopup = () => {
     this.props.closePopup();
   }
@@ -31,7 +30,6 @@ export default class ViewEventDialog extends Component {
       />
     ];
 
-    console.log(open, event);
 
     return (
       <Dialog
