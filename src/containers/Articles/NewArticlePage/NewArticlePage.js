@@ -17,7 +17,9 @@ import FlatButton from 'material-ui/FlatButton';
 import { Div } from 'components/styled';
 import styles from './NewArticlePage.scss';
 
-const mappedState = ({ articles }) => ({ addingArticle: articles.addingArticle });
+const mappedState = ({ articles }) => ({
+  addingArticle: articles.addingArticle
+});
 
 const mappedActions = { addArticle };
 
@@ -26,7 +28,7 @@ export default class NewArticlePage extends Component {
   static propTypes = {
     addingArticle: PropTypes.bool.isRequired,
     addArticle: PropTypes.func.isRequired
-  }
+  };
 
   state = {
     newArticle: {
@@ -34,17 +36,19 @@ export default class NewArticlePage extends Component {
       title: slate.textToState('Title...'),
       description: slate.textToState('Description...'),
       link: slate.textToState('http://'),
-      content: slate.textToState('Content...')
+      content: slate.textToState('Content...'),
+      coverImageUrl: slate.textToState('Image URL')
     },
     validationErrors: {
       title: '',
       description: '',
-      content: ''
+      content: '',
+      coverImageUrl: ''
     }
-  }
+  };
 
   // Updates state of the article
-  change = (property) => (value) => {
+  change = property => value => {
     const newState = { ...this.state };
 
     newState.newArticle[property] = value;
@@ -54,21 +58,22 @@ export default class NewArticlePage extends Component {
     }
 
     this.setState(newState);
-  }
+  };
 
   // TODO: probably move to to 'utils'? Since it's also used in ArticlePage
-  validateArticle = (articleData) => {
-    const { title, description, content } = articleData;
+  validateArticle = articleData => {
+    const { title, description, content, coverImageUrl } = articleData;
     const validationErrors = {};
 
     if (!title) validationErrors.title = 'Title is required';
     if (!description) validationErrors.description = 'Description is required';
     if (!content) validationErrors.content = 'Content is required';
+    if (!coverImageUrl) validationErrors.coverImageUrl = 'Cover image is required';
 
     this.setState({ validationErrors });
 
     return _isEmpty(validationErrors);
-  }
+  };
 
   addArticle = () => {
     const newArticle = { ...this.state.newArticle };
@@ -80,23 +85,24 @@ export default class NewArticlePage extends Component {
     newArticle.description = slate.stateToText(this.state.newArticle.description);
     newArticle.title = slate.stateToText(this.state.newArticle.title);
     newArticle.link = slate.stateToText(this.state.newArticle.link);
+    newArticle.coverImageUrl = slate.stateToText(this.state.newArticle.coverImageUrl);
 
     this.props.addArticle(newArticle);
-  }
+  };
 
   render() {
     const { addingArticle } = this.props;
-    const { newArticle: { type, title, description, content, link }, validationErrors } = this.state;
+    const {
+      newArticle: { type, title, description, content, link, coverImageUrl },
+      validationErrors
+    } = this.state;
 
     return (
       <Div height="100%">
         <Grid>
           <Row>
             <Col xs={12}>
-              <TypeSelectButtons
-                type={type}
-                onChange={this.change('type')}
-              />
+              <TypeSelectButtons type={type} onChange={this.change('type')} />
             </Col>
           </Row>
           <Row>
@@ -116,20 +122,33 @@ export default class NewArticlePage extends Component {
                     placeholder="Description"
                   />
                 </div>
-                {type === 'external' && <div className={styles.articleLink}>
+                <div>
                   <PlainTextEditor
-                    state={link}
-                    onChange={this.change('link')}
-                    placeholder="Link"
+                    state={coverImageUrl}
+                    onChange={this.change('coverImageUrl')}
+                    placeholder="Cover image URL"
                   />
-                </div>}
+                </div>
+                {type === 'external' &&
+                  <div className={styles.articleLink}>
+                    <PlainTextEditor
+                      state={link}
+                      onChange={this.change('link')}
+                      placeholder="Link"
+                    />
+                  </div>}
                 {validationErrors.title && <p>{validationErrors.title}</p>}
-                {type === 'own' && <RichTextEditor
-                  state={content}
-                  style={{ width: '100%', height: '100vh', maxHeight: '45vh' }}
-                  onChange={this.change('content')}
-                  placeholder="Content"
-                />}
+                {type === 'own' &&
+                  <RichTextEditor
+                    state={content}
+                    style={{
+                      width: '100%',
+                      height: '100vh',
+                      maxHeight: '45vh'
+                    }}
+                    onChange={this.change('content')}
+                    placeholder="Content"
+                  />}
                 {validationErrors.content && <p>{validationErrors.content}</p>}
                 <FlatButton
                   label={addingArticle ? 'Adding...' : 'Add article'}

@@ -8,7 +8,7 @@ import _startsWith from 'lodash/startsWith';
 // LAYOUT
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
-import { Card, CardTitle, CardText } from 'material-ui/Card';
+import { Card, CardTitle, CardText, CardMedia } from 'material-ui/Card';
 // STORE
 import { loadArticles } from 'redux/modules/articlesModule';
 // COMPONENTS
@@ -62,8 +62,12 @@ class ArticlesGrid extends Component {
                   style={{ cursor: 'pointer', marginBottom: 16 }}
                   onClick={() => this.redirectToArticle(article)}
                 >
-                  <CardTitle title={article.title} subtitle={date} />
-                  <CardText style={{ paddingTop: 0 }}>
+                  {article.coverImageUrl && <CardMedia
+                    overlay={<CardTitle title={article.title} subtitle={date} />}
+                  >
+                    <img src={article.coverImageUrl} />
+                  </CardMedia>}
+                  <CardText>
                     <p>{article.description}</p>
                     {article.link && <p>Go to: {article.link} <i className="fa fa-external-link" /></p>}
                   </CardText>
