@@ -12,13 +12,14 @@ import { submitComment } from 'redux/modules/conversationModule';
 // COMPONENTS
 import { Conversation } from 'containers';
 import { PlainTextEditor, RichTextEditor, CommentEditor } from 'components';
+import { Link } from 'react-router';
 // LAYOUT
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import FlatButton from 'material-ui/FlatButton';
 import { ArticleHeader, List, Div } from 'components/styled';
-import { Link } from 'react-router';
+import styles from './ArticlePage.scss';
 
 const mappedState = ({ articles, auth }, props) => ({
   article: _find(articles.all, art => props.params.id === `${art.id}`),
@@ -235,6 +236,24 @@ export default class ArticlePage extends Component {
     );
   }
 
+  renderCoverEditor = () => {
+    if (this.state.editingMode) {
+      return (
+        <div style={{ marginTop: 20 }}>
+          Image URL:
+          <PlainTextEditor
+            state={slate.textToState(this.state.article.coverImageUrl)}
+            onChange={this.change('coverImageUrl')}
+            placeholder="Cover image URL"
+          />
+        </div>
+      );
+    }
+
+    return this.state.article.coverImageUrl &&
+      <img className={styles.coverImagePreview} src={this.state.article.coverImageUrl} />;
+  }
+
   render = () => {
     const { article } = this.props;
 
@@ -256,6 +275,7 @@ export default class ArticlePage extends Component {
             {this.renderDescriptionEditor()}
             {isExternal && this.renderLinkEditor()}
             {!isExternal && this.renderContentEditor()}
+            {this.renderCoverEditor()}
             <List right>
               {this.renderDeleteButton()}
             </List>
