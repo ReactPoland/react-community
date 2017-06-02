@@ -27,14 +27,28 @@ export default class HomePage extends Component {
           </Col>
           <Col md={5}>
             <Link to="/world">
-              <Div flex column justifyContent="center" alignItems="center" relative>
-                <Paper style={{ position: 'absolute', margin: 'auto', padding: 16, zIndex: 500 }} zDepth={3}>
+              <Div
+                flex
+                column
+                justifyContent="center"
+                alignItems="center"
+                relative
+              >
+                <Paper
+                  style={{
+                    position: 'absolute',
+                    margin: 'auto',
+                    padding: 16,
+                    zIndex: 500
+                  }}
+                  zDepth={3}
+                >
                   Pin yourself
                 </Paper>
                 <Map static style={{ height: 300, marginBottom: 24 }} />
               </Div>
             </Link>
-            <EventsCalendar />
+            <EventsCalendar showEventsList />
           </Col>
         </Row>
       </Grid>

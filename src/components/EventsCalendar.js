@@ -9,7 +9,6 @@ import { loadEvents } from 'redux/modules/eventsModule';
 import { LoadingScreen } from 'components';
 
 const debug = false;
-const now = moment();
 
 const mappedState = ({ events }) => ({
   events: events.all,
@@ -26,16 +25,20 @@ export default class EventsCalendar extends Component {
     loadingEvents: PropTypes.bool.isRequired,
     eventsLoaded: PropTypes.bool.isRequired,
     loadEvents: PropTypes.func.isRequired,
-    onDayClick: PropTypes.func
-  }
+    onDayClick: PropTypes.func,
+    showEventsList: PropTypes.bool
+  };
 
   state = {
     from: null,
-    to: null
-  }
+    to: null,
+    activeMonth: moment()
+  };
 
   componentWillMount() {
-    if (!this.props.eventsLoaded && !this.props.loadingEvents) this.props.loadEvents();
+    if (!this.props.eventsLoaded && !this.props.loadingEvents) {
+      this.props.loadEvents();
+    }
   }
 
   handleDayClick = (day, modifiers) => {
@@ -52,23 +55,45 @@ export default class EventsCalendar extends Component {
     if (debug) console.info('Clicked date:', day, modifiers);
 
     this.setState({ selectedDay: modifiers.selected ? null : day });
-  }
+  };
+
+  handleMonthChange = date => {
+    this.setState({ activeMonth: moment(date) });
+  };
 
   render() {
-    const { from, to } = this.state;
+    const { from, to, activeMonth } = this.state;
+    const activeMonthEvents = this.props.events.filter(event =>
+      activeMonth.isSame(moment(event.date), 'month')
+    );
+
     return (
       <LoadingScreen loading={this.props.loadingEvents}>
-        <DayPicker
-          initialMonth={now.toDate()}
-          selectedDays={[from, { from, to }]}
-          onDayClick={this.handleDayClick}
-          modifiers={{
-            hasEvent: (day) => {
-              // Mark days that has the same date as an event
-              return !!this.props.events.find(event => moment(day).isSame(moment(event.date), 'day'));
-            }
-          }}
-        />
+        <div>
+          <DayPicker
+            initialMonth={activeMonth.toDate()}
+            selectedDays={[from, { from, to }]}
+            onDayClick={this.handleDayClick}
+            onMonthChange={this.handleMonthChange}
+            modifiers={{
+              hasEvent: day => {
+                // Mark days that has the same date as an event
+                return !!this.props.events.find(event =>
+                  moment(day).isSame(moment(event.date), 'day')
+                );
+              }
+            }}
+          />
+          {this.props.showEventsList &&
+            <div>
+              Events for the month of {activeMonth.format('MMMM')}:
+              <ul>
+                {activeMonthEvents.map(event => (
+                  <li key={event.id}>{event.title}</li>
+                ))}
+              </ul>
+            </div>}
+        </div>
       </LoadingScreen>
     );
   }
