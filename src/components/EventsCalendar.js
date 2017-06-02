@@ -25,7 +25,8 @@ export default class EventsCalendar extends Component {
     loadingEvents: PropTypes.bool.isRequired,
     eventsLoaded: PropTypes.bool.isRequired,
     loadEvents: PropTypes.func.isRequired,
-    onDayClick: PropTypes.func
+    onDayClick: PropTypes.func,
+    showEventsList: PropTypes.bool
   };
 
   state = {
@@ -83,12 +84,15 @@ export default class EventsCalendar extends Component {
               }
             }}
           />
-          <div>Events for the month of {activeMonth.format('MMMM')}:</div>
-          <ul>
-            {activeMonthEvents.map(event => (
-              <li key={event.id}>{event.title}</li>
-            ))}
-          </ul>
+          {this.props.showEventsList &&
+            <div>
+              Events for the month of {activeMonth.format('MMMM')}:
+              <ul>
+                {activeMonthEvents.map(event => (
+                  <li key={event.id}>{event.title}</li>
+                ))}
+              </ul>
+            </div>}
         </div>
       </LoadingScreen>
     );
