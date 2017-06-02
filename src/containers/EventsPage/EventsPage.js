@@ -16,7 +16,6 @@ import Paper from 'material-ui/Paper';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { EventsCalendar, LoadingScreen } from 'components';
-import { MockCard } from 'components/mocked';
 import { Div } from 'components/styled';
 import permission from 'utils/privileges';
 import { showError } from 'redux/modules/errorsModule';
@@ -244,7 +243,7 @@ export default class EventsPage extends Component {
           </FloatingActionButton>
 
           <Helmet title="Events" />
-          <MockCard title="React Events" content />
+          <h1 style={{ margin: '0 0 20px 0' }}>React Events</h1>
           {mapAndCalendar}
           {/* Events lists */}
           {userHasEvents && userEventsList}

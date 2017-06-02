@@ -1,1 +1,0 @@
-export MockCard from './MockCard';

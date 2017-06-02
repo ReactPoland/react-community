@@ -7,11 +7,9 @@ import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import Paper from 'material-ui/Paper';
-import { MockCard } from 'components/mocked';
 import { Div } from 'components/styled';
 import styles from './HomePage.scss';
 // COMPONENTS
-import Poll from './Poll';
 import ArticlesGrid from './ArticlesGrid';
 import { EventsCalendar, Map } from 'components';
 
@@ -37,17 +35,6 @@ export default class HomePage extends Component {
               </Div>
             </Link>
             <EventsCalendar />
-          </Col>
-        </Row>
-        <Row>
-          <Col md={4}>
-            <Poll />
-          </Col>
-          <Col md={4}>
-            <MockCard title="Test" content />
-          </Col>
-          <Col md={4}>
-            <MockCard title="Test" content />
           </Col>
         </Row>
       </Grid>
