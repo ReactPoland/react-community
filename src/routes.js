@@ -39,6 +39,13 @@ export default (store) => {
     cb();
   };
 
+  const onlyUnauthorized = (nextState, replace, cb) => {
+    const { user } = store.getState().auth;
+    const { isAuth } = permission(user);
+    if (isAuth) replace('/profile');
+    cb();
+  };
+
   return (
     <Route path="/" component={ct.App} onEnter={checkUserProfileStatus}>
       { /* Home (main) route */ }
@@ -53,6 +60,7 @@ export default (store) => {
 
       { /* Routes */ }
       <Route path="world" component={ct.WorldPage} noFooter />
+      <Route path="login" component={ct.Login} onEnter={onlyUnauthorized} />
       <Route path="tutorials" component={ct.TutorialsContainer}>
         <IndexRoute component={ct.TutorialsPage} />
         <Route path="add" component={ct.NewTutorialPage} />

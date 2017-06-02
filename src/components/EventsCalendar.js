@@ -10,7 +10,6 @@ import { LoadingScreen } from 'components';
 
 const debug = false;
 const now = moment();
-const pastDays = day => moment(day).isBefore(now, 'day');
 
 const mappedState = ({ events }) => ({
   events: events.all,
@@ -61,7 +60,6 @@ export default class EventsCalendar extends Component {
       <LoadingScreen loading={this.props.loadingEvents}>
         <DayPicker
           initialMonth={now.toDate()}
-          disabledDays={pastDays}
           selectedDays={[from, { from, to }]}
           onDayClick={this.handleDayClick}
           modifiers={{

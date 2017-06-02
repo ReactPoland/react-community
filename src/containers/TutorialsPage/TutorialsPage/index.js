@@ -8,34 +8,55 @@ import { push } from 'react-router-redux';
 import Jumbotron from 'react-bootstrap/lib/Jumbotron';
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
-import Col from 'react-bootstrap/lib/Col';
-import Paper from 'material-ui/Paper';
+// import Col from 'react-bootstrap/lib/Col';
+// import Paper from 'material-ui/Paper';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import styles from './TutorialsPage.scss';
+import ProposeTopicDialog from './ProposeTopicDialog';
 
 import TutorialsThumbnails from './TutorialsThumbnails';
 
+import { showProposeDialog, hideProposeDialog, sendPropose } from 'redux/modules/tutorialsModule';
+
 const mappedState = ({ tutorials, auth }) => ({
-  tutorials: tutorials.all,
+  tutorials: tutorials,
   permissions: permission(auth.user)
 });
 
 const mappedActions = {
-  redirect: push
+  redirect: push,
+  showProposeDialog,
+  hideProposeDialog,
+  sendPropose
 };
 
 @connect(mappedState, mappedActions)
 export default class TutorialsPage extends Component {
   static propTypes = {
-    tutorials: PropTypes.array.isRequired,
+    tutorials: PropTypes.object.isRequired,
     redirect: PropTypes.func.isRequired,
+    showProposeDialog: PropTypes.func.isRequired,
+    hideProposeDialog: PropTypes.func.isRequired,
+    sendPropose: PropTypes.func.isRequired,
     permissions: PropTypes.object.isRequired
   };
 
+  // state = {
+    // newProposePopup: null
+  // }
+
   onSelectTutorial = (id) => (ev) => {
     ev.preventDefault();
+    if (id === 'newPropose') return this.props.showProposeDialog( true );
     this.props.redirect(`/tutorial/${id}`);
+  }
+
+  closePopup = () => this.props.hideProposeDialog()
+
+  proposeSubmit = (title) => {
+    this.props.sendPropose(title);
+    // console.log('submit');
   }
 
   render() {
@@ -54,6 +75,13 @@ export default class TutorialsPage extends Component {
         </FloatingActionButton>
       );
 
+    const copyTutorials = [
+      ...tutorials.all, {
+        id: 'newPropose',
+        title: 'Propose your topic'
+      }
+    ];
+
     return (
       <Grid className={styles.TutorialsPage}>
         {permissions.isStaff && AddPracticeButton}
@@ -64,15 +92,13 @@ export default class TutorialsPage extends Component {
         </Jumbotron>
         <Row>
           <TutorialsThumbnails
-            list={tutorials}
+            list={copyTutorials}
             onSelect={this.onSelectTutorial} />
-          <Col md={6}>
-            <Paper zDepth={1} className={styles['TutorialsPage-card']}>
-              <ContentAdd style={{ width: '15rem', height: '15rem' }} />
-              <h3 className={styles['TutorialsPage-card-title']}>Propose your topic</h3>
-            </Paper>
-          </Col>
         </Row>
+        <ProposeTopicDialog
+          open={!!this.props.tutorials.proposeDialog}
+          closePopup={this.closePopup}
+          onSubmit={this.proposeSubmit} />
       </Grid>
     );
   }

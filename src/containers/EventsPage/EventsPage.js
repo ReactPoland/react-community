@@ -8,6 +8,7 @@ import { loadEvents, addEvent, editEvent, removeEvent } from 'redux/modules/even
 import { Map } from 'components';
 import AddEventDialog from './AddEventDialog';
 import EditEventDialog from './EditEventDialog';
+import ViewEventDialog from './ViewEventDialog';
 import EventsList from './EventsList';
 // LAYOUT
 import Grid from 'react-bootstrap/lib/Grid';
@@ -17,6 +18,8 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import { EventsCalendar, LoadingScreen } from 'components';
 import { MockCard } from 'components/mocked';
 import { Div } from 'components/styled';
+import permission from 'utils/privileges';
+import { showError } from 'redux/modules/errorsModule';
 
 const mappedState = ({ events, auth }) => ({
   events: events.all,
@@ -25,10 +28,17 @@ const mappedState = ({ events, auth }) => ({
   eventsLoaded: events.eventsLoaded,
   // Authorization
   loggedIn: auth.loggedIn,
-  user: auth.user
+  user: auth.user,
+  permission: permission(auth.user)
 });
 
-const mappedActions = { loadEvents, addEvent, editEvent, removeEvent };
+const mappedActions = {
+  loadEvents,
+  addEvent,
+  editEvent,
+  removeEvent,
+  showError
+};
 
 @connect(mappedState, mappedActions)
 export default class EventsPage extends Component {
@@ -46,12 +56,15 @@ export default class EventsPage extends Component {
     removeEvent: PropTypes.func.isRequired,
     // Authorization
     loggedIn: PropTypes.bool.isRequired,
-    user: PropTypes.object
+    user: PropTypes.object,
+    permission: PropTypes.object,
+    showError: PropTypes.func.isRequired
   }
 
   state = {
     showAddEventDialog: false,
     showEditEventDialog: false,
+    eventDetailDialog: null,
     eventToEditId: null,
     rangeToFilterEvents: null
   }
@@ -59,11 +72,38 @@ export default class EventsPage extends Component {
   componentWillMount() {
     // Load events, if they're not ready
     if (!this.props.eventsLoaded && !this.props.loadingEvents) this.props.loadEvents();
+
+    // Initializes Google Maps code
+    const { google } = window;
+    this.geocoder = new google.maps.Geocoder;
   }
 
   onSelectDays = (range) => {
     this.setState({ rangeToFilterEvents: range });
   }
+
+  onSelectEvent = (id) => () => {
+    const event = this.props.events.find(currentEvent => currentEvent.id === id);
+    this.getLocation(event.googleLocationId).then(location => {
+      this.setState({
+        eventDetailDialog: {
+          ...event,
+          location
+        }
+      });
+    });
+  }
+
+  getLocation = async (googleLocationId) => {
+    if (!googleLocationId) return undefined;
+    return new Promise(resolve => {
+      this.geocoder.geocode({ placeId: googleLocationId }, results => {
+        resolve(results[0]);
+      });
+    });
+  }
+
+  closeEventDetail = () => this.setState({ eventDetailDialog: null })
 
   prepareEvent = (eventData) => {
     return {
@@ -83,7 +123,8 @@ export default class EventsPage extends Component {
   // DIALOG WINDOW (MODAL) HANDLING
 
   openAddEventDialog = () => {
-    this.setState({ showAddEventDialog: true });
+    if (this.props.permission.isAuth) this.setState({ showAddEventDialog: true });
+    else this.props.showError({ requestName: 'Add new event', error: new Error('Please authorize') });
   }
 
   closeAddEventDialog = () => {
@@ -145,32 +186,30 @@ export default class EventsPage extends Component {
         events={userEvents}
         range={this.state.rangeToFilterEvents}
         onEdit={this.openEditEventDialog}
+        onSelectEvent={this.onSelectEvent}
         onDelete={this.deleteEvent}
       />
     );
 
-    const otherEventsList = <EventsList title="Other events" range={this.state.rangeToFilterEvents} events={otherEvents} />;
+    const otherEventsList = (
+      <EventsList
+        title="Other events"
+        range={this.state.rangeToFilterEvents}
+        onSelectEvent={this.onSelectEvent}
+        events={otherEvents} />
+    );
 
-    const allEventsList = <EventsList title="All events" range={this.state.rangeToFilterEvents} events={allEvents} />;
+    const allEventsList = (
+      <EventsList
+        title="All events"
+        onSelectEvent={this.onSelectEvent}
+        range={this.state.rangeToFilterEvents}
+        events={allEvents} />
+    );
 
     // Other components
 
     const centerCoords = firstEvent && [firstEvent.lat, firstEvent.lng];
-
-    // TODO: move to a separate component - rk
-    const addEventButton = (
-      <FloatingActionButton
-        style={{
-          position: 'fixed',
-          right: 40,
-          bottom: 40,
-          zIndex: 1000
-        }}
-        onClick={this.openAddEventDialog}
-      >
-        <ContentAdd />
-      </FloatingActionButton>
-    );
 
     const mapAndCalendar = (
       <Paper style={{ overflow: 'hidden', marginBottom: 24 }}>
@@ -193,7 +232,17 @@ export default class EventsPage extends Component {
     return (
       <LoadingScreen loading={this.props.loadingEvents}>
         <Grid style={{ paddingTop: 24 }}>
-          {this.props.loggedIn && addEventButton}
+          <FloatingActionButton
+            style={{
+              position: 'fixed',
+              right: 40,
+              bottom: 40,
+              zIndex: 1000
+            }}
+            onClick={this.openAddEventDialog} >
+            <ContentAdd />
+          </FloatingActionButton>
+
           <Helmet title="Events" />
           <MockCard title="React Events" content />
           {mapAndCalendar}
@@ -213,6 +262,10 @@ export default class EventsPage extends Component {
             closePopup={this.closeEditEventDialog}
             editEvent={this.editEvent}
           />
+          <ViewEventDialog
+            open={!!this.state.eventDetailDialog}
+            closePopup={this.closeEventDetail}
+            event={this.state.eventDetailDialog} />
         </Grid>
       </LoadingScreen>
     );
