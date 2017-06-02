@@ -1,7 +1,7 @@
 // import _startsWith from 'lodash/startsWith';
 import _isEmpty from 'lodash/isEmpty';
 import { Raw, Plain } from 'slate';
-import config from '../config';
+import config from '../client.config.js';
 
 export const ascendingBy = (key) => (a, b) => a[key] < b[key] ? -1 : a[key] > b[key] ? 1 : 0; // eslint-disable-line
 
@@ -25,7 +25,7 @@ export const eventFormValidator = (formData) => {
 
 export const gitAuthLink = () => {
   const state = Math.floor(Math.random() * 10000);
-  return `${config.git.authUrl}/?client_id=${config.git.clientId}&redirect_uri=${config.git.redirectUrl}&state=${state}`;
+  return `${config.git.authUrl}/?client_id=${__CLIENT_CONFIG__.GIT_CLIENT_ID}&redirect_uri=${location.protocol}//${location.host}${config.git.redirectUrl}&state=${state}`;
 };
 
 // Slate helpers for converting it's state to other types

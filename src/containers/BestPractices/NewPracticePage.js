@@ -91,14 +91,14 @@ export default class NewPracticePage extends Component {
               <Paper className={styles.practiceEditor} zDepth={2}>
                 <h3 className={styles.practiceTitle}>
                   <PlainTextEditor
-                    initialState={title}
+                    state={title}
                     onChange={this.change('title')}
                     placeholder="Title"
                   />
                 </h3>
                 {validationErrors.title && <p>{validationErrors.title}</p>}
                 <RichTextEditor
-                  initialState={content}
+                  state={content}
                   style={{ width: '100%', height: '100vh', maxHeight: '45vh' }}
                   onChange={this.change('content')}
                   placeholder="Content"
