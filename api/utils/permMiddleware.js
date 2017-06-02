@@ -25,7 +25,7 @@ const permMiddleware = () => (req, res, next) => {
       "quizStats.quiz"."title" AS "quizStats.title"
 
       FROM "users" AS "users"
-      INNER JOIN "quizStats" AS "quizStats"
+      LEFT JOIN "quizStats" AS "quizStats"
       ON "users"."id" = "quizStats"."userId"
       AND "quizStats"."finishTime"
       IS NOT NULL
