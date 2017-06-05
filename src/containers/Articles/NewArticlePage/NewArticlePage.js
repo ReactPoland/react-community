@@ -61,6 +61,18 @@ export default class NewArticlePage extends Component {
     this.setState(newState);
   };
 
+  changePreviewSize = index => ev => {
+    const previewSize = [...this.state.newArticle.previewSize];
+    previewSize[index] = parseInt(ev.target.value, 10);
+
+    const newArticle = {
+      ...this.state.newArticle,
+      previewSize
+    };
+
+    this.setState({ newArticle });
+  };
+
   // TODO: probably move to to 'utils'? Since it's also used in ArticlePage
   validateArticle = articleData => {
     const { title, description, content, coverImageUrl } = articleData;
@@ -97,6 +109,8 @@ export default class NewArticlePage extends Component {
       newArticle: { type, title, description, content, link, coverImageUrl, previewSize },
       validationErrors
     } = this.state;
+
+    console.log('previewSize', previewSize);
 
     return (
       <Div height="100%">
@@ -154,11 +168,23 @@ export default class NewArticlePage extends Component {
                 <div className={styles.previewSizeInputs}>
                   <div>
                     <span>Width:</span>
-                    <input type="number" value={previewSize[0]} />
+                    <input
+                      type="number"
+                      value={previewSize[0]}
+                      min="1"
+                      max="3"
+                      onChange={this.changePreviewSize(0)}
+                    />
                   </div>
                   <div>
                     <span>Height:</span>
-                    <input type="number" value={previewSize[1]} />
+                    <input
+                      type="number"
+                      value={previewSize[1]}
+                      min="1"
+                      max="3"
+                      onChange={this.changePreviewSize(1)}
+                    />
                   </div>
                 </div>
                 <FlatButton
