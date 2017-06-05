@@ -37,7 +37,8 @@ export default class NewArticlePage extends Component {
       description: slate.textToState('Description...'),
       link: slate.textToState('http://'),
       content: slate.textToState('Content...'),
-      coverImageUrl: slate.textToState('Image URL')
+      coverImageUrl: slate.textToState('Image URL'),
+      previewSize: [1, 1]
     },
     validationErrors: {
       title: '',
@@ -93,7 +94,7 @@ export default class NewArticlePage extends Component {
   render() {
     const { addingArticle } = this.props;
     const {
-      newArticle: { type, title, description, content, link, coverImageUrl },
+      newArticle: { type, title, description, content, link, coverImageUrl, previewSize },
       validationErrors
     } = this.state;
 
@@ -150,6 +151,16 @@ export default class NewArticlePage extends Component {
                     placeholder="Content"
                   />}
                 {validationErrors.content && <p>{validationErrors.content}</p>}
+                <div className={styles.previewSizeInputs}>
+                  <div>
+                    <span>Width:</span>
+                    <input type="number" value={previewSize[0]} />
+                  </div>
+                  <div>
+                    <span>Height:</span>
+                    <input type="number" value={previewSize[1]} />
+                  </div>
+                </div>
                 <FlatButton
                   label={addingArticle ? 'Adding...' : 'Add article'}
                   primary
