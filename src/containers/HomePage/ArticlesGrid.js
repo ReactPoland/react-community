@@ -77,7 +77,6 @@ class ArticlesGrid extends Component {
                       <img src={article.coverImageUrl} />
                     </CardMedia>}
                   <CardText>
-                    <p>{article.previewSize}</p>
                     <p>{article.description}</p>
                     {article.link &&
                       <p>
