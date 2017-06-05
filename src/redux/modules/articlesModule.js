@@ -1,5 +1,3 @@
-import _sample from 'lodash/sample';
-
 const debug = false;
 
 // --- ACTION TYPES ---
@@ -113,7 +111,6 @@ export default function articlesModule(state = initialState, action = {}) {
     case LOAD_ARTICLES_SUCCESS:
       const all = action.result.message.map(article => ({
         ...article,
-        size: _sample([6, 12]), // TODO: this will be set on the page, and should be stored in the DB
         // TODO: update the line below once we can store image URL in the database
         coverImageUrl: article.coverImageUrl || 'http://i1-news.softpedia-static.com/images/news2/Keep-Your-Programming-Code-Safe-Obfuscate-It-480832-2.jpg',
         content: prepareContent(article.content)

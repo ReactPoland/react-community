@@ -1,5 +1,3 @@
-import _sample from 'lodash/sample';
-
 const debug = false;
 
 // ---ACTION TYPES ---
@@ -112,7 +110,6 @@ export default function practicesModule(state = initialState, action = {}) {
     case LOAD_PRACTICES_SUCCESS:
       const all = action.result.message.map(practice => ({
         ...practice,
-        size: _sample([6, 12]), // TODO: this will be set on the page, and should be stored in the DB
         content: prepareContent(practice.content)
       }));
       return {

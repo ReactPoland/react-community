@@ -1,0 +1,16 @@
+.ArticlesGrid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.MediaOverlay {
+  img {
+    min-height: 140px;
+  }
+}
+
+.GridItem {
+  > div {
+    margin: 8px;
+  }
+}

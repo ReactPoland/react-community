@@ -167,25 +167,25 @@ export default class NewArticlePage extends Component {
                 {validationErrors.content && <p>{validationErrors.content}</p>}
                 <div className={styles.previewSizeInputs}>
                   <div>
-                    <span>Width:</span>
+                    <span>Preview size:</span>
                     <input
                       type="number"
                       value={previewSize[0]}
                       min="1"
-                      max="3"
+                      max="2"
                       onChange={this.changePreviewSize(0)}
                     />
                   </div>
-                  <div>
+                  {/* <div>
                     <span>Height:</span>
                     <input
                       type="number"
                       value={previewSize[1]}
                       min="1"
-                      max="3"
+                      max="2"
                       onChange={this.changePreviewSize(1)}
                     />
-                  </div>
+                  </div> */}
                 </div>
                 <FlatButton
                   label={addingArticle ? 'Adding...' : 'Add article'}
