@@ -16,3 +16,17 @@
     align-self: flex-end;
   }
 }
+
+.previewSizeInputs {
+  margin-top: 8px;
+  > div {
+    &:first-child { margin-bottom: 8px; }
+    span {
+      display: inline-block;
+      width: 50px;
+    }
+    input {
+      width: 3em;
+    }
+  }
+}

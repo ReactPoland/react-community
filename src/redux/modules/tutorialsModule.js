@@ -1,5 +1,3 @@
-import _sample from 'lodash/sample';
-
 const debug = false;
 
 // ---ACTION TYPES ---
@@ -138,7 +136,6 @@ export default function tutorialsModule(state = initialState, action = {}) {
     case LOAD_TUTORIALS_SUCCESS:
       const all = action.result.message.map(tutorial => ({
         ...tutorial,
-        size: _sample([6, 12]), // TODO: this will be set on the page, and should be stored in the DB
         content: prepareContent(tutorial.content)
       }));
       return {

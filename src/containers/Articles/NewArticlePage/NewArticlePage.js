@@ -37,7 +37,8 @@ export default class NewArticlePage extends Component {
       description: slate.textToState('Description...'),
       link: slate.textToState('http://'),
       content: slate.textToState('Content...'),
-      coverImageUrl: slate.textToState('Image URL')
+      coverImageUrl: slate.textToState('Image URL'),
+      previewSize: [1, 1]
     },
     validationErrors: {
       title: '',
@@ -58,6 +59,18 @@ export default class NewArticlePage extends Component {
     }
 
     this.setState(newState);
+  };
+
+  changePreviewSize = index => ev => {
+    const previewSize = [...this.state.newArticle.previewSize];
+    previewSize[index] = parseInt(ev.target.value, 10);
+
+    const newArticle = {
+      ...this.state.newArticle,
+      previewSize
+    };
+
+    this.setState({ newArticle });
   };
 
   // TODO: probably move to to 'utils'? Since it's also used in ArticlePage
@@ -93,9 +106,11 @@ export default class NewArticlePage extends Component {
   render() {
     const { addingArticle } = this.props;
     const {
-      newArticle: { type, title, description, content, link, coverImageUrl },
+      newArticle: { type, title, description, content, link, coverImageUrl, previewSize },
       validationErrors
     } = this.state;
+
+    console.log('previewSize', previewSize);
 
     return (
       <Div height="100%">
@@ -150,6 +165,28 @@ export default class NewArticlePage extends Component {
                     placeholder="Content"
                   />}
                 {validationErrors.content && <p>{validationErrors.content}</p>}
+                <div className={styles.previewSizeInputs}>
+                  <div>
+                    <span>Preview size:</span>
+                    <input
+                      type="number"
+                      value={previewSize[0]}
+                      min="1"
+                      max="2"
+                      onChange={this.changePreviewSize(0)}
+                    />
+                  </div>
+                  {/* <div>
+                    <span>Height:</span>
+                    <input
+                      type="number"
+                      value={previewSize[1]}
+                      min="1"
+                      max="2"
+                      onChange={this.changePreviewSize(1)}
+                    />
+                  </div> */}
+                </div>
                 <FlatButton
                   label={addingArticle ? 'Adding...' : 'Add article'}
                   primary
